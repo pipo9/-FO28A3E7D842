@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grocery/components/order_product.dart';
@@ -15,7 +14,6 @@ class OrderDtails extends StatefulWidget {
 }
 
 class _OrderDtailsState extends State<OrderDtails> {
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   int status = 0;
   bool init = true;
