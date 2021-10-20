@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:grocery/controllers/userController.dart';
 import '../strings.dart';
 import '../const.dart';
 
@@ -12,7 +13,6 @@ class LoadingScreen extends StatefulWidget {
 class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
-   
     super.initState();
     startTime();
   }
@@ -21,8 +21,14 @@ class _LoadingScreenState extends State<LoadingScreen> {
     var duration = new Duration(seconds: 8);
     return new Timer(
       duration,
-      () {
-        Navigator.pushReplacementNamed(context, '/signIn');
+      () async {
+        var washere = await User().wasHere();
+
+        if (washere == true) {
+          await User().getUserInfo();
+          Navigator.pushReplacementNamed(context, '/home');
+        } else
+          Navigator.pushReplacementNamed(context, '/signIn');
       },
     );
   }

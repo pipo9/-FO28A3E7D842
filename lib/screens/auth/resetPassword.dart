@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:grocery/components/text_fields.dart';
 import 'package:grocery/components/header_sign_in_up.dart';
 import 'package:grocery/components/gradient_button.dart';
+import 'package:grocery/controllers/userController.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../../const.dart';
 import '../../strings.dart';
@@ -32,7 +33,6 @@ class _ResetPasswordState extends State<ResetPassword> {
 
     return Scaffold(
       backgroundColor: klightGrey,
-      
       body: ModalProgressHUD(
           inAsyncCall: loading,
           child: SafeArea(
@@ -63,20 +63,41 @@ class _ResetPasswordState extends State<ResetPassword> {
                     height: 44,
                     width: 310,
                     borderRadius: 10,
-                    onpressed: () {},
+                    onpressed: () async {
+                      toggleSpinner();
+                      var emailResponse = validateEmail(email);
+                      if (emailResponse['status']) {
+                        var response = await User().resetPassword(email);
+                        if (response['status'])
+                          Navigator.pushReplacementNamed(this.context, '/signIn');
+                        else
+                          showAlert(this.context, "error !",
+                              "${response["message"]}", true, () {
+                            Navigator.of(context, rootNavigator: true).pop();
+                          });
+                      } else {
+                        showAlert(this.context, "error !",
+                            "${emailResponse['message']} ", true, () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                        });
+                      }
+                      toggleSpinner();
+                    },
                   ),
                   SizedBox(height: _height * 0.05),
-                  InkWell(onTap:(){
-                    Navigator.pop(context);
-                  },
-                  child:Text(
-                          go_back,
-                          style: GoogleFonts.zillaSlab(
-                            fontWeight: FontWeight.w600,
-                            color: kColor,
-                            fontSize: _width * 0.035,
-                          ),
-                        ),),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      go_back,
+                      style: GoogleFonts.zillaSlab(
+                        fontWeight: FontWeight.w600,
+                        color: kColor,
+                        fontSize: _width * 0.035,
+                      ),
+                    ),
+                  ),
                   SizedBox(height: _height * 0.05),
                   Container(
                       width: 65,

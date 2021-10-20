@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grocery/components/text_fields.dart';
 import 'package:grocery/components/gradient_button.dart';
+import 'package:grocery/controllers/userController.dart';
+import 'package:grocery/shared_Pref.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../../const.dart';
 import '../../strings.dart';
@@ -12,15 +14,15 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  String email = '';
-  String name = '';
-  String phone = '';
-
+  String email = SharedData.user.email;
+  String name = SharedData.user.fullName;
+  String phone = SharedData.user.phone;
   TextEditingController emailTextController = new TextEditingController();
   TextEditingController nameTextController = new TextEditingController();
   TextEditingController phoneTextController = new TextEditingController();
 
   bool loading = false;
+  bool enabled = false;
 
   toggleSpinner() {
     setState(() {
@@ -38,13 +40,17 @@ class _ProfileState extends State<Profile> {
       appBar: AppBar(
         centerTitle: true,
         toolbarHeight: _height * 0.11,
-        leading:InkWell( onTap: (){
-          Navigator.pushReplacementNamed(context, '/home');
-        },
-          child:Container(
-            width: 60,
-            height: 60,
-            child: Image.asset('assets/images/logo_second.png')),),
+        leading: InkWell(
+          onTap: () {
+            Navigator.pushReplacementNamed(context, '/home');
+          },
+          child: Image.asset(
+            "assets/images/logo.png",
+            color: kColor,
+            height: 37,
+            width: 58,
+          ),
+        ),
         backgroundColor: klightGrey,
         title: Text(
           profile_title,
@@ -78,8 +84,11 @@ class _ProfileState extends State<Profile> {
                   ),
                   SizedBox(height: _height * 0.02),
                   Textfields(
-                    inputType: TextInputType.emailAddress,
-                    labetText: fill_info_name_labet,
+                    enabled: enabled,
+                    inputType: TextInputType.text,
+                    labetText: SharedData.user.fullName != null && SharedData.user.fullName != ''
+                        ? SharedData.user.fullName
+                        : fill_info_name_labet,
                     hintText: fill_info_name_hint,
                     icon: Icons.person,
                     onChanged: (value) {
@@ -88,8 +97,11 @@ class _ProfileState extends State<Profile> {
                     controller: nameTextController,
                   ),
                   Textfields(
+                    enabled: enabled,
                     inputType: TextInputType.emailAddress,
-                    labetText: fill_info_email_labet,
+                    labetText: SharedData.user.email != null && SharedData.user.email != ''
+                        ? SharedData.user.email
+                        : fill_info_email_labet,
                     hintText: fill_info_email_hint,
                     icon: Icons.email,
                     onChanged: (value) {
@@ -98,8 +110,11 @@ class _ProfileState extends State<Profile> {
                     controller: emailTextController,
                   ),
                   Textfields(
-                    inputType: TextInputType.emailAddress,
-                    labetText: sign_in_phone_labet,
+                    enabled: enabled,
+                    inputType: TextInputType.number,
+                    labetText: SharedData.user.phone != null && SharedData.user.phone!= ''
+                        ? SharedData.user.phone
+                        : sign_in_phone_labet,
                     hintText: sign_in_phone_hint,
                     icon: Icons.phone,
                     onChanged: (value) {
@@ -116,7 +131,11 @@ class _ProfileState extends State<Profile> {
                     height: 44,
                     width: 310,
                     borderRadius: 10,
-                    onpressed: () {},
+                    onpressed: () {
+                      setState(() {
+                        enabled = !enabled;
+                      });
+                    },
                   ),
                   SizedBox(height: _height * 0.02),
                   GradientButton(
@@ -127,7 +146,38 @@ class _ProfileState extends State<Profile> {
                     height: 44,
                     width: 310,
                     borderRadius: 10,
-                    onpressed: () {},
+                    onpressed: () async{
+                      toggleSpinner();
+                      var emailResponse = validateEmail(email);
+                      var phoneResponse = validatetextField(phone);
+                      var nameResponse = validatetextField(name);
+
+                      if( !phoneResponse['status'] || !nameResponse['status'] || !emailResponse['status'] ){
+                        var text = emailResponse['status'] ?  "${emailResponse["message"]} \n - Text field length should not be empty" :"- Text field length should not be empty";
+                         showAlert(
+                            this.context,
+                            "error !",
+                            text,
+                            true, () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                        });
+                       
+                      }
+                      else{
+                       var response = await User().updateUserInfo(email,phone,name);
+                       if(!response['status']){
+                         showAlert(
+                            this.context,
+                            "error !",
+                            "${response["message"]}",
+                            true, () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                        });
+                       }
+                       
+                      }
+                      toggleSpinner();
+                    },
                   ),
                   SizedBox(height: _height * 0.09),
                   Container(

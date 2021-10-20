@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:grocery/components/text_fields.dart';
 import 'package:grocery/components/header_sign_in_up.dart';
 import 'package:grocery/components/gradient_button.dart';
+import 'package:grocery/controllers/userController.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../../const.dart';
 import '../../strings.dart';
@@ -75,28 +76,53 @@ class _SignInState extends State<SignIn> {
                     height: 44,
                     width: 310,
                     borderRadius: 10,
-                    onpressed: () {
-                      Navigator.pushReplacementNamed(context, '/home');
+                    onpressed: () async {
+                      toggleSpinner();
+                      var emailResponse = validateEmail(email);
+                      var passwordResponse = validatetextField(password);
+                      if (emailResponse['status'] &&
+                          passwordResponse['status']) {
+                        var response =await User().signIn(email, password);
+                        if(response['status'])
+                        Navigator.pushReplacementNamed(this.context, '/home');
+                        else
+                        showAlert(
+                            this.context,
+                            "error !",
+                            "${response["message"]}",
+                            true, () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                        });
+                      } else {
+                        showAlert(
+                            this.context,
+                            "error !",
+                            "${emailResponse['message']} \n ${passwordResponse['message']} ",
+                            true, () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                        });
+                      }
+                      toggleSpinner();
                     },
                   ),
                   SizedBox(height: _height * 0.02),
                   Align(
                       alignment: Alignment.centerLeft,
                       child: Padding(
-                        padding: EdgeInsets.only(left: _width * 0.08),
-                        child: InkWell( 
-                          onTap: (){
-                            Navigator.pushNamed(context, '/reset');
-                          },
-                          child:Text(
-                          sign_in_reset_password,
-                          style: GoogleFonts.zillaSlab(
-                            fontWeight: FontWeight.w600,
-                            color: kColor,
-                            fontSize: _width * 0.035,
-                          ),
-                        ),)
-                      )),
+                          padding: EdgeInsets.only(left: _width * 0.08),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, '/reset');
+                            },
+                            child: Text(
+                              sign_in_reset_password,
+                              style: GoogleFonts.zillaSlab(
+                                fontWeight: FontWeight.w600,
+                                color: kColor,
+                                fontSize: _width * 0.035,
+                              ),
+                            ),
+                          ))),
                   SizedBox(height: _height * 0.04),
                   Container(
                       width: 65,

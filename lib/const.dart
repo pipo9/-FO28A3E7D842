@@ -206,3 +206,36 @@ String convertDateTimeDisplay(String date, String initialFormat, String finalFor
   return formatted;
 }
 
+
+
+ Map validateEmail(email) {
+
+    Map response = Map();
+    if(email==null){
+      response['status'] = false;
+      response['message'] = "- email should not be empty";
+      return response;
+    }
+    if(!RegExp(
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email)){
+      response['status'] = false;
+      response['message'] = "- please enter a correct email";
+      return response;
+    }
+    response['status'] = true;
+    response['message'] = "";
+    return response;
+  }
+
+ Map validatetextField(textField) {
+    Map response = Map();
+    if (textField==null )  {
+      response['status'] = false;
+      response['message'] = "- Text field length should not be empty";
+      return response;
+    }
+
+    response['status'] = true;
+    response['message'] = "";
+    return response;
+  }

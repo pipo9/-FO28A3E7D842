@@ -4,7 +4,12 @@ import 'package:grocery/components/image_container.dart';
 import '../../const.dart';
 
 class OrderProduct extends StatefulWidget {
+ final productName;
+ final price;
+ final quantity;
+ final imageUrl;
 
+ OrderProduct({@required this.productName,@required this.price,@required this.quantity , @required this.imageUrl});
 
   @override
   _OrderProductState createState() => _OrderProductState();
@@ -36,7 +41,7 @@ class _OrderProductState extends State<OrderProduct> {
         children: [
           ImageContainer(
               width:_width*0.25,
-              img: "assets/images/fruits.png",
+              img: widget.imageUrl,
               height: _width*0.3,
               borderRaduis: 10),
           SizedBox(
@@ -46,7 +51,7 @@ class _OrderProductState extends State<OrderProduct> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Product Name",
+                widget.productName,
                 style: GoogleFonts.robotoSlab(
                   color: kColor,
                   fontSize: _height * 0.020,
@@ -57,7 +62,7 @@ class _OrderProductState extends State<OrderProduct> {
                 height: _height*0.02,
               ),
               Text(
-                "4 pieces",
+                "${widget.quantity} pieces",
                 style: GoogleFonts.robotoSlab(
                   color: kDarkText,
                   fontSize: _height * 0.017,
@@ -68,7 +73,7 @@ class _OrderProductState extends State<OrderProduct> {
                 height: _height*0.02,
               ),
               Text(
-                "2\$",
+                "${widget.price}\$",
                 style: GoogleFonts.robotoSlab(
                   color: kDarkText,
                   fontSize: _height * 0.019,
@@ -79,7 +84,7 @@ class _OrderProductState extends State<OrderProduct> {
                 height: _height*0.02,
               ),
               Text(
-                "Qantity : 8",
+                "Qantity : ${widget.quantity}",
                 style: GoogleFonts.robotoSlab(
                   color: kColor,
                   fontSize: _height * 0.018,
