@@ -255,7 +255,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                               ),
                               SharedData.user.role == "delivery"
                                   ? InkWell(
-                                      onTap: () {
+                                      onTap: () async {
                                         if (status == 0) {
                                           showConfirmation(context, "Warning",
                                               "do you really want to change the status to Delivred ?",
@@ -263,10 +263,14 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             setState(() {
                                               status = (status + 1) % 2;
                                             });
+                                            print(ifDeliveyStates[status]);
+
                                             _sharedData.updateProductsStatus(
                                                 date, ifDeliveyStates[status]);
+                                            _sharedData.order.situation =
+                                                ifDeliveyStates[status];
                                             await Order()
-                                                .updateOrder(_sharedData.order);
+                                                .updateSubs(_sharedData.order);
                                             Navigator.of(context,
                                                     rootNavigator: true)
                                                 .pop();
@@ -317,6 +321,8 @@ class _SubsDetailsState extends State<SubsDetails> {
                                               _sharedData.updateProductsStatus(
                                                   date, ifVendorStates[status]);
                                             });
+                                            _sharedData.order.situation =
+                                                ifVendorStates[status];
                                             await Order()
                                                 .updateSubs(_sharedData.order);
                                             _firestore
@@ -343,6 +349,9 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             _sharedData.updateProductsStatus(
                                                 date, ifVendorStates[status]);
                                           });
+                                          _sharedData.order.situation =
+                                              ifVendorStates[status];
+
                                           await Order()
                                               .updateSubs(_sharedData.order);
                                         }

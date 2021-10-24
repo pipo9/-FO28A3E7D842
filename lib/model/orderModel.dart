@@ -21,10 +21,12 @@ class OrderModel {
   String deliveryId;
   UserModel user;
   bool acceptance;
+  String statusDay;
 
   OrderModel(String id, Map<String, dynamic> data) {
     this.uid = id;
     this.id = data['orderId'];
+    this.statusDay = data['statusDay'];
     
     User().getUsersInfo(data['userId']).then((user) {
       this.user = user;
@@ -61,6 +63,7 @@ class OrderModel {
     });
    
     return {
+      "statusDay":statusDay,
       "products":listProducts,
       "acceptance":acceptance,
       'vendorId': vendorId,

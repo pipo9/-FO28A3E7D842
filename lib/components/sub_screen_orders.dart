@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:grocery/controllers/orderController.dart';
 import 'package:grocery/model/orderModel.dart';
 import 'package:grocery/shared_Pref.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -21,6 +23,7 @@ class SubScreenOrders extends StatefulWidget {
 class _SubScreenOrdersState extends State<SubScreenOrders> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  Order _order = Order();
 
   List stateOrder = ["pendingrejected", "processingprepared", "delivered"];
   List stateSubs = [
@@ -156,6 +159,15 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                             children: docs.map((order) {
                           OrderModel localOrderContainer =
                               OrderModel(order.id, order.data());
+                          if (localOrderContainer.statusDay == null ||
+                              localOrderContainer.statusDay !=
+                                  DateFormat('yyyy-MM-dd')
+                                      .format(DateTime.now())) {
+                            localOrderContainer.statusDay =
+                                DateFormat('yyyy-MM-dd').format(DateTime.now());
+                            localOrderContainer.situation = "pending";
+                            _order.updateSubs(localOrderContainer);
+                          }
                           if (order["purchased_at"].toString().contains(time) &&
                               stateSubs[widget.status]
                                   .toString()

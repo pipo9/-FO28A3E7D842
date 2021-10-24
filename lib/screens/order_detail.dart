@@ -14,9 +14,7 @@ class OrderDtails extends StatefulWidget {
 }
 
 class _OrderDtailsState extends State<OrderDtails> {
-
   int status = 0;
-  bool init = true;
   List<Color> iconsColors = [kColor, klightGrey, klightGrey];
   List<String> ifDeliveyStates = ['processing', 'delivered'];
   List<Color> ifDeliveryColors = [kBlueAccent.withOpacity(0.2), kGreen];
@@ -48,57 +46,54 @@ class _OrderDtailsState extends State<OrderDtails> {
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
 
-    if (init) {
-      setState(() {
-        init = false;
-      });
-      switch (_sharedData.order.situation) {
-        case 'delivered':
-          {
-            setState(() {
-              status = 1;
-            });
-            break;
-          }
-        case 'rejected':
-          {
-            setState(() {
-              status = 2;
-            });
-            break;
-          }
-        case 'pending':
-          {
-            setState(() {
-              status = 0;
-            });
-            break;
-          }
-        case 'processing':
-          {
-            setState(() {
-              status = SharedData.user.role == 'delivery' ? 0 : 1;
-            });
-            break;
-          }
-        case 'prepared':
-          {
-            setState(() {
-              status = SharedData.user.role == 'delivery' ? 0 : 1;
-            });
-            break;
-          }
-
+    switch (_sharedData.order.situation) {
+      case 'delivered':
+        {
+          setState(() {
+            status = 1;
+          });
           break;
-        default:
-          {
-            setState(() {
-              status = 0;
-            });
-            break;
-          }
-      }
+        }
+      case 'rejected':
+        {
+          setState(() {
+            status = 2;
+          });
+          break;
+        }
+      case 'pending':
+        {
+          setState(() {
+            status = 0;
+          });
+          break;
+        }
+      case 'processing':
+        {
+          setState(() {
+            status = SharedData.user.role == 'delivery' ? 0 : 1;
+          });
+          break;
+        }
+      case 'prepared':
+        {
+          setState(() {
+            status = SharedData.user.role == 'delivery' ? 0 : 2;
+          });
+          break;
+        }
+
+        break;
+      default:
+        {
+          setState(() {
+            status = 0;
+          });
+          break;
+        }
     }
+
+    print(status);
 
     return Scaffold(
       backgroundColor: klightGrey,
@@ -349,7 +344,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                 SizedBox(
                   height: _height * 0.04,
                 ),
-                _sharedData.order.acceptance == true
+                _sharedData.order.acceptance != true
                     ? SizedBox(
                         height: _height * 0.04,
                       )
@@ -559,7 +554,6 @@ class _OrderDtailsState extends State<OrderDtails> {
                                           () async {
                                         setState(() {
                                           status = (status + 1) % 2;
-                                          init = false;
                                           _sharedData.order.situation =
                                               ifDeliveyStates[status];
                                         });
@@ -607,37 +601,36 @@ class _OrderDtailsState extends State<OrderDtails> {
                                 )
                               : InkWell(
                                   onTap: () async {
-                                    if (status == 1) {
-                                      showConfirmation(context, "Warning",
-                                          "do you really want to change the status to Prepared ?",
-                                          () async {
+                                    if (status != 2) {
+                                      if (status == 1) {
+                                        showConfirmation(context, "Warning",
+                                            "do you really want to change the status to Prepared ?",
+                                            () async {
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pop();
+                                          setState(() {
+                                            status = (status + 1) % 3;
+                                            _sharedData.order.situation =
+                                                ifVendorStates[status];
+                                          });
+                                          await Order()
+                                              .updateOrder(_sharedData.order);
+                                        }, () {
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pop();
+                                        });
+                                      }
+                                      if (status == 0) {
                                         setState(() {
                                           status = (status + 1) % 3;
-                                          init = false;
                                           _sharedData.order.situation =
-                                              ifDeliveyStates[status];
+                                              ifVendorStates[status];
                                         });
                                         await Order()
-                                            .updateSubs(_sharedData.order);
-                                       
-                                        Navigator.of(context,
-                                                rootNavigator: true)
-                                            .pop();
-                                      }, () {
-                                        Navigator.of(context,
-                                                rootNavigator: true)
-                                            .pop();
-                                      });
-                                    }
-                                    if (status == 0) {
-                                      setState(() {
-                                        status = (status + 1) % 3;
-                                        init = false;
-                                        _sharedData.order.situation =
-                                            ifDeliveyStates[status];
-                                      });
-                                      await Order()
-                                          .updateSubs(_sharedData.order);
+                                            .updateOrder(_sharedData.order);
+                                      }
                                     }
                                   },
                                   child: Container(
