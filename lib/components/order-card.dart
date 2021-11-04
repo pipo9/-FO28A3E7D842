@@ -16,6 +16,7 @@ class OrderCard extends StatefulWidget {
 
 class _OrderCardState extends State<OrderCard> {
   var status;
+  String state;
   List<Color> pendingColors = [
     kColorRed,
     kDarkBlue,
@@ -79,6 +80,7 @@ class _OrderCardState extends State<OrderCard> {
           });
           break;
         }
+      case 'dispatched':
       case 'processing':
         {
           setState(() {
@@ -103,6 +105,8 @@ class _OrderCardState extends State<OrderCard> {
           break;
         }
     }
+
+    state = status == 2 ? "ready for pickUp" : widget.status;
 
     return InkWell(
         onTap: widget.onTap,
@@ -154,7 +158,7 @@ class _OrderCardState extends State<OrderCard> {
                       ],
                     ),
                     Text(
-                      status== 2 ? "ready for pickUp" :widget.status,
+                      state,
                       style: GoogleFonts.robotoSlab(
                         color: pendingColors[status],
                         fontSize: _height * 0.020,

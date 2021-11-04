@@ -87,7 +87,7 @@ class _HomeState extends State<Home> {
                               child: Icon(
                                 Icons.calendar_today_outlined,
                                 size: _width * 0.055,
-                                color: kColor,
+                                color: kDarkGrey,
                               )),
                           SizedBox(width: _width * 0.05),
                           InkWell(
@@ -97,7 +97,7 @@ class _HomeState extends State<Home> {
                             child: Icon(
                               Icons.notifications_none,
                               size: _width * 0.07,
-                              color: kBlueAccent,
+                              color: kDarkGrey,
                             ),
                           ),
                           SizedBox(width: _width * 0.05),

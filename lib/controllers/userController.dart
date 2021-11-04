@@ -1,3 +1,6 @@
+
+import 'package:grocery/Helpers/Config.dart';
+import 'package:grocery/Helpers/HttpClient.dart';
 import 'package:grocery/model/userModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,6 +8,8 @@ import 'package:grocery/shared_Pref.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class User {
+
+
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -93,6 +98,23 @@ class User {
       }
     } catch (e) {
       print(e.message);
+    }
+  }
+
+  sendEmail(stauts, id,email) async {
+    HttpClient httpClient = new HttpClient();
+    var headers = <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      };
+    var body = {
+      "id": id,
+      "status": stauts,
+      "email":email
+    };
+    try {
+      await httpClient.postRequest(Urls.sendEmail, headers, body);
+    } catch (e) {
+      print(e);
     }
   }
 }

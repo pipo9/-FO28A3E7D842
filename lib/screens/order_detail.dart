@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grocery/components/order_product.dart';
 import 'package:grocery/controllers/orderController.dart';
+import 'package:grocery/controllers/userController.dart';
 import 'package:grocery/shared_Pref.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
@@ -16,8 +17,8 @@ class OrderDtails extends StatefulWidget {
 class _OrderDtailsState extends State<OrderDtails> {
   int status = 0;
   List<Color> iconsColors = [kColor, klightGrey, klightGrey];
-  List<String> ifDeliveyStates = ['processing', 'delivered'];
-  List<Color> ifDeliveryColors = [kBlueAccent.withOpacity(0.2), kGreen];
+  List<String> ifDeliveyStates = ['processing', 'dispatched', 'delivered'];
+  List<Color> ifDeliveryColors = [kBlueAccent.withOpacity(0.2), kColor, kGreen];
   List<IconData> ifDeliveyicons = [Icons.loop, Icons.local_mall];
 
   List<Color> ifVendorColors = [
@@ -35,9 +36,7 @@ class _OrderDtailsState extends State<OrderDtails> {
   bool loading = false;
 
   toggleSpinner() {
-    setState(() {
-      loading = !loading;
-    });
+    setState(() {});
   }
 
   @override
@@ -75,6 +74,13 @@ class _OrderDtailsState extends State<OrderDtails> {
           });
           break;
         }
+      case 'dispatched':
+        {
+          setState(() {
+            status = SharedData.user.role == 'delivery' ? 1 : 2;
+          });
+          break;
+        }
       case 'prepared':
         {
           setState(() {
@@ -92,8 +98,6 @@ class _OrderDtailsState extends State<OrderDtails> {
           break;
         }
     }
-
-    print(status);
 
     return Scaffold(
       backgroundColor: klightGrey,
@@ -478,6 +482,8 @@ class _OrderDtailsState extends State<OrderDtails> {
                             onTap: () async {
                               _sharedData.order.vendorId = '';
                               await Order().updateOrder(_sharedData.order);
+                              await User().sendEmail("rejected",
+                                  _sharedData.order.id, kAdminEmail);
                               Navigator.pop(context);
                             },
                             child: Container(
@@ -508,6 +514,9 @@ class _OrderDtailsState extends State<OrderDtails> {
                                 _sharedData.order.acceptance = true;
                               });
                               await Order().updateOrder(_sharedData.order);
+                              await User().sendEmail("Accepted",
+                                  _sharedData.order.id, kAdminEmail);
+
                               toggleSpinner();
                             },
                             child: Container(
@@ -547,19 +556,22 @@ class _OrderDtailsState extends State<OrderDtails> {
                           ),
                           SharedData.user.role == "delivery"
                               ? InkWell(
-                                  onTap: () {
-                                    if (status == 0) {
+                                  onTap: () async {
+                                    if (status == 1) {
                                       showConfirmation(context, "Warning",
                                           "do you really want to change the status to Delivred ?",
                                           () async {
                                         setState(() {
-                                          status = (status + 1) % 2;
+                                          status = (status + 1) % 3;
                                           _sharedData.order.situation =
                                               ifDeliveyStates[status];
                                         });
 
                                         await Order()
                                             .updateOrder(_sharedData.order);
+                                        await User().sendEmail("Delivered",
+                                            _sharedData.order.id, kAdminEmail);
+
                                         Navigator.of(context,
                                                 rootNavigator: true)
                                             .pop();
@@ -568,6 +580,17 @@ class _OrderDtailsState extends State<OrderDtails> {
                                                 rootNavigator: true)
                                             .pop();
                                       });
+                                    }
+                                    if (status == 0) {
+                                      {
+                                        setState(() {
+                                          status = (status + 1) % 3;
+                                          _sharedData.order.situation =
+                                              ifDeliveyStates[status];
+                                        });
+                                        await Order()
+                                            .updateOrder(_sharedData.order);
+                                      }
                                     }
                                   },
                                   child: Container(
@@ -601,28 +624,13 @@ class _OrderDtailsState extends State<OrderDtails> {
                                 )
                               : InkWell(
                                   onTap: () async {
-                                    if (status != 2) {
-                                      if (status == 1) {
-                                        showConfirmation(context, "Warning",
-                                            "do you really want to change the status to Prepared ?",
-                                            () async {
-                                          Navigator.of(context,
-                                                  rootNavigator: true)
-                                              .pop();
-                                          setState(() {
-                                            status = (status + 1) % 3;
-                                            _sharedData.order.situation =
-                                                ifVendorStates[status];
-                                          });
-                                          await Order()
-                                              .updateOrder(_sharedData.order);
-                                        }, () {
-                                          Navigator.of(context,
-                                                  rootNavigator: true)
-                                              .pop();
-                                        });
-                                      }
-                                      if (status == 0) {
+                                    if (status == 1) {
+                                      showConfirmation(context, "Warning",
+                                          "do you really want to change the status to Prepared ?",
+                                          () async {
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pop();
                                         setState(() {
                                           status = (status + 1) % 3;
                                           _sharedData.order.situation =
@@ -630,7 +638,24 @@ class _OrderDtailsState extends State<OrderDtails> {
                                         });
                                         await Order()
                                             .updateOrder(_sharedData.order);
-                                      }
+                                        await User().sendEmail("Prepared",
+                                            _sharedData.order.id, kAdminEmail);
+                                      }, () {
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pop();
+                                      });
+                                    }
+                                    if (status == 0 &&
+                                        _sharedData.order.situation ==
+                                            'prepared') {
+                                      setState(() {
+                                        status = (status + 1) % 3;
+                                        _sharedData.order.situation =
+                                            ifVendorStates[status];
+                                      });
+                                      await Order()
+                                          .updateOrder(_sharedData.order);
                                     }
                                   },
                                   child: Container(

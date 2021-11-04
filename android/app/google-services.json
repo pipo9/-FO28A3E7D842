@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:528514823299:android:0c79ccce45c59acfce57b6",
+        "mobilesdk_app_id": "1:528514823299:android:b1fa9fd7e39a4392ce57b6",
         "android_client_info": {
-          "package_name": "com.example.grocerry"
+          "package_name": "com.example.grocery"
         }
       },
       "oauth_client": [

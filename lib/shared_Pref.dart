@@ -3,9 +3,12 @@ import 'package:grocery/model/orderModel.dart';
 import 'package:grocery/model/productModel.dart';
 import 'package:grocery/model/userModel.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class SharedData with ChangeNotifier {
   static UserModel user;
+  
   OrderModel order;
   List<ProductModel> toDayproducts = [];
   String _subCurentstatus;
@@ -43,6 +46,16 @@ class SharedData with ChangeNotifier {
     var dateYMD = DateFormat('yyyy-MM-dd').format(date);
     order.products.forEach((product) {
       if (product.dates[dateYMD] != "paused") product.dates[dateYMD] = status;
+    });
+  }
+
+  pushNotification(status) async {
+      FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+    await _firestore.collection("notifications").add({
+      "body": "Order with ID :${order.id} \n is now prepared",
+      "title": "Order Prepared",
+      "to": "${order.deliveryId}"
     });
   }
 }

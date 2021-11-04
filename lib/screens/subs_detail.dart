@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grocery/components/calendar.dart';
 import 'package:grocery/components/order_product.dart';
 import 'package:grocery/controllers/orderController.dart';
+import 'package:grocery/controllers/userController.dart';
 import 'package:grocery/shared_Pref.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
@@ -16,13 +16,11 @@ class SubsDetails extends StatefulWidget {
 }
 
 class _SubsDetailsState extends State<SubsDetails> {
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
   int status = 0;
   String disabled;
   List<Color> iconsColors = [kColor, klightGrey, klightGrey];
-  List<String> ifDeliveyStates = ['processing', 'delivered'];
-  List<Color> ifDeliveryColors = [kBlueAccent.withOpacity(0.2), kGreen];
+  List<String> ifDeliveyStates = ['processing', 'dispatched', 'delivered'];
+  List<Color> ifDeliveryColors = [kBlueAccent.withOpacity(0.2), kColor, kGreen];
   List<IconData> ifDeliveyicons = [Icons.loop, Icons.local_mall];
 
   List<Color> ifVendorColors = [
@@ -52,7 +50,8 @@ class _SubsDetailsState extends State<SubsDetails> {
 
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
-    switch (_sharedData.onDateSelected(date)) {
+    String state = _sharedData.onDateSelected(date);
+    switch (state) {
       case 'delivered':
         {
           setState(() {
@@ -85,6 +84,13 @@ class _SubsDetailsState extends State<SubsDetails> {
         {
           setState(() {
             status = status = SharedData.user.role == 'delivery' ? 0 : 2;
+          });
+          break;
+        }
+      case 'dispatched':
+        {
+          setState(() {
+            status = SharedData.user.role == 'delivery' ? 1 : 2;
           });
           break;
         }
@@ -187,6 +193,8 @@ class _SubsDetailsState extends State<SubsDetails> {
                                   await Order().updateOrder(_sharedData.order);
                                   Navigator.pushReplacementNamed(
                                       context, '/home');
+                                  await User().sendEmail("Rejected",
+                                      _sharedData.order.id, kAdminEmail);
                                 },
                                 child: Container(
                                     padding: EdgeInsets.symmetric(
@@ -216,6 +224,8 @@ class _SubsDetailsState extends State<SubsDetails> {
                                     _sharedData.order.acceptance = true;
                                   });
                                   await Order().updateSubs(_sharedData.order);
+                                  await User().sendEmail("Accepted",
+                                      _sharedData.order.id, kAdminEmail);
                                   toggleSpinner();
                                 },
                                 child: Container(
@@ -256,21 +266,23 @@ class _SubsDetailsState extends State<SubsDetails> {
                               SharedData.user.role == "delivery"
                                   ? InkWell(
                                       onTap: () async {
-                                        if (status == 0) {
+                                        if (status == 1) {
                                           showConfirmation(context, "Warning",
                                               "do you really want to change the status to Delivred ?",
                                               () async {
                                             setState(() {
-                                              status = (status + 1) % 2;
+                                              status = (status + 1) % 3;
                                             });
-                                            print(ifDeliveyStates[status]);
-
                                             _sharedData.updateProductsStatus(
                                                 date, ifDeliveyStates[status]);
                                             _sharedData.order.situation =
                                                 ifDeliveyStates[status];
                                             await Order()
                                                 .updateSubs(_sharedData.order);
+                                            await User().sendEmail(
+                                                "Delivered",
+                                                _sharedData.order.id,
+                                                kAdminEmail);
                                             Navigator.of(context,
                                                     rootNavigator: true)
                                                 .pop();
@@ -279,6 +291,18 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                     rootNavigator: true)
                                                 .pop();
                                           });
+                                        }
+                                        if (status == 0 &&
+                                            state == 'prepared') {
+                                          setState(() {
+                                            status = (status + 1) % 3;
+                                          });
+                                          _sharedData.updateProductsStatus(
+                                              date, ifDeliveyStates[status]);
+                                          _sharedData.order.situation =
+                                              ifDeliveyStates[status];
+                                          await Order()
+                                              .updateSubs(_sharedData.order);
                                         }
                                       },
                                       child: Container(
@@ -325,15 +349,10 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                 ifVendorStates[status];
                                             await Order()
                                                 .updateSubs(_sharedData.order);
-                                            _firestore
-                                                .collection("notifications")
-                                                .add({
-                                              "body":
-                                                  "Order with ID :${_sharedData.order.id} \n is now prepared",
-                                              "title": "Order Prepared",
-                                              "to":
-                                                  "${_sharedData.order.deliveryId}"
-                                            });
+                                            await User().sendEmail(
+                                                "Prepared",
+                                                _sharedData.order.id,
+                                                kAdminEmail);
                                             Navigator.of(context,
                                                     rootNavigator: true)
                                                 .pop();

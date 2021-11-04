@@ -25,10 +25,10 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
       RefreshController(initialRefresh: false);
   Order _order = Order();
 
-  List stateOrder = ["pendingrejected", "processingprepared", "delivered"];
+  List stateOrder = ["pendingrejected", "dispatchedprocessingprepared", "delivered"];
   List stateSubs = [
     'pendingrejectedsuspended',
-    'processingpreparedsubscribed',
+    'processingpreparedsubscribeddispatched',
     'delivered'
   ];
 

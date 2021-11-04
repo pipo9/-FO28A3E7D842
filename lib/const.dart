@@ -19,6 +19,8 @@ const kDarkGrey =  Color(0xff707070);
 //Fonts
 const smalText = 'Adobe Devanagari';
 
+//contacts
+const kAdminEmail ="Support@grocurs.com";
 //style
 // roboto slab bold
 TextStyle kStyle =
