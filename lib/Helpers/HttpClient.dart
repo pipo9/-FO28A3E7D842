@@ -24,7 +24,6 @@ class HttpClient {
         headers: headers,
         body: jsonEncode(body),
       );
-      print('body:${response.body}');
       final statusCode = response.statusCode;
       if (statusCode >= 200 && statusCode < 299) {
             print('done');

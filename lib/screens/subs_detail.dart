@@ -5,6 +5,7 @@ import 'package:grocery/components/order_product.dart';
 import 'package:grocery/controllers/orderController.dart';
 import 'package:grocery/controllers/userController.dart';
 import 'package:grocery/shared_Pref.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import '../../const.dart';
@@ -21,7 +22,11 @@ class _SubsDetailsState extends State<SubsDetails> {
   List<Color> iconsColors = [kColor, klightGrey, klightGrey];
   List<String> ifDeliveyStates = ['processing', 'dispatched', 'delivered'];
   List<Color> ifDeliveryColors = [kBlueAccent.withOpacity(0.2), kColor, kGreen];
-  List<IconData> ifDeliveyicons = [Icons.loop, Icons.local_mall];
+  List<IconData> ifDeliveyicons = [
+    Icons.loop,
+    Icons.local_mall,
+    Icons.local_mall
+  ];
 
   List<Color> ifVendorColors = [
     kBlueAccent.withOpacity(0.2),
@@ -55,7 +60,7 @@ class _SubsDetailsState extends State<SubsDetails> {
       case 'delivered':
         {
           setState(() {
-            status = 1;
+            status = 2;
           });
           break;
         }
@@ -159,6 +164,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                   onDateSelected: (value) {
                     setState(() {
                       date = value;
+                      print(date);
                       disabled = _sharedData.onDateSelected(date);
                     });
                   },
@@ -168,11 +174,14 @@ class _SubsDetailsState extends State<SubsDetails> {
                 SizedBox(
                   height: _height * 0.04,
                 ),
-                status == -1 || disabled == "disabled"
+                status == -1 ||
+                        disabled == "disabled" ||
+                        DateFormat('yyyy-MM-dd').format(date) !=
+                            DateFormat('yyyy-MM-dd').format(DateTime.now())
                     ? Align(
                         alignment: Alignment.center,
                         child: Text(
-                          "this order is Paused Or disabled",
+                          "You can not change this day state",
                           style: GoogleFonts.robotoSlab(
                             color: kColorRed,
                             fontSize: _height * 0.025,
@@ -270,6 +279,9 @@ class _SubsDetailsState extends State<SubsDetails> {
                                           showConfirmation(context, "Warning",
                                               "do you really want to change the status to Delivred ?",
                                               () async {
+                                            Navigator.of(context,
+                                                    rootNavigator: true)
+                                                .pop();
                                             setState(() {
                                               status = (status + 1) % 3;
                                             });
@@ -283,9 +295,6 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                 "Delivered",
                                                 _sharedData.order.id,
                                                 kAdminEmail);
-                                            Navigator.of(context,
-                                                    rootNavigator: true)
-                                                .pop();
                                           }, () {
                                             Navigator.of(context,
                                                     rootNavigator: true)
@@ -340,6 +349,9 @@ class _SubsDetailsState extends State<SubsDetails> {
                                           showConfirmation(context, "Warning",
                                               "do you really want to change the status to Prepared ?",
                                               () async {
+                                            Navigator.of(context,
+                                                    rootNavigator: true)
+                                                .pop();
                                             setState(() {
                                               status = (status + 1) % 3;
                                               _sharedData.updateProductsStatus(
@@ -353,9 +365,6 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                 "Prepared",
                                                 _sharedData.order.id,
                                                 kAdminEmail);
-                                            Navigator.of(context,
-                                                    rootNavigator: true)
-                                                .pop();
                                           }, () {
                                             Navigator.of(context,
                                                     rootNavigator: true)

@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
                     children: [
                       InkWell(
                         onTap: () {
-                          Navigator.pushReplacementNamed(context, "/profile");
+                          Navigator.pushNamed(context, "/profile");
                         },
                         child: CircleAvatar(
                           radius: 18,
@@ -92,7 +92,7 @@ class _HomeState extends State<Home> {
                           SizedBox(width: _width * 0.05),
                           InkWell(
                             onTap: () {
-                              Navigator.pushReplacementNamed(context, '/notif');
+                              Navigator.pushNamed(context, '/notif');
                             },
                             child: Icon(
                               Icons.notifications_none,
@@ -103,7 +103,7 @@ class _HomeState extends State<Home> {
                           SizedBox(width: _width * 0.05),
                           InkWell(
                             onTap: () {
-                              Navigator.pushReplacementNamed(
+                              Navigator.pushNamed(
                                   context, '/signIn');
                             },
                             child: Icon(

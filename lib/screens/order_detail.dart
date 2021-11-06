@@ -19,7 +19,11 @@ class _OrderDtailsState extends State<OrderDtails> {
   List<Color> iconsColors = [kColor, klightGrey, klightGrey];
   List<String> ifDeliveyStates = ['processing', 'dispatched', 'delivered'];
   List<Color> ifDeliveryColors = [kBlueAccent.withOpacity(0.2), kColor, kGreen];
-  List<IconData> ifDeliveyicons = [Icons.loop, Icons.local_mall];
+  List<IconData> ifDeliveyicons = [
+    Icons.loop,
+    Icons.local_mall,
+    Icons.local_mall
+  ];
 
   List<Color> ifVendorColors = [
     kBlueAccent.withOpacity(0.2),
@@ -49,7 +53,7 @@ class _OrderDtailsState extends State<OrderDtails> {
       case 'delivered':
         {
           setState(() {
-            status = 1;
+            status = 2;
           });
           break;
         }
@@ -561,27 +565,27 @@ class _OrderDtailsState extends State<OrderDtails> {
                                       showConfirmation(context, "Warning",
                                           "do you really want to change the status to Delivred ?",
                                           () async {
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pop();
                                         setState(() {
                                           status = (status + 1) % 3;
-                                          _sharedData.order.situation =
-                                              ifDeliveyStates[status];
                                         });
-
+                                        _sharedData.order.situation =
+                                            ifDeliveyStates[status];
                                         await Order()
                                             .updateOrder(_sharedData.order);
                                         await User().sendEmail("Delivered",
                                             _sharedData.order.id, kAdminEmail);
-
-                                        Navigator.of(context,
-                                                rootNavigator: true)
-                                            .pop();
                                       }, () {
                                         Navigator.of(context,
                                                 rootNavigator: true)
                                             .pop();
                                       });
                                     }
-                                    if (status == 0) {
+                                    if (status == 0 &&
+                                        _sharedData.order.situation ==
+                                            'prepared') {
                                       {
                                         setState(() {
                                           status = (status + 1) % 3;
@@ -646,9 +650,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                             .pop();
                                       });
                                     }
-                                    if (status == 0 &&
-                                        _sharedData.order.situation ==
-                                            'prepared') {
+                                    if (status == 0) {
                                       setState(() {
                                         status = (status + 1) % 3;
                                         _sharedData.order.situation =

@@ -86,7 +86,8 @@ class _ProfileState extends State<Profile> {
                   Textfields(
                     enabled: enabled,
                     inputType: TextInputType.text,
-                    labetText: SharedData.user.fullName != null && SharedData.user.fullName != ''
+                    labetText: SharedData.user.fullName != null &&
+                            SharedData.user.fullName != ''
                         ? SharedData.user.fullName
                         : fill_info_name_labet,
                     hintText: fill_info_name_hint,
@@ -99,7 +100,8 @@ class _ProfileState extends State<Profile> {
                   Textfields(
                     enabled: enabled,
                     inputType: TextInputType.emailAddress,
-                    labetText: SharedData.user.email != null && SharedData.user.email != ''
+                    labetText: SharedData.user.email != null &&
+                            SharedData.user.email != ''
                         ? SharedData.user.email
                         : fill_info_email_labet,
                     hintText: fill_info_email_hint,
@@ -112,7 +114,8 @@ class _ProfileState extends State<Profile> {
                   Textfields(
                     enabled: enabled,
                     inputType: TextInputType.number,
-                    labetText: SharedData.user.phone != null && SharedData.user.phone!= ''
+                    labetText: SharedData.user.phone != null &&
+                            SharedData.user.phone != ''
                         ? SharedData.user.phone
                         : sign_in_phone_labet,
                     hintText: sign_in_phone_hint,
@@ -138,47 +141,54 @@ class _ProfileState extends State<Profile> {
                     },
                   ),
                   SizedBox(height: _height * 0.02),
-                  GradientButton(
-                    color1: kColor,
-                    color2: kBlueAccent,
-                    text: profile_update,
-                    textColor: Color(0xffF8F8F8),
-                    height: 44,
-                    width: 310,
-                    borderRadius: 10,
-                    onpressed: () async{
-                      toggleSpinner();
-                      var emailResponse = validateEmail(email);
-                      var phoneResponse = validatetextField(phone);
-                      var nameResponse = validatetextField(name);
+                  enabled
+                      ? GradientButton(
+                          color1: kColor,
+                          color2: kBlueAccent,
+                          text: profile_update,
+                          textColor: Color(0xffF8F8F8),
+                          height: 44,
+                          width: 310,
+                          borderRadius: 10,
+                          onpressed: () async {
+                            toggleSpinner();
+                            var emailResponse = validateEmail(email);
+                            var phoneResponse = validatetextField(phone);
+                            var nameResponse = validatetextField(name);
 
-                      if( !phoneResponse['status'] || !nameResponse['status'] || !emailResponse['status'] ){
-                        var text = emailResponse['status'] ?  "${emailResponse["message"]} \n - Text field length should not be empty" :"- Text field length should not be empty";
-                         showAlert(
-                            this.context,
-                            "error !",
-                            text,
-                            true, () {
-                          Navigator.of(context, rootNavigator: true).pop();
-                        });
-                       
-                      }
-                      else{
-                       var response = await User().updateUserInfo(email,phone,name);
-                       if(!response['status']){
-                         showAlert(
-                            this.context,
-                            "error !",
-                            "${response["message"]}",
-                            true, () {
-                          Navigator.of(context, rootNavigator: true).pop();
-                        });
-                       }
-                       
-                      }
-                      toggleSpinner();
-                    },
-                  ),
+                            if (!phoneResponse['status'] ||
+                                !nameResponse['status'] ||
+                                !emailResponse['status']) {
+                              var text = emailResponse['status']
+                                  ? "${emailResponse["message"]} \n - Text field length should not be empty"
+                                  : "- Text field length should not be empty";
+                              showAlert(this.context, "error !", text, true,
+                                  () {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+                              });
+                            } else {
+                              var response = await User()
+                                  .updateUserInfo(email, phone, name);
+                              if (!response['status']) {
+                                showAlert(this.context, "error !",
+                                    "${response["message"]}", true, () {
+                                  Navigator.of(context, rootNavigator: true)
+                                      .pop();
+                                });
+                              } else {
+                                emailTextController.clear();
+                                phoneTextController.clear();
+                                nameTextController.clear();
+                                setState(() {
+                                  enabled = false;
+                                });
+                              }
+                            }
+                            toggleSpinner();
+                          },
+                        )
+                      : SizedBox(height: _height * 0.15),
                   SizedBox(height: _height * 0.09),
                   Container(
                       width: 65,
