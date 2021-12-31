@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grocery/controllers/orderController.dart';
 import 'package:grocery/model/orderModel.dart';
+import 'package:grocery/model/productModel.dart';
 import 'package:grocery/shared_Pref.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -25,10 +26,12 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
       RefreshController(initialRefresh: false);
   Order _order = Order();
 
-  List stateOrder = ["pendingrejected", "dispatchedprocessingprepared", "delivered"];
+  List stateOrder = [
+    "pendingrejecteddispatchedprocessingprepared",
+    "delivered"
+  ];
   List stateSubs = [
-    'pendingrejectedsuspended',
-    'processingpreparedsubscribeddispatched',
+    'pendingrejectedsuspendedprocessingpreparedsubscribeddispatched',
     'delivered'
   ];
 
@@ -44,14 +47,7 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
     SharedData _sharedData = Provider.of<SharedData>(context, listen: false);
 
     // final _height = MediaQuery.of(context).size.height;
-    final year = widget.time.year.toString();
-    final month = widget.time.month.toString().length == 1
-        ? "0" + widget.time.month.toString()
-        : widget.time.month.toString();
-    final day = widget.time.day.toString().length == 1
-        ? "0" + widget.time.day.toString()
-        : widget.time.day.toString();
-    final time = year + '-' + month + '-' + day;
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -110,19 +106,20 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                             children: docs.map((order) {
                           OrderModel localOrderContainer =
                               OrderModel(order.id, order.data());
-                          if (order["purchased_at"].toString().contains(time) &&
-                              stateOrder[widget.status]
-                                  .toString()
-                                  .contains(order['situation'])) {
+                          if (stateOrder[widget.status]
+                              .toString()
+                              .contains(order['situation'])) {
                             return OrderCard(
-                              orderId: order["orderId"],
-                              onTap: () {
-                                _sharedData.order = localOrderContainer;
-
-                                Navigator.pushNamed(context, '/order');
-                              },
-                              status: order["situation"],
-                            );
+                                orderId: order["orderId"],
+                                onTap: () async {
+                                  _sharedData.order = localOrderContainer;
+                                  await Order().updateOrder(_sharedData.order);
+                                  Navigator.pushNamed(context, '/order');
+                                },
+                                status: order["situation"],
+                                seen: SharedData.user.role == "vendor"
+                                    ? localOrderContainer.vendorSeen
+                                    : localOrderContainer.deliverySeen);
                           } else {
                             return SizedBox();
                           }
@@ -168,22 +165,33 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                             localOrderContainer.situation = "pending";
                             _order.updateSubs(localOrderContainer);
                           }
-                          if (order["purchased_at"].toString().contains(time) &&
-                              stateSubs[widget.status]
-                                  .toString()
-                                  .contains(order['situation'])) {
-                            return OrderCard(
-                              orderId: order["orderId"],
-                              onTap: () {
-                                _sharedData.order = localOrderContainer;
-                                Navigator.popAndPushNamed(
-                                    context, '/subscripton');
-                              },
-                              status: order["situation"],
-                            );
-                          } else {
-                            return SizedBox();
+
+                          for (var Mapproduct in order["products"]) {
+                            ProductModel product = new ProductModel(Mapproduct);
+
+                            for (String day in product.days) {
+                              if (day ==
+                                      DateFormat('EEEE').format(widget.time) &&
+                                  stateSubs[widget.status]
+                                      .toString()
+                                      .contains(order['situation'])) {
+                                return OrderCard(
+                                    orderId: order["orderId"],
+                                    onTap: () async {
+                                      _sharedData.order = localOrderContainer;
+                                      await Order()
+                                          .updateSubs(_sharedData.order);
+                                      Navigator.pushNamed(
+                                          context, '/subscripton');
+                                    },
+                                    status: order["situation"],
+                                    seen: SharedData.user.role == "vendor"
+                                        ? localOrderContainer.vendorSeen
+                                        : localOrderContainer.deliverySeen);
+                              }
+                            }
                           }
+                          return SizedBox();
                         }).toList());
                       })),
             ],

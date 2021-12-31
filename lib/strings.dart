@@ -166,6 +166,8 @@ const conditions_title = "Terms & Conditions";
 const my_subscriptions_title = "My subscriptions";
 //my notifs
 const notifications_title = "Notifications";
+const notifications_description = 'click on notifcation to mark as read';
+
 //profile
 const profile_title = "Profile";
 const profile_description = 'Keep your profile updated.';

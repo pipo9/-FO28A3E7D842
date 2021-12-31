@@ -9,7 +9,7 @@ class OrderModel {
   String amount;
   String phone;
   String localisation;
-  List<ProductModel> products=[];
+  List<ProductModel> products = [];
   String situation;
   String paymentMethod;
   String purchasedAt;
@@ -20,14 +20,19 @@ class OrderModel {
   UserModel delivery;
   String deliveryId;
   UserModel user;
-  bool acceptance;
+  bool vendorAcceptance;
+  bool deliveryAcceptance;
   String statusDay;
+  bool vendorSeen;
+  bool deliverySeen;
 
   OrderModel(String id, Map<String, dynamic> data) {
     this.uid = id;
     this.id = data['orderId'];
+    this.vendorSeen = data['vendorSeen'] ?? false;
+    this.deliverySeen = data['deliverySeen'] ?? false;
     this.statusDay = data['statusDay'];
-    
+
     User().getUsersInfo(data['userId']).then((user) {
       this.user = user;
     });
@@ -38,7 +43,8 @@ class OrderModel {
       this.delivery = user;
     });
     this.paymentId = data['paymentId'];
-    this.acceptance = data['acceptance'];
+    this.vendorAcceptance = data['vendorAcceptance'] ?? false;
+    this.deliveryAcceptance = data['deliveryAcceptance'] ?? false;
     this.amount = data['amount'];
     this.phone = data['phone'];
     this.localisation = data['localisation'];
@@ -58,16 +64,20 @@ class OrderModel {
   Map<String, dynamic> toMap() {
     List listProducts = [];
 
-    products.forEach((element) { 
+    products.forEach((element) {
       listProducts.add(element.toMap());
     });
-   
+
     return {
-      "statusDay":statusDay,
-      "products":listProducts,
-      "acceptance":acceptance,
+      "statusDay": statusDay,
+      "products": listProducts,
+      "vendorAcceptance": vendorAcceptance,
+      "deliveryAcceptance": deliveryAcceptance,
       'vendorId': vendorId,
+      'deliveryId': deliveryId,
       'situation': situation,
+      'vendorSeen':vendorSeen,
+      'deliverySeen':deliverySeen
     };
   }
 }

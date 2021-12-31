@@ -48,6 +48,7 @@ class _OrderDtailsState extends State<OrderDtails> {
     SharedData _sharedData = Provider.of<SharedData>(context, listen: false);
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
+    SharedData.context = context;
 
     switch (_sharedData.order.situation) {
       case 'delivered':
@@ -352,132 +353,15 @@ class _OrderDtailsState extends State<OrderDtails> {
                 SizedBox(
                   height: _height * 0.04,
                 ),
-                _sharedData.order.acceptance != true
-                    ? SizedBox(
-                        height: _height * 0.04,
-                      )
-                    : Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: _width * 0.08,
-                            vertical: _height * 0.03),
-                        width: _width,
-                        color: kBlueAccent.withOpacity(0.15),
-                        child: Column(
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Vendor details :",
-                                style: GoogleFonts.robotoSlab(
-                                  color: kDarkText,
-                                  fontSize: _height * 0.030,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: _height * 0.02,
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "Name:",
-                                  style: GoogleFonts.robotoSlab(
-                                    color: kColor,
-                                    fontSize: _height * 0.020,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: _width * 0.01,
-                                ),
-                                Text(
-                                  _sharedData.order.vendor.fullName,
-                                  style: GoogleFonts.robotoSlab(
-                                    color: kColor,
-                                    fontSize: _height * 0.018,
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "Email :",
-                                  style: GoogleFonts.robotoSlab(
-                                    color: kColor,
-                                    fontSize: _height * 0.020,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: _width * 0.01,
-                                ),
-                                Text(
-                                  _sharedData.order.vendor.email,
-                                  style: GoogleFonts.robotoSlab(
-                                    color: kColor,
-                                    fontSize: _height * 0.018,
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "Mobile :",
-                                  style: GoogleFonts.robotoSlab(
-                                    color: kColor,
-                                    fontSize: _height * 0.020,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: _width * 0.01,
-                                ),
-                                Text(
-                                  _sharedData.order.vendor.phone,
-                                  style: GoogleFonts.robotoSlab(
-                                    color: kColor,
-                                    fontSize: _height * 0.018,
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "Pickup Address :",
-                                  style: GoogleFonts.robotoSlab(
-                                    color: kColor,
-                                    fontSize: _height * 0.020,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: _width * 0.01,
-                                ),
-                                Text(
-                                  _sharedData.order.vendor.address,
-                                  style: GoogleFonts.robotoSlab(
-                                    color: kColor,
-                                    fontSize: _height * 0.018,
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        )),
                 SizedBox(
                   height: _height * 0.04,
                 ),
                 SharedData.user.role == "vendor" &&
-                            _sharedData.order.acceptance == null ||
-                        _sharedData.order.acceptance == false
+                            (_sharedData.order.vendorAcceptance == null ||
+                                _sharedData.order.vendorAcceptance == false) ||
+                        SharedData.user.role == "delivery" &&
+                            (_sharedData.order.deliveryAcceptance == null ||
+                                _sharedData.order.deliveryAcceptance == false)
                     ? Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -515,7 +399,13 @@ class _OrderDtailsState extends State<OrderDtails> {
                             onTap: () async {
                               toggleSpinner();
                               setState(() {
-                                _sharedData.order.acceptance = true;
+                                if (SharedData.user.role == "vendor") {
+                                  _sharedData.order.vendorSeen = true;
+                                  _sharedData.order.vendorAcceptance = true;
+                                } else {
+                                  _sharedData.order.deliverySeen = true;
+                                  _sharedData.order.deliveryAcceptance = true;
+                                }
                               });
                               await Order().updateOrder(_sharedData.order);
                               await User().sendEmail("Accepted",
@@ -573,6 +463,10 @@ class _OrderDtailsState extends State<OrderDtails> {
                                         });
                                         _sharedData.order.situation =
                                             ifDeliveyStates[status];
+                                        if (_sharedData.order.paymentMethod =='Wallet') 
+                                        {
+                                         await User().updateWallet(_sharedData.order);
+                                        }
                                         await Order()
                                             .updateOrder(_sharedData.order);
                                         await User().sendEmail("Delivered",
@@ -697,14 +591,17 @@ class _OrderDtailsState extends State<OrderDtails> {
                 Column(
                     children: _sharedData.order.products.map((product) {
                   return OrderProduct(
-                    imageUrl: product.image,
-                    price: product.price,
-                    productName: product.name,
-                    quantity: product.quantity,
-                  );
+                      imageUrl: product.image,
+                      price: product.price,
+                      productName: product.name,
+                      quantity: product.quantity,
+                      days: product.days,
+                      simple : true
+                      );
                 }).toList())
               ],
-            )),
+            )
+            ),
           )),
     );
   }

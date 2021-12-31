@@ -4,6 +4,7 @@ import 'package:grocery/components/text_fields.dart';
 import 'package:grocery/components/header_sign_in_up.dart';
 import 'package:grocery/components/gradient_button.dart';
 import 'package:grocery/controllers/userController.dart';
+import 'package:grocery/shared_Pref.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../../const.dart';
 import '../../strings.dart';
@@ -32,7 +33,7 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
-
+    
     return Scaffold(
       backgroundColor: klightGrey,
       body: ModalProgressHUD(
@@ -61,6 +62,7 @@ class _SignInState extends State<SignIn> {
                     inputType: TextInputType.text,
                     labetText: fill_info_password_labet,
                     hintText: fill_info_password_hint,
+                    password: true,
                     icon: Icons.lock,
                     onChanged: (value) {
                       password = value;
@@ -83,8 +85,10 @@ class _SignInState extends State<SignIn> {
                       if (emailResponse['status'] &&
                           passwordResponse['status']) {
                         var response =await User().signIn(email, password);
-                        if(response['status'])
+                        if(response['status']){
+                        await SharedData().getNotifications();
                         Navigator.pushReplacementNamed(this.context, '/home');
+                        }
                         else
                         showAlert(
                             this.context,

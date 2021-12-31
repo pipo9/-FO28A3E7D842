@@ -6,6 +6,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 // Colors
 const kColor = Color(0xff0F357B);
 const klightGrey = Color(0xffF8F8F8);
+const klightblue = Color(0xffD8F8F8);
 const kColorRed = Color(0xffD61B2F);
 const kBlueAccent = Color(0xff00A5BB);
 const kOrange = Color(0xffFFBA00);
@@ -20,7 +21,7 @@ const kDarkGrey =  Color(0xff707070);
 const smalText = 'Adobe Devanagari';
 
 //contacts
-const kAdminEmail ="achraf.bouchouik@gmail.com";
+const kAdminEmail ="Support@grocurs.com";
 //style
 // roboto slab bold
 TextStyle kStyle =
@@ -38,7 +39,7 @@ double resizeText(String text) {
   } else if (text.length >= 27) {
     size = 8;
   }
-  return size;
+  return size+1;
 }
 
 void showAlert(context, title, message, error, onPressed) {

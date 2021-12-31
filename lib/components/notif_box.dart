@@ -2,23 +2,26 @@ import 'package:flutter/material.dart';
 import '../const.dart';
 
 class NotifBox extends StatelessWidget {
-  
   final double width;
   final String title;
   final String body;
+  final bool seen;
   final double height;
-
-  const NotifBox({Key key, this.width, this.title, this.body, this.height}) : super(key: key);
+  final Function onTap;
+  const NotifBox({Key key, this.width, this.title, this.body, this.height, @required this.onTap, @required this.seen})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return InkWell(
+      onTap: onTap,
+        child: Container(
       margin: EdgeInsets.symmetric(
           horizontal: width * 0.06, vertical: height * 0.015),
       padding: EdgeInsets.symmetric(
           horizontal: width * 0.06, vertical: height * 0.02),
       decoration: BoxDecoration(
-        color: klightGrey,
+        color: seen == false ? klightblue: klightGrey,
         borderRadius: BorderRadius.circular(5),
         boxShadow: [
           BoxShadow(
@@ -40,7 +43,7 @@ class NotifBox extends StatelessWidget {
           ),
           child: Icon(
             Icons.notifications,
-            color: kColor,
+            color:  kColor,
             size: height * 0.045,
           ),
         ),
@@ -49,23 +52,23 @@ class NotifBox extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                  title,
-                  style: TextStyle(
-                    color: kColor,
-                    fontSize: width * 0.04,
-                  ),
+                title,
+                style: TextStyle(
+                  color: kColor,
+                  fontSize: width * 0.04,
                 ),
+              ),
               Text(
-                  body,
-                  style: TextStyle(
-                    color: kColor.withOpacity(0.5),
-                    fontSize: width * 0.03,
-                  ),
+                body,
+                style: TextStyle(
+                  color: kColor.withOpacity(0.5),
+                  fontSize: width * 0.03,
                 ),
+              ),
             ],
           ),
         ),
       ]),
-    );
+    ));
   }
 }

@@ -4,12 +4,20 @@ import 'package:grocery/components/image_container.dart';
 import '../../const.dart';
 
 class OrderProduct extends StatefulWidget {
- final productName;
- final price;
- final quantity;
- final imageUrl;
+  final productName;
+  final price;
+  final quantity;
+  final imageUrl;
+  final days;
+  final simple;
 
- OrderProduct({@required this.productName,@required this.price,@required this.quantity , @required this.imageUrl});
+  OrderProduct(
+      {@required this.productName,
+      @required this.price,
+      @required this.quantity,
+      @required this.imageUrl,
+       this.simple = false,
+      @required this.days});
 
   @override
   _OrderProductState createState() => _OrderProductState();
@@ -40,9 +48,9 @@ class _OrderProductState extends State<OrderProduct> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ImageContainer(
-              width:_width*0.25,
+              width: _width * 0.25,
               img: widget.imageUrl,
-              height: _width*0.3,
+              height: _width * 0.3,
               borderRaduis: 10),
           SizedBox(
             width: _width * 0.05,
@@ -59,7 +67,7 @@ class _OrderProductState extends State<OrderProduct> {
                 ),
               ),
               SizedBox(
-                height: _height*0.02,
+                height: _height * 0.02,
               ),
               Text(
                 "${widget.quantity} pieces",
@@ -70,7 +78,7 @@ class _OrderProductState extends State<OrderProduct> {
                 ),
               ),
               SizedBox(
-                height: _height*0.02,
+                height: _height * 0.02,
               ),
               Text(
                 "${widget.price}\$",
@@ -81,7 +89,29 @@ class _OrderProductState extends State<OrderProduct> {
                 ),
               ),
               SizedBox(
-                height: _height*0.02,
+                height: _height * 0.02,
+              ),
+              
+              widget.simple == false ? 
+              Row(children: [
+                Text(widget.days[0].toString(),
+                    overflow: TextOverflow.visible,
+                    style: GoogleFonts.robotoSlab(
+                      color: kDarkGrey,
+                      fontSize: resizeText(widget.days.toString()),
+                      fontWeight: FontWeight.w300,
+                    )),
+                for (var i = 1; i < widget.days.length; i++)
+                  Text(", " + widget.days[i].toString(),
+                      overflow: TextOverflow.visible,
+                      style: GoogleFonts.robotoSlab(
+                        color: kDarkGrey,
+                        fontSize: resizeText(widget.days.toString()),
+                        fontWeight: FontWeight.w300,
+                      ))
+              ]): SizedBox(),
+              SizedBox(
+                height: _height * 0.02,
               ),
               Text(
                 "Qantity : ${widget.quantity}",
@@ -92,7 +122,7 @@ class _OrderProductState extends State<OrderProduct> {
                 ),
               ),
               SizedBox(
-                height: _height*0.02,
+                height: _height * 0.02,
               ),
             ],
           )

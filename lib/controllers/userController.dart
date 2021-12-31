@@ -1,6 +1,9 @@
+import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:grocery/Helpers/Config.dart';
 import 'package:grocery/Helpers/HttpClient.dart';
+import 'package:grocery/model/orderModel.dart';
 import 'package:grocery/model/userModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,8 +11,7 @@ import 'package:grocery/shared_Pref.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class User {
-
-
+  FirebaseMessaging _fcm = FirebaseMessaging.instance;
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -101,20 +103,85 @@ class User {
     }
   }
 
-  sendEmail(stauts, id,email) async {
+  sendEmail(stauts, id, email) async {
     HttpClient httpClient = new HttpClient();
     var headers = <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      };
-    var body = {
-      "id": id,
-      "status": stauts,
-      "email":email
+      'Content-Type': 'application/json; charset=UTF-8',
     };
+    var body = {"id": id, "status": stauts, "email": email};
     try {
       await httpClient.postRequest(Urls.sendEmail, headers, body);
     } catch (e) {
       print(e);
     }
   }
+
+  saveDeviceToken() async {
+    String uid = _auth.currentUser.uid;
+    String fcmToken = await _fcm.getToken();
+
+    if (fcmToken != null) {
+      var tokens = _firestore.collection('tokens').doc(fcmToken);
+      await tokens.set({
+        'uid': uid,
+        'token': fcmToken,
+        'createdAt': FieldValue.serverTimestamp(),
+        'platform': Platform.operatingSystem
+      });
+    }
+  }
+
+  updateWallet(OrderModel order) async {
+    var newBalance =
+        double.parse(order.user.wallet["balance"]) - double.parse(order.amount);
+    order.user.wallet["balance"] = newBalance.toString();
+    order.user.wallet["transactions"]
+        .add({"amount": "-${order.amount}","description":"By Wallet", "date": "${DateTime.now()}"});
+    try {
+      await _firestore
+          .collection('users')
+          .doc(order.user.uid)
+          .update(order.user.toMap());
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // initialise(context) {
+  //   if (Platform.isAndroid) {
+  //     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //       RemoteNotification notification = message.notification;
+  //       AndroidNotification android = message.notification?.android;
+  //       showNotification(context, notification.title, notification.body, null);
+  //     });
+  //   }
+  // }
+
+  // initializeNotifications(context) async {
+  //   await saveDeviceToken();
+  //   _onMessageNotification(context);
+  //   _onOpenMessageNotification(context);
+  // }
+
+  // void _onMessageNotification(context) {
+  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //     if (message.notification != null) {
+  //       showNotification(context, message.notification.title,
+  //           message.notification.body, null);
+  //     }
+  //   });
+  // }
+
+  // void _onOpenMessageNotification(context) {
+  //   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+  //     if (message.notification != null) {
+  //       showNotification(context, message.notification.title,
+  //           message.notification.body, null);
+  //     }
+  //   });
+  // }
+
+  // Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  //   print('Message on background: ${message.messageId}');
+  // }
 }

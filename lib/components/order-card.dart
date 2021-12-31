@@ -6,9 +6,13 @@ class OrderCard extends StatefulWidget {
   final String orderId;
   final onTap;
   final status;
+  final seen;
 
   OrderCard(
-      {@required this.orderId, @required this.onTap, @required this.status});
+      {@required this.orderId,
+      @required this.onTap,
+      @required this.status,
+      @required this.seen});
 
   @override
   _OrderCardState createState() => _OrderCardState();
@@ -125,7 +129,10 @@ class _OrderCardState extends State<OrderCard> {
               )
             ],
             borderRadius: BorderRadius.all(Radius.circular(5)),
-            color: klightGrey,
+            color: widget.status == 'pending' && (widget.seen == null ||
+                    widget.seen == false)
+                ? klightblue
+                : klightGrey,
           ),
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,

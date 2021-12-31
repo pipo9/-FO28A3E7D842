@@ -52,6 +52,7 @@ class _SubsDetailsState extends State<SubsDetails> {
   @override
   Widget build(BuildContext context) {
     SharedData _sharedData = Provider.of<SharedData>(context, listen: false);
+    SharedData.context = context;
 
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
@@ -125,6 +126,8 @@ class _SubsDetailsState extends State<SubsDetails> {
           break;
         }
     }
+    disabled = _sharedData.onDateSelected(date);
+
     return Scaffold(
       backgroundColor: klightGrey,
       appBar: AppBar(
@@ -164,8 +167,6 @@ class _SubsDetailsState extends State<SubsDetails> {
                   onDateSelected: (value) {
                     setState(() {
                       date = value;
-                      print(date);
-                      disabled = _sharedData.onDateSelected(date);
                     });
                   },
                   width: _width,
@@ -190,16 +191,25 @@ class _SubsDetailsState extends State<SubsDetails> {
                         ),
                       )
                     : SharedData.user.role == "vendor" &&
-                                _sharedData.order.acceptance == null ||
-                            _sharedData.order.acceptance == false
+                                (_sharedData.order.vendorAcceptance == null ||
+                                    _sharedData.order.vendorAcceptance ==
+                                        false) ||
+                            SharedData.user.role == "delivery" &&
+                                (_sharedData.order.deliveryAcceptance == null ||
+                                    _sharedData.order.deliveryAcceptance ==
+                                        false)
                         ? Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               InkWell(
                                 onTap: () async {
-                                  _sharedData.order.vendorId = '';
-                                  await Order().updateOrder(_sharedData.order);
+                                  if (SharedData.user.role == "vendor")
+                                    _sharedData.order.vendorId = '';
+                                  else
+                                    _sharedData.order.deliveryId = '';
+
+                                  await Order().updateSubs(_sharedData.order);
                                   Navigator.pushReplacementNamed(
                                       context, '/home');
                                   await User().sendEmail("Rejected",
@@ -230,7 +240,14 @@ class _SubsDetailsState extends State<SubsDetails> {
                                 onTap: () async {
                                   toggleSpinner();
                                   setState(() {
-                                    _sharedData.order.acceptance = true;
+                                    if (SharedData.user.role == "vendor") {
+                                      _sharedData.order.vendorSeen = true;
+                                      _sharedData.order.vendorAcceptance = true;
+                                    } else {
+                                      _sharedData.order.deliverySeen = true;
+                                      _sharedData.order.deliveryAcceptance =
+                                          true;
+                                    }
                                   });
                                   await Order().updateSubs(_sharedData.order);
                                   await User().sendEmail("Accepted",
@@ -291,6 +308,12 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                 ifDeliveyStates[status];
                                             await Order()
                                                 .updateSubs(_sharedData.order);
+                                            if (_sharedData
+                                                    .order.paymentMethod ==
+                                                'Wallet') {
+                                              await User().updateWallet(
+                                                  _sharedData.order);
+                                            }
                                             await User().sendEmail(
                                                 "Delivered",
                                                 _sharedData.order.id,
@@ -488,6 +511,29 @@ class _SubsDetailsState extends State<SubsDetails> {
                         Row(
                           children: [
                             Text(
+                              "Purchased At :",
+                              style: GoogleFonts.robotoSlab(
+                                color: kColor,
+                                fontSize: _height * 0.020,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            SizedBox(
+                              width: _width * 0.01,
+                            ),
+                            Text(
+                              _sharedData.order.purchasedAt,
+                              style: GoogleFonts.robotoSlab(
+                                color: kColor,
+                                fontSize: _height * 0.018,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
                               "TOTAL :",
                               style: GoogleFonts.robotoSlab(
                                 color: kColor,
@@ -632,7 +678,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                 SizedBox(
                   height: _height * 0.04,
                 ),
-                _sharedData.order.acceptance != true
+                _sharedData.order.vendorAcceptance != true
                     ? SizedBox()
                     : Container(
                         padding: EdgeInsets.symmetric(
@@ -754,14 +800,17 @@ class _SubsDetailsState extends State<SubsDetails> {
                 SizedBox(
                   height: _height * 0.04,
                 ),
+                SizedBox(
+                  height: _height * 0.04,
+                ),
                 Column(
                     children: _sharedData.toDayproducts.map((product) {
                   return OrderProduct(
-                    imageUrl: product.image,
-                    price: product.price,
-                    productName: product.name,
-                    quantity: product.quantity,
-                  );
+                      imageUrl: product.image,
+                      price: product.price,
+                      productName: product.name,
+                      quantity: product.quantity,
+                      days: product.days);
                 }).toList())
               ],
             )),

@@ -1,22 +1,50 @@
 import 'package:flutter/cupertino.dart';
+import 'package:grocery/model/notificationModel.dart';
 import 'package:grocery/model/orderModel.dart';
 import 'package:grocery/model/productModel.dart';
 import 'package:grocery/model/userModel.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
 class SharedData with ChangeNotifier {
   static UserModel user;
-  
+  static BuildContext context;
+  static List<NotificationModel> notifications = [];
+  static int unreadNotifs = 0;
+
   OrderModel order;
   List<ProductModel> toDayproducts = [];
   String _subCurentstatus;
 
   get subCurentstatus => _subCurentstatus;
 
+  get currentNotifications => notifications;
+
   set changeCurentOrder(OrderModel order) {
     this.order = order;
+    notifyListeners();
+  }
+
+  getNotifications() async {
+    List<NotificationModel> notifications = [];
+    int unseen = 0;
+    FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    await _firestore
+        .collection("notifications")
+        .where("to", isEqualTo: SharedData.user.uid)
+        .get()
+        .then((querySnapshot) => {
+              for (int i = 0; i < querySnapshot.docs.length; i++)
+                {
+                  notifications
+                      .add(new NotificationModel(querySnapshot.docs[i].data()))
+                }
+            });
+    for (var notif in notifications) {
+      if (notif.seen == false) unseen++;
+    }
+    unreadNotifs = unseen;
+    notifications = notifications;
     notifyListeners();
   }
 
@@ -50,7 +78,7 @@ class SharedData with ChangeNotifier {
   }
 
   pushNotification(status) async {
-      FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
     await _firestore.collection("notifications").add({
       "body": "Order with ID :${order.id} \n is now prepared",

@@ -34,6 +34,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
+    SharedData.context= context;
 
     return Scaffold(
       backgroundColor: klightGrey,

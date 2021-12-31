@@ -5,6 +5,7 @@ class UserModel {
   String fullName;
   String role;
   String address;
+  Map wallet;
 
   UserModel(String uid, Map<String, dynamic> data) {
     this.uid = uid ?? "";
@@ -13,6 +14,7 @@ class UserModel {
     this.fullName = data['fullName'] ?? "";
     this.role = data['role'] ?? "";
     this.address = data['address'] ?? "";
+    this.wallet = data['wallet']?? {};
   }
 
   Map<String, dynamic> toMap() {
@@ -20,6 +22,7 @@ class UserModel {
       'fullName': fullName,
       'email': email,
       'phone': phone,
+      'wallet':wallet
     };
   }
 }

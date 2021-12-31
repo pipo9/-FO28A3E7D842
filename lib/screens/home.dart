@@ -1,6 +1,11 @@
+import 'package:badges/badges.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grocery/components/sub_screen_orders.dart';
+import 'package:grocery/controllers/userController.dart';
+import 'package:grocery/model/notificationModel.dart';
+import 'package:grocery/shared_Pref.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../const.dart';
@@ -13,6 +18,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   bool loading = false;
   TextEditingController searchTextController = new TextEditingController();
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   int status = 0;
   DateTime time = DateTime.now();
   toggleSpinner() {
@@ -22,7 +29,13 @@ class _HomeState extends State<Home> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    SharedData.context = context;
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -90,21 +103,58 @@ class _HomeState extends State<Home> {
                                 color: kDarkGrey,
                               )),
                           SizedBox(width: _width * 0.05),
-                          InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/notif');
-                            },
-                            child: Icon(
-                              Icons.notifications_none,
-                              size: _width * 0.07,
-                              color: kDarkGrey,
-                            ),
-                          ),
+                          StreamBuilder(
+                              stream: _firestore
+                                  .collection("notifications")
+                                  .where("to", isEqualTo: SharedData.user.uid)
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                var data = snapshot.data;
+                                var unseen = [];
+                                SharedData.notifications = [];
+                                if (data != null) {
+                                  for (var notif in data.docs) {
+                                    var currentNotif = NotificationModel(notif);
+                                    SharedData.notifications.add(currentNotif);
+                                  }
+                                  for (var notif in SharedData.notifications) {
+                                    if (notif.seen == false) {
+                                      unseen.add(notif);
+                                    }
+                                  }
+                                  SharedData.notifications.sort(
+                                      (notif1, notif2) => notif1.timeStamp
+                                          .compareTo(notif1.timeStamp));
+                                }
+
+                                return Badge(
+                                  badgeContent: Text(
+                                    unseen.length.toString(),
+                                    style: TextStyle(
+                                        fontSize: _width * 0.025,
+                                        color: klightGrey),
+                                  ),
+                                  badgeColor: kColor,
+                                  position:
+                                      BadgePosition.topEnd(top: 0, end: 0),
+                                  child: InkWell(
+                                      onTap: () {
+                                        Navigator.pushNamed(context, '/notif');
+                                      },
+                                      child: Icon(
+                                        Icons.notifications_none,
+                                        size: _width * 0.07,
+                                        color: kDarkGrey,
+                                      )),
+                                  padding: EdgeInsets.all(2),
+                                );
+                              }),
                           SizedBox(width: _width * 0.05),
                           InkWell(
                             onTap: () {
-                              Navigator.pushNamed(
+                              Navigator.pushReplacementNamed(
                                   context, '/signIn');
+                              User().signOut();
                             },
                             child: Icon(
                               Icons.power_settings_new_outlined,
@@ -151,7 +201,7 @@ class _HomeState extends State<Home> {
                       ),
                     ],
                   ),
-                  width: _width * 1 / 3,
+                  width: _width * 1 / 2,
                   height: _height * 0.07,
                 )),
             InkWell(
@@ -164,12 +214,12 @@ class _HomeState extends State<Home> {
                 child: Column(
                   children: [
                     Icon(
-                      Icons.loop,
+                      Icons.shopping_bag_outlined,
                       color: status == 1 ? kBlueAccent : kDarkGrey,
                       size: _height * 0.035,
                     ),
                     Text(
-                      "Processing",
+                      "Delivered",
                       style: GoogleFonts.robotoSlab(
                         color: status == 1 ? kBlueAccent : kDarkGrey,
                         fontSize: _height * 0.017,
@@ -178,35 +228,7 @@ class _HomeState extends State<Home> {
                     ),
                   ],
                 ),
-                width: _width * 1 / 3,
-                height: _height * 0.07,
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                setState(() {
-                  status = 2;
-                });
-              },
-              child: Container(
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.shopping_bag_outlined,
-                      color: status == 2 ? kBlueAccent : kDarkGrey,
-                      size: _height * 0.035,
-                    ),
-                    Text(
-                      "Delivered",
-                      style: GoogleFonts.robotoSlab(
-                        color: status == 2 ? kBlueAccent : kDarkGrey,
-                        fontSize: _height * 0.017,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-                width: _width * 1 / 3,
+                width: _width * 1 / 2,
                 height: _height * 0.07,
               ),
             )
