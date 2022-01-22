@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grocery/controllers/orderController.dart';
 import 'package:grocery/model/orderModel.dart';
-import 'package:grocery/model/productModel.dart';
 import 'package:grocery/shared_Pref.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -166,30 +165,19 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                             _order.updateSubs(localOrderContainer);
                           }
 
-                          for (var Mapproduct in order["products"]) {
-                            ProductModel product = new ProductModel(Mapproduct);
-
-                            for (String day in product.days) {
-                              if (day ==
-                                      DateFormat('EEEE').format(widget.time) &&
-                                  stateSubs[widget.status]
-                                      .toString()
-                                      .contains(order['situation'])) {
-                                return OrderCard(
-                                    orderId: order["orderId"],
-                                    onTap: () async {
-                                      _sharedData.order = localOrderContainer;
-                                      await Order()
-                                          .updateSubs(_sharedData.order);
-                                      Navigator.pushNamed(
-                                          context, '/subscripton');
-                                    },
-                                    status: order["situation"],
-                                    seen: SharedData.user.role == "vendor"
-                                        ? localOrderContainer.vendorSeen
-                                        : localOrderContainer.deliverySeen);
-                              }
-                            }
+                          if (SharedData().onDateSelectedSubs(
+                              widget.time, localOrderContainer)) {
+                            return OrderCard(
+                                orderId: order["orderId"],
+                                onTap: () async {
+                                  _sharedData.order = localOrderContainer;
+                                  await Order().updateSubs(_sharedData.order);
+                                  Navigator.pushNamed(context, '/subscripton');
+                                },
+                                status: order["situation"],
+                                seen: SharedData.user.role == "vendor"
+                                    ? localOrderContainer.vendorSeen
+                                    : localOrderContainer.deliverySeen);
                           }
                           return SizedBox();
                         }).toList());

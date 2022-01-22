@@ -21,7 +21,8 @@ const kDarkGrey =  Color(0xff707070);
 const smalText = 'Adobe Devanagari';
 
 //contacts
-const kAdminEmail ="Support@grocurs.com";
+const kAdminEmail ="achraf.bouchouik@gmail.com";
+// "Support@grocurs.com";
 //style
 // roboto slab bold
 TextStyle kStyle =
@@ -174,7 +175,6 @@ showNotification(context, title, message, onPressed) {
     ),
     title: title,
     desc: message,
-    image: Image.asset("assets/images/notification.png"),
     buttons: [
       DialogButton(
         child: Text(

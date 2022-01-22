@@ -388,6 +388,9 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                 "Prepared",
                                                 _sharedData.order.id,
                                                 kAdminEmail);
+                                            await User().sendPushMessage(
+                                                _sharedData.order.deliveryId,
+                                                _sharedData.order.id , false);
                                           }, () {
                                             Navigator.of(context,
                                                     rootNavigator: true)
@@ -649,6 +652,30 @@ class _SubsDetailsState extends State<SubsDetails> {
                             ),
                           ],
                         ),
+                           Row(
+                          children: [
+                            Text(
+                              "Balance:",
+                              style: GoogleFonts.robotoSlab(
+                                color: kColor,
+                                fontSize: _height * 0.020,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            SizedBox(
+                              width: _width * 0.01,
+                            ),
+                            Text(
+                              _sharedData.order.user.wallet["balance"],
+                              style: GoogleFonts.robotoSlab(
+                                color: kColor,
+                                fontSize: _height * 0.018,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                          ],
+                        ),
+                   
                         Row(
                           children: [
                             Text(

@@ -49,6 +49,7 @@ class ProductModel {
       "price": price,
       "image": image,
       "status": status,
+      "quantity":quantity,
       "days": days,
       "id":id,
       "startDate":startDate

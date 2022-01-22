@@ -33,6 +33,9 @@ dependencies:
   flutter_slidable: ^0.6.0
   firebase_messaging: ^10.0.7
   flutter_local_notifications: 5.0.0+1
+  http: ^0.13.0
+  permission_handler: ^6.0.0
+
 
 
 

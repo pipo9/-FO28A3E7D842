@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:grocery/Helpers/Config.dart';
@@ -8,6 +10,7 @@ import 'package:grocery/model/userModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grocery/shared_Pref.dart';
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class User {
@@ -135,8 +138,11 @@ class User {
     var newBalance =
         double.parse(order.user.wallet["balance"]) - double.parse(order.amount);
     order.user.wallet["balance"] = newBalance.toString();
-    order.user.wallet["transactions"]
-        .add({"amount": "-${order.amount}","description":"By Wallet", "date": "${DateTime.now()}"});
+    order.user.wallet["transactions"].add({
+      "amount": "-${order.amount}",
+      "description": "By Wallet",
+      "date": "${DateTime.now()}"
+    });
     try {
       await _firestore
           .collection('users')
@@ -146,6 +152,59 @@ class User {
       print(e);
     }
   }
+
+  Future<void> sendPushMessage(id, orderId, isOrder) async {
+    var type = isOrder == true ? "Order" : "Subscription";
+     var headers = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    var body = jsonEncode({
+          "notif": {
+            "to": "$id",
+            "title": "Vendor Notification",
+            "body": 'the $type with the id $orderId is now prepared'
+          },
+          "userId": "$id"
+        });
+    if (id == "" || id == null) {
+      print('Unable to send FCM message, no delivery id exists.');
+      return;
+    }
+
+    try {
+      Response response = await http.post(
+        Uri.parse('https://grocurs-admin.herokuapp.com/notifications/send'),
+        headers: headers,
+        body: body,
+      );
+
+      final statusCode = response.statusCode;
+      if (statusCode >= 200 && statusCode < 299) {
+      print('FCM request for device sent!');
+      } else {
+        print("Server ERROR***:");
+      }
+    } on SocketException {
+      print("Socket ERROR***:");
+    }
+  }
+
+  // String constructFCMPayload(String token, id, type) {
+  //   return jsonEncode({
+  //     'token': token,
+  //     'android': {
+  //       'priority': "high",
+  //     },
+  //     'data': {
+  //       'via': 'Grocery Delivery App',
+  //       'count': 1,
+  //     },
+  //     'notification': {
+  //       'title': 'Vendor Notification',
+  //       'body': 'the $type with the id $orderId is now prepared',
+  //     },
+  //   });
+  // }
 
   // initialise(context) {
   //   if (Platform.isAndroid) {

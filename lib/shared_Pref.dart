@@ -57,16 +57,40 @@ class SharedData with ChangeNotifier {
         Map dates = product.dates;
         var dateYMD = DateFormat('yyyy-MM-dd').format(date);
         var dateEEE = DateFormat('EEEE').format(date);
-
-        if (dates.containsKey(dateYMD)) {
-          productStatus = dates[dateYMD.toString()];
-        } else if (product.status == "subscribed" && days.contains(dateEEE)) {
-          productStatus = "pending";
+        if (product.startDate.compareTo(dateYMD.toString()) <= 0) {
+          if (dates.containsKey(dateYMD)) {
+            productStatus = dates[dateYMD.toString()];
+          } else if (product.status == "subscribed" && days.contains(dateEEE)) {
+            productStatus = "pending";
+          }
+          products.add(product);
         }
-        products.add(product);
       }
     });
     toDayproducts = products;
+           
+    if (toDayproducts.length == 0) {
+      productStatus = "disabled";
+    }
+    return productStatus;
+  }
+ 
+  bool onDateSelectedSubs(DateTime date , OrderModel order) {
+    bool productStatus = false;
+    order.products.forEach((product) {
+      if (product.status != 'paused') {
+        List days = product.days;
+        var dateYMD = DateFormat('yyyy-MM-dd').format(date);
+        var dateEEE = DateFormat('EEEE').format(date);
+
+        if (product.startDate.compareTo(dateYMD.toString()) <= 0) {
+           if (days.contains(dateEEE)) {
+            productStatus = true;
+          }
+        }
+      }
+    });
+  
     return productStatus;
   }
 

@@ -49,7 +49,6 @@ class _OrderDtailsState extends State<OrderDtails> {
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
     SharedData.context = context;
-
     switch (_sharedData.order.situation) {
       case 'delivered':
         {
@@ -149,14 +148,12 @@ class _OrderDtailsState extends State<OrderDtails> {
                       children: [
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Payment details :",
-                            style: GoogleFonts.robotoSlab(
-                              color: kDarkText,
-                              fontSize: _height * 0.030,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
+                          child: Text("Payment details :",
+                              style: GoogleFonts.robotoSlab(
+                                color: kDarkText,
+                                fontSize: _height * 0.030,
+                                fontWeight: FontWeight.w700,
+                              )),
                         ),
                         SizedBox(
                           height: _height * 0.02,
@@ -328,6 +325,30 @@ class _OrderDtailsState extends State<OrderDtails> {
                         Row(
                           children: [
                             Text(
+                              "Balance:",
+                              style: GoogleFonts.robotoSlab(
+                                color: kColor,
+                                fontSize: _height * 0.020,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            SizedBox(
+                              width: _width * 0.01,
+                            ),
+                            Text(
+                              _sharedData.order.user.wallet["balance"],
+                              style: GoogleFonts.robotoSlab(
+                                color: kColor,
+                                fontSize: _height * 0.018,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                          ],
+                        ),
+                   
+                        Row(
+                          children: [
+                            Text(
                               "Delivery Address :",
                               style: GoogleFonts.robotoSlab(
                                 color: kColor,
@@ -368,11 +389,16 @@ class _OrderDtailsState extends State<OrderDtails> {
                         children: [
                           InkWell(
                             onTap: () async {
-                              _sharedData.order.vendorId = '';
+                              if (SharedData.user.role == "vendor")
+                                _sharedData.order.vendorId = '';
+                              else
+                                _sharedData.order.deliveryId = '';
+
                               await Order().updateOrder(_sharedData.order);
-                              await User().sendEmail("rejected",
+                              Navigator.pushReplacementNamed(context, '/home');
+                              await User().sendEmail("Rejected",
                                   _sharedData.order.id, kAdminEmail);
-                              Navigator.pop(context);
+
                             },
                             child: Container(
                                 padding: EdgeInsets.symmetric(
@@ -410,7 +436,6 @@ class _OrderDtailsState extends State<OrderDtails> {
                               await Order().updateOrder(_sharedData.order);
                               await User().sendEmail("Accepted",
                                   _sharedData.order.id, kAdminEmail);
-
                               toggleSpinner();
                             },
                             child: Container(
@@ -463,9 +488,10 @@ class _OrderDtailsState extends State<OrderDtails> {
                                         });
                                         _sharedData.order.situation =
                                             ifDeliveyStates[status];
-                                        if (_sharedData.order.paymentMethod =='Wallet') 
-                                        {
-                                         await User().updateWallet(_sharedData.order);
+                                        if (_sharedData.order.paymentMethod ==
+                                            'Wallet') {
+                                          await User()
+                                              .updateWallet(_sharedData.order);
                                         }
                                         await Order()
                                             .updateOrder(_sharedData.order);
@@ -538,6 +564,9 @@ class _OrderDtailsState extends State<OrderDtails> {
                                             .updateOrder(_sharedData.order);
                                         await User().sendEmail("Prepared",
                                             _sharedData.order.id, kAdminEmail);
+                                        await User().sendPushMessage(
+                                            _sharedData.order.deliveryId,
+                                            _sharedData.order.id , true);
                                       }, () {
                                         Navigator.of(context,
                                                 rootNavigator: true)
@@ -596,12 +625,10 @@ class _OrderDtailsState extends State<OrderDtails> {
                       productName: product.name,
                       quantity: product.quantity,
                       days: product.days,
-                      simple : true
-                      );
+                      simple: true);
                 }).toList())
               ],
-            )
-            ),
+            )),
           )),
     );
   }

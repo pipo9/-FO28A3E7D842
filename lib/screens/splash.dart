@@ -28,6 +28,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
         if (washere == true) {
           await User().getUserInfo();
+            await User().saveDeviceToken();
           Navigator.pushReplacementNamed(context, '/home');
         } else
           Navigator.pushReplacementNamed(context, '/signIn');

@@ -6,6 +6,7 @@ import 'package:grocery/components/gradient_button.dart';
 import 'package:grocery/controllers/userController.dart';
 import 'package:grocery/shared_Pref.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../const.dart';
 import '../../strings.dart';
 
@@ -79,6 +80,7 @@ class _SignInState extends State<SignIn> {
                     width: 310,
                     borderRadius: 10,
                     onpressed: () async {
+                      await Permission.ignoreBatteryOptimizations.request();
                       toggleSpinner();
                       var emailResponse = validateEmail(email);
                       var passwordResponse = validatetextField(password);
@@ -87,6 +89,7 @@ class _SignInState extends State<SignIn> {
                         var response =await User().signIn(email, password);
                         if(response['status']){
                         await SharedData().getNotifications();
+                        await User().saveDeviceToken();
                         Navigator.pushReplacementNamed(this.context, '/home');
                         }
                         else

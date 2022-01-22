@@ -2,8 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:grocery/const.dart';
-import 'package:grocery/controllers/userController.dart';
+// import 'package:grocery/const.dart';
 import 'package:grocery/screens/auth/resetPassword.dart';
 import 'package:grocery/screens/auth/signin.dart';
 import 'package:grocery/screens/home.dart';
@@ -15,6 +14,7 @@ import 'package:grocery/screens/subs_detail.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:grocery/shared_Pref.dart';
 import 'package:provider/provider.dart';
+
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
@@ -28,16 +28,28 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
+    flutterLocalNotificationsPlugin.show(
+            message.notification.hashCode,
+            message.notification.title,
+            message.notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                channel.description,
+                color: Colors.blue,
+                playSound: true,
+                icon: '@mipmap/ic_launcher',
+                priority: Priority.high
+              ),
+            ));
   print('A bg message just showed up :  ${message.messageId}');
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  User().saveDeviceToken();
-
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
@@ -48,6 +60,7 @@ void main() async {
     badge: true,
     sound: true,
   );
+
   runApp(MyApp());
 }
 
@@ -62,14 +75,16 @@ class _MyAppState extends State<MyApp> {
     return route;
   }
 
-  getdata(widget){
-   SharedData().getNotifications();
-   return widget;
+  getdata(widget) {
+    SharedData().getNotifications();
+    return widget;
   }
-
   @override
   void initState() {
     super.initState();
+
+
+
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification notification = message.notification;
       AndroidNotification android = message.notification?.android;
@@ -86,6 +101,7 @@ class _MyAppState extends State<MyApp> {
                 color: Colors.blue,
                 playSound: true,
                 icon: '@mipmap/ic_launcher',
+                priority: Priority.high
               ),
             ));
       }
@@ -96,10 +112,13 @@ class _MyAppState extends State<MyApp> {
       RemoteNotification notification = message.notification;
       AndroidNotification android = message.notification?.android;
       if (notification != null && android != null) {
-        showNotification(SharedData.context, message.notification.title,
-            message.notification.body, null);
+        // showNotification(SharedData.context, message.notification.title,
+        //     message.notification.body, (){
+        //       Navigator.pop(context);
+        //     });
       }
     });
+
   }
 
   @override

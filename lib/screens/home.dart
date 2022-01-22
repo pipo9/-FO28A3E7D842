@@ -7,6 +7,7 @@ import 'package:grocery/controllers/userController.dart';
 import 'package:grocery/model/notificationModel.dart';
 import 'package:grocery/shared_Pref.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../const.dart';
 
@@ -53,7 +54,16 @@ class _HomeState extends State<Home> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
-                        onTap: () {
+                        onTap: () async {
+                          // try {
+                          //  var val =   await Permission.ignoreBatteryOptimizations.request();
+                          //   print(val);
+                            
+                          // } catch (e) {
+                          //   print(e);
+                          // }
+
+                          // await User().sendPushMessage('n1vescGHGfT1ve3MFhmKnif6U883', 1111, false);
                           Navigator.pushNamed(context, "/profile");
                         },
                         child: CircleAvatar(
@@ -128,15 +138,17 @@ class _HomeState extends State<Home> {
                                 }
 
                                 return Badge(
-                                  badgeContent: Text(
-                                    unseen.length.toString(),
-                                    style: TextStyle(
-                                        fontSize: _width * 0.025,
-                                        color: klightGrey),
-                                  ),
+                                  badgeContent: Padding(
+                                      padding: EdgeInsets.all(1),
+                                      child: Text(
+                                        unseen.length.toString(),
+                                        style: TextStyle(
+                                            fontSize: _width * 0.020,
+                                            color: klightGrey),
+                                      )),
                                   badgeColor: kColor,
                                   position:
-                                      BadgePosition.topEnd(top: 0, end: 0),
+                                      BadgePosition.topEnd(top: 0, end: 3),
                                   child: InkWell(
                                       onTap: () {
                                         Navigator.pushNamed(context, '/notif');

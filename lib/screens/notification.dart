@@ -93,7 +93,7 @@ class _NotificationsState extends State<Notifications> {
                                             "seen":true
                                           });
                                           if(notif.seen == false)
-                                           Navigator.pushReplacementNamed(context, '/home');
+                                           Navigator.pop(context);
                                          
                                         },
                                         width: _width,
