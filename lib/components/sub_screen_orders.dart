@@ -166,7 +166,9 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                           }
 
                           if (SharedData().onDateSelectedSubs(
-                              widget.time, localOrderContainer)) {
+                              widget.time, localOrderContainer) && stateSubs[widget.status]
+                              .toString()
+                              .contains(order['situation'])) {
                             return OrderCard(
                                 orderId: order["orderId"],
                                 onTap: () async {
