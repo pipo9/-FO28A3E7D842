@@ -28,21 +28,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-    flutterLocalNotificationsPlugin.show(
-            message.notification.hashCode,
-            message.notification.title,
-            message.notification.body,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                channel.id,
-                channel.name,
-                channel.description,
-                color: Colors.blue,
-                playSound: true,
-                icon: '@mipmap/ic_launcher',
-                priority: Priority.high
-              ),
-            ));
+   
   print('A bg message just showed up :  ${message.messageId}');
 }
 
