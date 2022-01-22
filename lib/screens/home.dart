@@ -7,7 +7,6 @@ import 'package:grocery/controllers/userController.dart';
 import 'package:grocery/model/notificationModel.dart';
 import 'package:grocery/shared_Pref.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../const.dart';
 

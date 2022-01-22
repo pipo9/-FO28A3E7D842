@@ -166,20 +166,23 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                           }
 
                           if (SharedData().onDateSelectedSubs(
-                              widget.time, localOrderContainer) && stateSubs[widget.status]
-                              .toString()
-                              .contains(order['situation'])) {
-                            return OrderCard(
-                                orderId: order["orderId"],
-                                onTap: () async {
-                                  _sharedData.order = localOrderContainer;
-                                  await Order().updateSubs(_sharedData.order);
-                                  Navigator.pushNamed(context, '/subscripton');
-                                },
-                                status: order["situation"],
-                                seen: SharedData.user.role == "vendor"
-                                    ? localOrderContainer.vendorSeen
-                                    : localOrderContainer.deliverySeen);
+                              widget.time, localOrderContainer)) {
+                            if (stateSubs[widget.status]
+                                .toString()
+                                .contains(order['situation'])) {
+                              return OrderCard(
+                                  orderId: order["orderId"],
+                                  onTap: () async {
+                                    _sharedData.order = localOrderContainer;
+                                    await Order().updateSubs(_sharedData.order);
+                                    Navigator.pushNamed(
+                                        context, '/subscripton');
+                                  },
+                                  status: order["situation"],
+                                  seen: SharedData.user.role == "vendor"
+                                      ? localOrderContainer.vendorSeen
+                                      : localOrderContainer.deliverySeen);
+                            }
                           }
                           return SizedBox();
                         }).toList());
