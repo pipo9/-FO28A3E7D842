@@ -488,6 +488,9 @@ class _OrderDtailsState extends State<OrderDtails> {
                                         });
                                         _sharedData.order.situation =
                                             ifDeliveyStates[status];
+                                            
+                                        _sharedData.order.amount =
+                                            "0";
                                         if (_sharedData.order.paymentMethod ==
                                             'Wallet') {
                                           await User()

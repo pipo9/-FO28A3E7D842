@@ -77,7 +77,8 @@ class OrderModel {
       'deliveryId': deliveryId,
       'situation': situation,
       'vendorSeen':vendorSeen,
-      'deliverySeen':deliverySeen
+      'deliverySeen':deliverySeen,
+      "amount":amount
     };
   }
 }
