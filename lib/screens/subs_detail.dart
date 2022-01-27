@@ -301,23 +301,24 @@ class _SubsDetailsState extends State<SubsDetails> {
                                     ),
                                   ],
                                 )
-                              : Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      "Status",
-                                      style: GoogleFonts.zillaSlab(
-                                        fontWeight: FontWeight.w600,
-                                        color: kColor,
-                                        fontSize: _height * 0.032,
-                                      ),
-                                    ),
-                                    DateFormat('yyyy-MM-dd').format(date) ==
-                                            DateFormat('yyyy-MM-dd')
-                                                .format(DateTime.now())
-                                        ? SharedData.user.role == "delivery"
+                              : DateFormat('yyyy-MM-dd').format(date) ==
+                                      DateFormat('yyyy-MM-dd')
+                                          .format(DateTime.now())
+                                  ? Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Text(
+                                          "Status",
+                                          style: GoogleFonts.zillaSlab(
+                                            fontWeight: FontWeight.w600,
+                                            color: kColor,
+                                            fontSize: _height * 0.032,
+                                          ),
+                                        ),
+                                        SharedData.user.role == "delivery"
                                             ? InkWell(
                                                 onTap: () async {
                                                   if (status == 1) {
@@ -526,16 +527,19 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                       ],
                                                     )),
                                               )
-                                        : Text(
-                                            "You can not change this day state",
-                                            style: GoogleFonts.robotoSlab(
-                                              color: kDarkGrey,
-                                              fontSize: _height * 0.015,
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                  ],
-                                ),
+                                      ],
+                                    )
+                                  : SizedBox(
+                                      height: _height * 0.045,
+                                      child:   Text(
+                              "You can not change today's Order state ",
+                              style: GoogleFonts.robotoSlab(
+                                color: kColor,
+                                fontSize: _height * 0.025,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                                    ),
                           SizedBox(
                             height: _height * 0.05,
                           ),
