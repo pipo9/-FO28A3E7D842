@@ -344,8 +344,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                               .order.situation =
                                                           ifDeliveyStates[
                                                               status];
-                                                      _sharedData.order.amount =
-                                                          "0";
+                                                     
                                                       await Order().updateSubs(
                                                           _sharedData.order);
                                                       if (_sharedData.order
