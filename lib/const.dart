@@ -21,7 +21,7 @@ const kDarkGrey =  Color(0xff707070);
 const smalText = 'Adobe Devanagari';
 
 //contacts
-const kAdminEmail ="Support@grocurs.com";
+const kAdminEmail ="anshulgoel_005@yahoo.co.in";
 // "Support@grocurs.com";
 //style
 // roboto slab bold
