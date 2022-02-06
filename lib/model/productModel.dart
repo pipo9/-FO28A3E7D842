@@ -50,8 +50,16 @@ class ProductModel {
       "image": image,
       "status": status,
       "quantity":quantity,
+      "discount":discount,
       "days": days,
       "id":id,
+      "category":category,
+      "subcategory":subcategory,
+      "city":city,
+      "description":description,
+      "bestproduct":bestproduct,
+      "visible":visible,
+      "topsells":topsells,
       "startDate":startDate
     };
   }

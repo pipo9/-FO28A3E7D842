@@ -102,7 +102,7 @@ class User {
         return user;
       }
     } catch (e) {
-      print(e.message);
+      print(e);
     }
   }
 
@@ -141,13 +141,21 @@ class User {
     order.user.wallet["transactions"].add({
       "amount": "-${order.amount}",
       "description": "By Wallet",
-      "date": "${DateTime.now()}"
+      "date": "${DateTime.now()}",
+      "status":"completed"
     });
+      for (var transaction in  order.user.wallet['transactions']) {
+        if(transaction["status"] == "pending"){
+          transaction["status"] = "completed";
+        }   
+      }
     try {
       await _firestore
           .collection('users')
           .doc(order.user.uid)
           .update(order.user.toMap());
+       print("##### wallet updated")   ;
+
     } catch (e) {
       print(e);
     }

@@ -54,15 +54,6 @@ class _HomeState extends State<Home> {
                     children: [
                       InkWell(
                         onTap: () async {
-                          // try {
-                          //  var val =   await Permission.ignoreBatteryOptimizations.request();
-                          //   print(val);
-                            
-                          // } catch (e) {
-                          //   print(e);
-                          // }
-
-                          // await User().sendPushMessage('n1vescGHGfT1ve3MFhmKnif6U883', 1111, false);
                           Navigator.pushNamed(context, "/profile");
                         },
                         child: CircleAvatar(
@@ -133,9 +124,10 @@ class _HomeState extends State<Home> {
                                   }
                                   SharedData.notifications.sort(
                                       (notif1, notif2) => notif1.timeStamp
-                                          .compareTo(notif1.timeStamp));
+                                          .compareTo(notif2.timeStamp));
+                                  SharedData.notifications = List.from(
+                                      SharedData.notifications.reversed);
                                 }
-
                                 return Badge(
                                   badgeContent: Padding(
                                       padding: EdgeInsets.all(1),

@@ -344,8 +344,6 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                               .order.situation =
                                                           ifDeliveyStates[
                                                               status];
-                                                      _sharedData.order.amount =
-                                                          "0";
                                                       await Order().updateSubs(
                                                           _sharedData.order);
                                                       if (_sharedData.order
@@ -382,6 +380,13 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                         ifDeliveyStates[status];
                                                     await Order().updateSubs(
                                                         _sharedData.order);
+                                                  }
+                                                  if (ifDeliveyStates[status] ==
+                                                      'dispatched') {
+                                                    await User().sendEmail(
+                                                        'dispatched',
+                                                        _sharedData.order.id,
+                                                        kAdminEmail);
                                                   }
                                                 },
                                                 child: Container(
@@ -531,14 +536,14 @@ class _SubsDetailsState extends State<SubsDetails> {
                                     )
                                   : SizedBox(
                                       height: _height * 0.045,
-                                      child:   Text(
-                              "You can not change today's Order state ",
-                              style: GoogleFonts.robotoSlab(
-                                color: kColor,
-                                fontSize: _height * 0.025,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
+                                      child: Text(
+                                        "You can not change today's Order state",
+                                        style: GoogleFonts.robotoSlab(
+                                          color: kColor,
+                                          fontSize: _height * 0.025,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
                                     ),
                           SizedBox(
                             height: _height * 0.05,
@@ -638,6 +643,52 @@ class _SubsDetailsState extends State<SubsDetails> {
                                   Row(
                                     children: [
                                       Text(
+                                        "Order Amount :",
+                                        style: GoogleFonts.robotoSlab(
+                                          color: kColor,
+                                          fontSize: _height * 0.020,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: _width * 0.01,
+                                      ),
+                                      Text(
+                                        "${_sharedData.order.amount}",
+                                        style: GoogleFonts.robotoSlab(
+                                          color: kColor,
+                                          fontSize: _height * 0.018,
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Pending Amount:",
+                                        style: GoogleFonts.robotoSlab(
+                                          color: kColor,
+                                          fontSize: _height * 0.020,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: _width * 0.01,
+                                      ),
+                                      Text(
+                                        "${_sharedData.order.user.pendingAmount}",
+                                        style: GoogleFonts.robotoSlab(
+                                          color: kColor,
+                                          fontSize: _height * 0.018,
+                                          fontWeight: FontWeight.w300,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
                                         "TOTAL :",
                                         style: GoogleFonts.robotoSlab(
                                           color: kColor,
@@ -649,7 +700,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                         width: _width * 0.01,
                                       ),
                                       Text(
-                                        "${_sharedData.order.amount}\$",
+                                        "${(double.parse(_sharedData.order.amount) + double.parse(_sharedData.order.user.pendingAmount))}\$",
                                         style: GoogleFonts.robotoSlab(
                                           color: kColor,
                                           fontSize: _height * 0.018,
@@ -779,6 +830,8 @@ class _SubsDetailsState extends State<SubsDetails> {
                                     ],
                                   ),
                                   Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         "Delivery Address :",
@@ -791,13 +844,16 @@ class _SubsDetailsState extends State<SubsDetails> {
                                       SizedBox(
                                         width: _width * 0.01,
                                       ),
-                                      Text(
-                                        _sharedData.order.user.address,
-                                        style: GoogleFonts.robotoSlab(
-                                          color: kColor,
-                                          fontSize: resizeText(
-                                              _sharedData.order.user.address),
-                                          fontWeight: FontWeight.w300,
+                                      Container(
+                                        width: _width * 0.51,
+                                        child: Text(
+                                          _sharedData.order.user.address,
+                                          softWrap: true,
+                                          style: GoogleFonts.robotoSlab(
+                                            color: kColor,
+                                            fontSize: _width * 0.027,
+                                            fontWeight: FontWeight.w300,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -901,6 +957,8 @@ class _SubsDetailsState extends State<SubsDetails> {
                                         ],
                                       ),
                                       Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             "Pickup Address :",
@@ -913,13 +971,16 @@ class _SubsDetailsState extends State<SubsDetails> {
                                           SizedBox(
                                             width: _width * 0.01,
                                           ),
-                                          Text(
-                                            _sharedData.order.vendor.address,
-                                            style: GoogleFonts.robotoSlab(
-                                              color: kColor,
-                                              fontSize: resizeText(_sharedData
-                                                  .order.vendor.address),
-                                              fontWeight: FontWeight.w300,
+                                          Container(
+                                            width: _width * 0.51,
+                                            child: Text(
+                                              _sharedData.order.vendor.address,
+                                              softWrap: true,
+                                              style: GoogleFonts.robotoSlab(
+                                                color: kColor,
+                                                fontSize: _width * 0.027,
+                                                fontWeight: FontWeight.w300,
+                                              ),
                                             ),
                                           ),
                                         ],
