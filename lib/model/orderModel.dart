@@ -25,6 +25,7 @@ class OrderModel {
   String statusDay;
   bool vendorSeen;
   bool deliverySeen;
+  double realOrderPrice= 0.0;
 
   OrderModel(String id, Map<String, dynamic> data) {
     this.uid = id;
@@ -51,6 +52,8 @@ class OrderModel {
 
     for (var i = 0; i < data['products'].length; i++) {
       this.products.add(ProductModel(data['products'][i]));
+      realOrderPrice += double.parse(data['products'][i]["price"]) *
+              double.parse(data['products'][i]["quantity"]);
     }
     this.situation = data['situation'];
     this.paymentMethod = data['paymentMethod'];
@@ -59,6 +62,7 @@ class OrderModel {
     this.coupon = data['coupon'] ?? null;
     this.vendorId = data['vendorId'];
     this.deliveryId = data['deliveryId'];
+    
   }
 
   Map<String, dynamic> toMap() {
@@ -76,9 +80,9 @@ class OrderModel {
       'vendorId': vendorId,
       'deliveryId': deliveryId,
       'situation': situation,
-      'vendorSeen':vendorSeen,
-      'deliverySeen':deliverySeen,
-      "amount":amount
+      'vendorSeen': vendorSeen,
+      'deliverySeen': deliverySeen,
+      "amount": amount
     };
   }
 }

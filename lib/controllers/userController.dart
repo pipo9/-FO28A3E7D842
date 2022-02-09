@@ -11,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grocery/shared_Pref.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class User {
@@ -141,21 +142,23 @@ class User {
     order.user.wallet["transactions"].add({
       "amount": "-${order.amount}",
       "description": "By Wallet",
-      "date": "${DateTime.now()}",
-      "status":"completed"
+      "date": DateFormat('dd-MM-yyyy HH:mm:ss.S').format(DateTime.now()),
+      "status": "completed",
+      "type":"Order Payment",
+      "paymentId":""
+      
     });
-      for (var transaction in  order.user.wallet['transactions']) {
-        if(transaction["status"] == "pending"){
-          transaction["status"] = "completed";
-        }   
+    for (var transaction in order.user.wallet['transactions']) {
+      if (transaction["status"] == "pending") {
+        transaction["status"] = "completed";
       }
+    }
     try {
       await _firestore
           .collection('users')
           .doc(order.user.uid)
           .update(order.user.toMap());
-       print("##### wallet updated")   ;
-
+      print("##### wallet updated");
     } catch (e) {
       print(e);
     }
@@ -163,17 +166,17 @@ class User {
 
   Future<void> sendPushMessage(id, orderId, isOrder) async {
     var type = isOrder == true ? "Order" : "Subscription";
-     var headers = <String, String>{
+    var headers = <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     };
     var body = jsonEncode({
-          "notif": {
-            "to": "$id",
-            "title": "Vendor Notification",
-            "body": 'the $type with the id $orderId is now prepared'
-          },
-          "userId": "$id"
-        });
+      "notif": {
+        "to": "$id",
+        "title": "Vendor Notification",
+        "body": 'the $type with the id $orderId is now prepared'
+      },
+      "userId": "$id"
+    });
     if (id == "" || id == null) {
       print('Unable to send FCM message, no delivery id exists.');
       return;
@@ -188,7 +191,7 @@ class User {
 
       final statusCode = response.statusCode;
       if (statusCode >= 200 && statusCode < 299) {
-      print('FCM request for device sent!');
+        print('FCM request for device sent!');
       } else {
         print("Server ERROR***:");
       }

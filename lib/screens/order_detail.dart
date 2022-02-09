@@ -148,12 +148,14 @@ class _OrderDtailsState extends State<OrderDtails> {
                       children: [
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Text("Payment details :",
-                              style: GoogleFonts.robotoSlab(
-                                color: kDarkText,
-                                fontSize: _height * 0.030,
-                                fontWeight: FontWeight.w700,
-                              )),
+                          child: Text(
+                            "Payment details :",
+                            style: GoogleFonts.robotoSlab(
+                              color: kDarkText,
+                              fontSize: _height * 0.030,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
                         ),
                         SizedBox(
                           height: _height * 0.02,
@@ -207,6 +209,29 @@ class _OrderDtailsState extends State<OrderDtails> {
                         Row(
                           children: [
                             Text(
+                              "Purchased At :",
+                              style: GoogleFonts.robotoSlab(
+                                color: kColor,
+                                fontSize: _height * 0.020,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            SizedBox(
+                              width: _width * 0.01,
+                            ),
+                            Text(
+                              _sharedData.order.purchasedAt.split(' ')[0],
+                              style: GoogleFonts.robotoSlab(
+                                color: kColor,
+                                fontSize: _height * 0.018,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
                               "Order Amount :",
                               style: GoogleFonts.robotoSlab(
                                 color: kColor,
@@ -218,7 +243,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                               width: _width * 0.01,
                             ),
                             Text(
-                              "${_sharedData.order.amount}",
+                              "${_sharedData.order.amount}₹",
                               style: GoogleFonts.robotoSlab(
                                 color: kColor,
                                 fontSize: _height * 0.018,
@@ -230,7 +255,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                         Row(
                           children: [
                             Text(
-                              "Pending Amount:",
+                              "Saving amount :",
                               style: GoogleFonts.robotoSlab(
                                 color: kColor,
                                 fontSize: _height * 0.020,
@@ -241,7 +266,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                               width: _width * 0.01,
                             ),
                             Text(
-                              "${_sharedData.order.user.pendingAmount}",
+                              "${_sharedData.order.realOrderPrice - double.parse(_sharedData.order.amount)} ₹",
                               style: GoogleFonts.robotoSlab(
                                 color: kColor,
                                 fontSize: _height * 0.018,
@@ -253,7 +278,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                         Row(
                           children: [
                             Text(
-                              "TOTAL :",
+                              "Wallet pending amount:",
                               style: GoogleFonts.robotoSlab(
                                 color: kColor,
                                 fontSize: _height * 0.020,
@@ -264,7 +289,32 @@ class _OrderDtailsState extends State<OrderDtails> {
                               width: _width * 0.01,
                             ),
                             Text(
-                              "${(double.parse(_sharedData.order.amount) + double.parse(_sharedData.order.user.pendingAmount))}\$",
+                              "${_sharedData.order.user.pendingAmount}₹",
+                              style: GoogleFonts.robotoSlab(
+                                color: kColor,
+                                fontSize: _height * 0.018,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Total amount to be collected :",
+                              style: GoogleFonts.robotoSlab(
+                                color: kColor,
+                                fontSize: _height * 0.020,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            SizedBox(
+                              width: _width * 0.01,
+                            ),
+                            Text(
+                              _sharedData.order.paymentMethod == "COD"
+                                  ? "${(double.parse(_sharedData.order.amount) + double.parse(_sharedData.order.user.pendingAmount))}₹"
+                                  : "${_sharedData.order.user.pendingAmount}₹",
                               style: GoogleFonts.robotoSlab(
                                 color: kColor,
                                 fontSize: _height * 0.018,
@@ -278,153 +328,250 @@ class _OrderDtailsState extends State<OrderDtails> {
                 SizedBox(
                   height: _height * 0.04,
                 ),
-                Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: _width * 0.08, vertical: _height * 0.03),
-                    width: _width,
-                    color: kBlueAccent.withOpacity(0.15),
-                    child: Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Delivery details :",
-                            style: GoogleFonts.robotoSlab(
-                              color: kDarkText,
-                              fontSize: _height * 0.030,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: _height * 0.02,
-                        ),
-                        Row(
+                SharedData.user.role == "delivery"
+                    ? Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: _width * 0.08,
+                            vertical: _height * 0.03),
+                        width: _width,
+                        color: kBlueAccent.withOpacity(0.15),
+                        child: Column(
                           children: [
-                            Text(
-                              "Name:",
-                              style: GoogleFonts.robotoSlab(
-                                color: kColor,
-                                fontSize: _height * 0.020,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            SizedBox(
-                              width: _width * 0.01,
-                            ),
-                            Text(
-                              _sharedData.order.user.fullName,
-                              style: GoogleFonts.robotoSlab(
-                                color: kColor,
-                                fontSize: _height * 0.018,
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Email :",
-                              style: GoogleFonts.robotoSlab(
-                                color: kColor,
-                                fontSize: _height * 0.020,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            SizedBox(
-                              width: _width * 0.01,
-                            ),
-                            Text(
-                              _sharedData.order.user.email,
-                              style: GoogleFonts.robotoSlab(
-                                color: kColor,
-                                fontSize: _height * 0.018,
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Mobile :",
-                              style: GoogleFonts.robotoSlab(
-                                color: kColor,
-                                fontSize: _height * 0.020,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            SizedBox(
-                              width: _width * 0.01,
-                            ),
-                            Text(
-                              _sharedData.order.user.phone,
-                              style: GoogleFonts.robotoSlab(
-                                color: kColor,
-                                fontSize: _height * 0.018,
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Balance:",
-                              style: GoogleFonts.robotoSlab(
-                                color: kColor,
-                                fontSize: _height * 0.020,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            SizedBox(
-                              width: _width * 0.01,
-                            ),
-                            Text(
-                              _sharedData.order.user.wallet["balance"],
-                              style: GoogleFonts.robotoSlab(
-                                color: kColor,
-                                fontSize: _height * 0.018,
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Delivery Address :",
-                              style: GoogleFonts.robotoSlab(
-                                color: kColor,
-                                fontSize: _height * 0.020,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            SizedBox(
-                              width: _width * 0.01,
-                            ),
-                            Container(
-                              width: _width * 0.51,
+                            Align(
+                              alignment: Alignment.centerLeft,
                               child: Text(
-                                _sharedData.order.user.address,
-                                softWrap: true,
+                                "Customer delivery details:",
                                 style: GoogleFonts.robotoSlab(
-                                  color: kColor,
-                                  fontSize: _width * 0.027,
-                                  fontWeight: FontWeight.w300,
+                                  color: kDarkText,
+                                  fontSize: _height * 0.030,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
                             ),
+                            SizedBox(
+                              height: _height * 0.02,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Name:",
+                                  style: GoogleFonts.robotoSlab(
+                                    color: kColor,
+                                    fontSize: _height * 0.020,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: _width * 0.01,
+                                ),
+                                Text(
+                                  _sharedData.order.user.fullName,
+                                  style: GoogleFonts.robotoSlab(
+                                    color: kColor,
+                                    fontSize: _height * 0.018,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Email :",
+                                  style: GoogleFonts.robotoSlab(
+                                    color: kColor,
+                                    fontSize: _height * 0.020,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: _width * 0.01,
+                                ),
+                                Text(
+                                  _sharedData.order.user.email,
+                                  style: GoogleFonts.robotoSlab(
+                                    color: kColor,
+                                    fontSize: _height * 0.018,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Mobile :",
+                                  style: GoogleFonts.robotoSlab(
+                                    color: kColor,
+                                    fontSize: _height * 0.020,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: _width * 0.01,
+                                ),
+                                Text(
+                                  _sharedData.order.user.phone,
+                                  style: GoogleFonts.robotoSlab(
+                                    color: kColor,
+                                    fontSize: _height * 0.018,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Balance:",
+                                  style: GoogleFonts.robotoSlab(
+                                    color: kColor,
+                                    fontSize: _height * 0.020,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: _width * 0.01,
+                                ),
+                                Text(
+                                  _sharedData.order.user.wallet["balance"] +
+                                      "₹",
+                                  style: GoogleFonts.robotoSlab(
+                                    color: kColor,
+                                    fontSize: _height * 0.018,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Delivery Address :",
+                                  style: GoogleFonts.robotoSlab(
+                                    color: kColor,
+                                    fontSize: _height * 0.020,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: _width * 0.01,
+                                ),
+                                Container(
+                                  width: _width * 0.51,
+                                  child: Text(
+                                    _sharedData.order.user.address,
+                                    softWrap: true,
+                                    style: GoogleFonts.robotoSlab(
+                                      color: kColor,
+                                      fontSize: _height * 0.018,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
-                        ),
-                      ],
-                    )),
+                        ))
+                    : Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: _width * 0.08,
+                            vertical: _height * 0.03),
+                        width: _width,
+                        color: kBlueAccent.withOpacity(0.15),
+                        child: Column(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "delivery boy details :",
+                                style: GoogleFonts.robotoSlab(
+                                  color: kDarkText,
+                                  fontSize: _height * 0.030,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: _height * 0.02,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Name:",
+                                  style: GoogleFonts.robotoSlab(
+                                    color: kColor,
+                                    fontSize: _height * 0.020,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: _width * 0.01,
+                                ),
+                                Text(
+                                  _sharedData.order.delivery.fullName,
+                                  style: GoogleFonts.robotoSlab(
+                                    color: kColor,
+                                    fontSize: _height * 0.018,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Email :",
+                                  style: GoogleFonts.robotoSlab(
+                                    color: kColor,
+                                    fontSize: _height * 0.020,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: _width * 0.01,
+                                ),
+                                Text(
+                                  _sharedData.order.delivery.email,
+                                  style: GoogleFonts.robotoSlab(
+                                    color: kColor,
+                                    fontSize: _height * 0.018,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Mobile :",
+                                  style: GoogleFonts.robotoSlab(
+                                    color: kColor,
+                                    fontSize: _height * 0.020,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: _width * 0.01,
+                                ),
+                                Text(
+                                  _sharedData.order.delivery.phone,
+                                  style: GoogleFonts.robotoSlab(
+                                    color: kColor,
+                                    fontSize: _height * 0.018,
+                                    fontWeight: FontWeight.w300,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )),
                 SizedBox(
                   height: _height * 0.04,
                 ),
-                _sharedData.order.vendorAcceptance != true
+                _sharedData.order.vendorAcceptance != true ||
+                        SharedData.user.role == "vendor"
                     ? SizedBox()
                     : Container(
                         padding: EdgeInsets.symmetric(
@@ -538,7 +685,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                     softWrap: true,
                                     style: GoogleFonts.robotoSlab(
                                       color: kColor,
-                                      fontSize: _width * 0.027,
+                                      fontSize: _height * 0.018,
                                       fontWeight: FontWeight.w300,
                                     ),
                                   ),
@@ -648,8 +795,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                           SharedData.user.role == "delivery"
                               ? InkWell(
                                   onTap: () async {
-                                    if (status == 1) 
-                                    {
+                                    if (status == 1) {
                                       showConfirmation(context, "Warning",
                                           "do you really want to change the status to Delivred ?",
                                           () async {
@@ -662,7 +808,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                         _sharedData.order.situation =
                                             ifDeliveyStates[status];
                                         if (_sharedData.order.paymentMethod ==
-                                            'COD') {
+                                            'Wallet') {
                                           await User()
                                               .updateWallet(_sharedData.order);
                                         }
@@ -798,14 +944,14 @@ class _OrderDtailsState extends State<OrderDtails> {
                   height: _height * 0.06,
                 ),
                 Column(
-                    children: _sharedData.order.products.map((product) {
+                    children: _sharedData.toDayproducts.map((product) {
                   return OrderProduct(
                       imageUrl: product.image,
                       price: product.price,
                       productName: product.name,
+                      discount: product.discount,
                       quantity: product.quantity,
-                      days: product.days,
-                      simple: true);
+                      days: product.days);
                 }).toList())
               ],
             )),

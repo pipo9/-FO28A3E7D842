@@ -30,7 +30,7 @@ class SharedData with ChangeNotifier {
     int unseen = 0;
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
     await _firestore
-        .collection("notifications")
+        .collection("reminders")
         .where("to", isEqualTo: SharedData.user.uid)
         .get()
         .then((querySnapshot) => {
@@ -104,7 +104,7 @@ class SharedData with ChangeNotifier {
   pushNotification(status) async {
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-    await _firestore.collection("notifications").add({
+    await _firestore.collection("reminders").add({
       "body": "Order with ID :${order.id} \n is now prepared",
       "title": "Order Prepared",
       "to": "${order.deliveryId}"

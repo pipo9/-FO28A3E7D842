@@ -105,7 +105,7 @@ class _HomeState extends State<Home> {
                           SizedBox(width: _width * 0.05),
                           StreamBuilder(
                               stream: _firestore
-                                  .collection("notifications")
+                                  .collection("reminders")
                                   .where("to", isEqualTo: SharedData.user.uid)
                                   .snapshots(),
                               builder: (context, snapshot) {

@@ -89,7 +89,7 @@ class _NotificationsState extends State<Notifications> {
                                     (notif) => Slidable(
                                       child: NotifBox(
                                         onTap: ()async{
-                                          await _firestore.collection("notifications").doc(notif.id).update({
+                                          await _firestore.collection("reminders").doc(notif.id).update({
                                             "seen":true
                                           });
                                           if(notif.seen == false)
@@ -114,7 +114,7 @@ class _NotificationsState extends State<Notifications> {
                                             SharedData.notifications.remove(notif);
                                             });
                                             await _firestore
-                                                .collection("notifications")
+                                                .collection("reminders")
                                                 .doc(notif.id)
                                                 .delete();
                                           },
