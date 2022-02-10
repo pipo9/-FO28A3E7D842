@@ -51,9 +51,10 @@ class OrderModel {
     this.localisation = data['localisation'];
 
     for (var i = 0; i < data['products'].length; i++) {
-      this.products.add(ProductModel(data['products'][i]));
-      realOrderPrice += double.parse(data['products'][i]["price"]) *
-              double.parse(data['products'][i]["quantity"]);
+      ProductModel productModel = ProductModel(data['products'][i]);
+      this.products.add(productModel);
+      realOrderPrice += double.parse(productModel.price) *
+              double.parse(productModel.quantity);
     }
     this.situation = data['situation'];
     this.paymentMethod = data['paymentMethod'];
