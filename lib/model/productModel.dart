@@ -20,9 +20,9 @@ class ProductModel {
   bool isExpanded = false;
 
   ProductModel(Map<String, dynamic> data) {
-    this.id = data['id'];
-    this.name = data['name'];
-    this.startDate = data['startDate'];
+    this.id = data['id'] ?? "";
+    this.name = data['name'] ?? "";
+    this.startDate = data['startDate']??"";
     this.price = data['price'].toString();
     this.category = data['category'] ?? "";
     this.subcategory = data['subcategory'] ?? "";
@@ -37,9 +37,9 @@ class ProductModel {
     this.discount = data['discount'].toString() ?? "";
     this.quantity =
         data['quantity'] == null ? "1" : data['quantity'].toString();
-    this.dates = data['dates'];
-    this.days = data['days'];
-    this.status = data['status'];
+    this.dates = data['dates'] ?? {};
+    this.days = data['days'] ?? [];
+    this.status = data['status'] ?? "";
   }
 
   Map<String, dynamic> toMap() {
@@ -63,4 +63,7 @@ class ProductModel {
       "startDate":startDate
     };
   }
+
+
+
 }

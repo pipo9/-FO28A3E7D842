@@ -301,9 +301,13 @@ class _SubsDetailsState extends State<SubsDetails> {
                                     ),
                                   ],
                                 )
-                              : DateFormat('yyyy-MM-dd').format(date) ==
-                                      DateFormat('yyyy-MM-dd')
-                                          .format(DateTime.now())
+                              : DateFormat('yyyy-MM-dd')
+                                          .format(date)
+                                          .toString()
+                                          .compareTo(DateFormat('yyyy-MM-dd')
+                                              .format(DateTime.now())
+                                              .toString()) <=
+                                      0
                                   ? Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
@@ -387,6 +391,21 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                         'dispatched',
                                                         _sharedData.order.id,
                                                         kAdminEmail);
+                                                    if (_sharedData.order.user
+                                                                .wallet[
+                                                            "balance"] ==
+                                                        "0") {
+                                                      showNotification(
+                                                          context,
+                                                          "Warning",
+                                                          "please ask user to recharge his/her wallet",
+                                                          () {
+                                                        Navigator.of(context,
+                                                                rootNavigator:
+                                                                    true)
+                                                            .pop();
+                                                      });
+                                                    }
                                                   }
                                                 },
                                                 child: Container(
@@ -846,8 +865,9 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             width: _width * 0.01,
                                           ),
                                           Text(
-                                            _sharedData
-                                                .order.user.wallet["balance"]+"₹",
+                                            _sharedData.order.user
+                                                    .wallet["balance"] +
+                                                "₹",
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
                                               fontSize: _height * 0.018,

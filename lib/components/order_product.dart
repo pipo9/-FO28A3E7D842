@@ -47,7 +47,9 @@ class _OrderProductState extends State<OrderProduct> {
     double _width = MediaQuery.of(context).size.width;
     const double pi = 3.1415926535897932;
     var total = priceAfterDiscount() * double.parse(widget.quantity);
-    String daysToText = getDays();
+    String daysToText = "";
+    if(!widget.simple)
+      daysToText = getDays();
 
     return Container(
       padding: EdgeInsets.all(_height * 0.015),

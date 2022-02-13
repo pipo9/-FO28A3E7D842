@@ -52,7 +52,7 @@ class OrderModel {
 
     for (var i = 0; i < data['products'].length; i++) {
       ProductModel productModel = ProductModel(data['products'][i]);
-      this.products.add(productModel);
+      products.add(productModel);
       realOrderPrice += double.parse(productModel.price) *
               double.parse(productModel.quantity);
     }
@@ -72,8 +72,7 @@ class OrderModel {
     products.forEach((element) {
       listProducts.add(element.toMap());
     });
-
-    return {
+        return {
       "statusDay": statusDay,
       "products": listProducts,
       "vendorAcceptance": vendorAcceptance,

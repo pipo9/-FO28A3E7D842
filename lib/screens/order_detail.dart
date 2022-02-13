@@ -840,6 +840,17 @@ class _OrderDtailsState extends State<OrderDtails> {
                                         'dispatched') {
                                       await User().sendEmail('dispatched',
                                           _sharedData.order.id, kAdminEmail);
+                                      if (_sharedData
+                                              .order.user.wallet["balance"] ==
+                                          "0") {
+                                        showNotification(context, "Warning",
+                                            "please ask user to recharge his/her wallet",
+                                            () {
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pop();
+                                        });
+                                      }
                                     }
                                   },
                                   child: Container(
@@ -944,14 +955,15 @@ class _OrderDtailsState extends State<OrderDtails> {
                   height: _height * 0.06,
                 ),
                 Column(
-                    children: _sharedData.toDayproducts.map((product) {
+                    children: _sharedData.order.products.map((product) {
                   return OrderProduct(
                       imageUrl: product.image,
                       price: product.price,
                       productName: product.name,
                       discount: product.discount,
                       quantity: product.quantity,
-                      days: product.days);
+                      simple: true,
+                      days: []);
                 }).toList())
               ],
             )),

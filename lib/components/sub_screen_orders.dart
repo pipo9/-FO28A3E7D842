@@ -108,10 +108,12 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                           if (stateOrder[widget.status]
                               .toString()
                               .contains(order['situation'])) {
+                                   
                             return OrderCard(
                                 orderId: order["orderId"],
                                 onTap: () async {
                                   _sharedData.order = localOrderContainer;
+                               
                                   await Order().updateOrder(_sharedData.order);
                                   Navigator.pushNamed(context, '/order');
                                 },
