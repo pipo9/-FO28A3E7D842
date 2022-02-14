@@ -70,7 +70,7 @@ class ProductModel {
       "name": name,
       "price": price,
       "image": image,
-      "quantity":quantity,
+      "quantity":int.parse(quantity),
       "discount":discount,
       "id":id,    
     };
