@@ -104,20 +104,20 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                         return Column(
                             children: docs.map((order) {
                           OrderModel localOrderContainer =
-                              OrderModel(order.id, order.data());
+                              OrderModel(order.id, order.data(),true);
                           if (stateOrder[widget.status]
                               .toString()
                               .contains(order['situation'])) {
-                                   
                             return OrderCard(
                                 orderId: order["orderId"],
                                 onTap: () async {
                                   _sharedData.order = localOrderContainer;
-                               
+
                                   await Order().updateOrder(_sharedData.order);
                                   Navigator.pushNamed(context, '/order');
                                 },
                                 status: order["situation"],
+                                isSimple: true,
                                 seen: SharedData.user.role == "vendor"
                                     ? localOrderContainer.vendorSeen
                                     : localOrderContainer.deliverySeen);
@@ -156,7 +156,7 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                         return Column(
                             children: docs.map((order) {
                           OrderModel localOrderContainer =
-                              OrderModel(order.id, order.data());
+                              OrderModel(order.id, order.data(),false);
                           if (localOrderContainer.statusDay == null ||
                               localOrderContainer.statusDay !=
                                   DateFormat('yyyy-MM-dd')
@@ -181,6 +181,7 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                                         context, '/subscripton');
                                   },
                                   status: order["situation"],
+                                  isSimple: false,
                                   seen: SharedData.user.role == "vendor"
                                       ? localOrderContainer.vendorSeen
                                       : localOrderContainer.deliverySeen);

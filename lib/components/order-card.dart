@@ -7,11 +7,13 @@ class OrderCard extends StatefulWidget {
   final onTap;
   final status;
   final seen;
+  final isSimple;
 
   OrderCard(
       {@required this.orderId,
       @required this.onTap,
       @required this.status,
+      @required this.isSimple,
       @required this.seen});
 
   @override

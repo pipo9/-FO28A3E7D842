@@ -27,7 +27,7 @@ class OrderModel {
   bool deliverySeen;
   double realOrderPrice= 0.0;
 
-  OrderModel(String id, Map<String, dynamic> data) {
+  OrderModel(String id, Map<String, dynamic> data , isSimple) {
     this.uid = id;
     this.id = data['orderId'];
     this.vendorSeen = data['vendorSeen'] ?? false;
@@ -51,7 +51,7 @@ class OrderModel {
     this.localisation = data['localisation'];
 
     for (var i = 0; i < data['products'].length; i++) {
-      ProductModel productModel = ProductModel(data['products'][i]);
+      ProductModel productModel = ProductModel(data['products'][i] , isSimple);
       products.add(productModel);
       realOrderPrice += double.parse(productModel.price) *
               double.parse(productModel.quantity);
@@ -70,7 +70,11 @@ class OrderModel {
     List listProducts = [];
 
     products.forEach((element) {
-      listProducts.add(element.toMap());
+      if(element.isSimple)
+      listProducts.add(element.simpleToMap());
+      else
+      listProducts.add(element.subsToMap());
+
     });
         return {
       "statusDay": statusDay,

@@ -18,9 +18,11 @@ class ProductModel {
   String discount;
   String quantity;
   bool isExpanded = false;
+  bool isSimple;
 
-  ProductModel(Map<String, dynamic> data) {
+  ProductModel(Map<String, dynamic> data , isSimple) {
     this.id = data['id'] ?? "";
+    this.isSimple = isSimple;
     this.name = data['name'] ?? "";
     this.startDate = data['startDate']??"";
     this.price = data['price'].toString();
@@ -42,7 +44,7 @@ class ProductModel {
     this.status = data['status'] ?? "";
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> subsToMap() {
     return {
       "dates": dates,
       "name": name,
@@ -61,6 +63,16 @@ class ProductModel {
       "visible":visible,
       "topsells":topsells,
       "startDate":startDate
+    };
+  }
+  Map<String, dynamic> simpleToMap() {
+    return {
+      "name": name,
+      "price": price,
+      "image": image,
+      "quantity":quantity,
+      "discount":discount,
+      "id":id,    
     };
   }
 
