@@ -12,7 +12,7 @@ class UserModel {
     this.uid = uid ?? "";
     this.phone = data['phone'] ?? "";
     this.email = data['email'] ?? "";
-    this.fullName = data['email'] ?? "";
+    this.fullName = data['fullName'] ?? "";
     this.role = data['role'] ?? "";
     this.address = data['address'] ?? "";
     this.wallet = data['wallet']?? {};
