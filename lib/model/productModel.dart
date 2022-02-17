@@ -51,7 +51,7 @@ class ProductModel {
       "price": price,
       "image": image,
       "status": status,
-      "quantity":int.parse(quantity),
+      "quantity":quantity,
       "discount":discount,
       "days": days,
       "id":id,

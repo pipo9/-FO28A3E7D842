@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import '../../const.dart';
 import '../../strings.dart';
 
+
 class OrderDtails extends StatefulWidget {
   @override
   _OrderDtailsState createState() => _OrderDtailsState();
@@ -555,7 +556,11 @@ class _OrderDtailsState extends State<OrderDtails> {
                                 SizedBox(
                                   width: _width * 0.01,
                                 ),
-                                Text(
+                                InkWell(
+                                  onTap: ()async{
+
+                                  },
+                                  child: Text(
                                   _sharedData.order.delivery.phone,
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
@@ -563,6 +568,8 @@ class _OrderDtailsState extends State<OrderDtails> {
                                     fontWeight: FontWeight.w300,
                                   ),
                                 ),
+                                ),
+                                
                               ],
                             ),
                           ],
