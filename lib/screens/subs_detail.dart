@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grocery/components/calendar.dart';
 import 'package:grocery/components/order_product.dart';
@@ -841,14 +842,27 @@ class _SubsDetailsState extends State<SubsDetails> {
                                           SizedBox(
                                             width: _width * 0.01,
                                           ),
-                                          Text(
+                                          InkWell(
+                                  onTap: () async {
+                                    try {
+                                      await FlutterPhoneDirectCaller.callNumber(
+                                          _sharedData.order.user.phone);
+                                    } catch (e) {
+                                      showAlert(context, "Error", e.message.toString(), true, () {
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pop();
+                                      });
+                                    }
+                                  },
+                                  child:Text(
                                             _sharedData.order.user.phone,
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
                                               fontSize: _height * 0.018,
                                               fontWeight: FontWeight.w300,
                                             ),
-                                          ),
+                                          )),
                                         ],
                                       ),
                                       Row(
@@ -988,6 +1002,20 @@ class _SubsDetailsState extends State<SubsDetails> {
                                           SizedBox(
                                             width: _width * 0.01,
                                           ),
+                                          InkWell(
+                                  onTap: () async {
+                                    try {
+                                      await FlutterPhoneDirectCaller.callNumber(
+                                          _sharedData.order.delivery.phone);
+                                    } catch (e) {
+                                      showAlert(context, "Error", e.message.toString(), true, () {
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pop();
+                                      });
+                                    }
+                                  },
+                                  child:
                                           Text(
                                             _sharedData.order.delivery.phone,
                                             style: GoogleFonts.robotoSlab(
@@ -995,7 +1023,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                               fontSize: _height * 0.018,
                                               fontWeight: FontWeight.w300,
                                             ),
-                                          ),
+                                          )),
                                         ],
                                       ),
                                     ],
@@ -1087,14 +1115,27 @@ class _SubsDetailsState extends State<SubsDetails> {
                                           SizedBox(
                                             width: _width * 0.01,
                                           ),
-                                          Text(
+                                          InkWell(
+                                  onTap: () async {
+                                    try {
+                                      await FlutterPhoneDirectCaller.callNumber(
+                                          _sharedData.order.vendor.phone);
+                                    } catch (e) {
+                                      showAlert(context, "Error", e.message.toString(), true, () {
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pop();
+                                      });
+                                    }
+                                  },
+                                  child:Text(
                                             _sharedData.order.vendor.phone,
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
                                               fontSize: _height * 0.018,
                                               fontWeight: FontWeight.w300,
                                             ),
-                                          ),
+                                          )),
                                         ],
                                       ),
                                       Row(
