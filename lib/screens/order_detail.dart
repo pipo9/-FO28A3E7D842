@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grocery/components/order_product.dart';
 import 'package:grocery/controllers/orderController.dart';
@@ -8,7 +9,6 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import '../../const.dart';
 import '../../strings.dart';
-
 
 class OrderDtails extends StatefulWidget {
   @override
@@ -411,12 +411,26 @@ class _OrderDtailsState extends State<OrderDtails> {
                                 SizedBox(
                                   width: _width * 0.01,
                                 ),
-                                Text(
-                                  _sharedData.order.user.phone,
-                                  style: GoogleFonts.robotoSlab(
-                                    color: kColor,
-                                    fontSize: _height * 0.018,
-                                    fontWeight: FontWeight.w300,
+                                InkWell(
+                                  onTap: () async {
+                                    try {
+                                      await FlutterPhoneDirectCaller.callNumber(
+                                          _sharedData.order.user.phone);
+                                    } catch (e) {
+                                      showAlert(context, "Error", e.message.toString(), true, () {
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pop();
+                                      });
+                                    }
+                                  },
+                                  child: Text(
+                                    _sharedData.order.user.phone,
+                                    style: GoogleFonts.robotoSlab(
+                                      color: kColor,
+                                      fontSize: _height * 0.018,
+                                      fontWeight: FontWeight.w300,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -556,20 +570,29 @@ class _OrderDtailsState extends State<OrderDtails> {
                                 SizedBox(
                                   width: _width * 0.01,
                                 ),
-                                InkWell(
-                                  onTap: ()async{
-
+                                 InkWell(
+                                  onTap: () async {
+                                    try {
+                                      await FlutterPhoneDirectCaller.callNumber(
+                                          _sharedData.order.delivery.phone);
+                                    } catch (e) {
+                                      showAlert(context, "Error", e.message.toString(), true, () {
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pop();
+                                      });
+                                    }
                                   },
                                   child: Text(
-                                  _sharedData.order.delivery.phone,
-                                  style: GoogleFonts.robotoSlab(
-                                    color: kColor,
-                                    fontSize: _height * 0.018,
-                                    fontWeight: FontWeight.w300,
+                                    _sharedData.order.delivery.phone,
+                                    style: GoogleFonts.robotoSlab(
+                                      color: kColor,
+                                      fontSize: _height * 0.018,
+                                      fontWeight: FontWeight.w300,
+                                    ),
                                   ),
                                 ),
-                                ),
-                                
+                               
                               ],
                             ),
                           ],
@@ -661,14 +684,27 @@ class _OrderDtailsState extends State<OrderDtails> {
                                 SizedBox(
                                   width: _width * 0.01,
                                 ),
-                                Text(
+                                InkWell(
+                                  onTap: () async {
+                                    try {
+                                      await FlutterPhoneDirectCaller.callNumber(
+                                          _sharedData.order.vendor.phone);
+                                    } catch (e) {
+                                      showAlert(context, "Error", e.message.toString(), true, () {
+                                        Navigator.of(context,
+                                                rootNavigator: true)
+                                            .pop();
+                                      });
+                                    }
+                                  },
+                                  child: Text(
                                   _sharedData.order.vendor.phone,
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
                                     fontSize: _height * 0.018,
                                     fontWeight: FontWeight.w300,
                                   ),
-                                ),
+                                )),
                               ],
                             ),
                             Row(

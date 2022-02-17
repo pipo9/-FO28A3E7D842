@@ -35,7 +35,7 @@ dependencies:
   flutter_local_notifications: 5.0.0+1
   http: ^0.13.0
   permission_handler: ^6.0.0
-
+  flutter_phone_direct_caller: ^2.1.0
 
 
 
