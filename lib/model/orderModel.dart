@@ -1,7 +1,6 @@
 import 'package:grocery/controllers/userController.dart';
 import 'package:grocery/model/productModel.dart';
 import 'package:grocery/model/userModel.dart';
-import 'package:intl/intl.dart';
 
 class OrderModel {
   String uid;
