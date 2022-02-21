@@ -136,24 +136,12 @@ class User {
   }
 
   updateWallet(OrderModel order) async {
-    var newBalance =
-        double.parse(order.user.wallet["balance"]) - double.parse(order.amount);
-    order.user.wallet["balance"] = newBalance.toString();
-    order.user.wallet["transactions"].add({
-      "amount": "-${order.amount}",
-      "description": "By Wallet",
-      "date": DateFormat('dd-MM-yyyy HH:mm:ss.S').format(DateTime.now()),
-      "status": "completed",
-      "type":"Order Payment",
-      "paymentId":""
-      
-    });
-    for (var transaction in order.user.wallet['transactions']) {
+    try {
+        for (var transaction in order.user.wallet['transactions']) {
       if (transaction["status"] == "pending") {
         transaction["status"] = "completed";
       }
     }
-    try {
       await _firestore
           .collection('users')
           .doc(order.user.uid)

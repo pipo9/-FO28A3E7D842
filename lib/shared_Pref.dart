@@ -68,30 +68,33 @@ class SharedData with ChangeNotifier {
       }
     });
     toDayproducts = products;
-           
+
     if (toDayproducts.length == 0) {
       productStatus = "disabled";
     }
     return productStatus;
   }
- 
-  bool onDateSelectedSubs(DateTime date , OrderModel order) {
+
+   onDateSelectedSubs(DateTime date, OrderModel order) {
+    var response = {};
+    var dateYMD = DateFormat('yyyy-MM-dd').format(date);
+    var dateEEE = DateFormat('EEEE').format(date);
     bool productStatus = false;
     order.products.forEach((product) {
       if (product.status != 'paused') {
         List days = product.days;
-        var dateYMD = DateFormat('yyyy-MM-dd').format(date);
-        var dateEEE = DateFormat('EEEE').format(date);
-
         if (product.startDate.compareTo(dateYMD.toString()) <= 0) {
-           if (days.contains(dateEEE)) {
+          if (days.contains(dateEEE)) {
             productStatus = true;
           }
         }
       }
     });
-  
-    return productStatus;
+
+    response["status"] = productStatus;
+    response["state"] = order.products[0].dates[dateYMD] ?? "pending";
+
+    return response;
   }
 
   updateProductsStatus(DateTime date, status) {

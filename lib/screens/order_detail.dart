@@ -417,7 +417,8 @@ class _OrderDtailsState extends State<OrderDtails> {
                                       await FlutterPhoneDirectCaller.callNumber(
                                           _sharedData.order.user.phone);
                                     } catch (e) {
-                                      showAlert(context, "Error", e.message.toString(), true, () {
+                                      showAlert(context, "Error",
+                                          e.message.toString(), true, () {
                                         Navigator.of(context,
                                                 rootNavigator: true)
                                             .pop();
@@ -570,13 +571,14 @@ class _OrderDtailsState extends State<OrderDtails> {
                                 SizedBox(
                                   width: _width * 0.01,
                                 ),
-                                 InkWell(
+                                InkWell(
                                   onTap: () async {
                                     try {
                                       await FlutterPhoneDirectCaller.callNumber(
                                           _sharedData.order.delivery.phone);
                                     } catch (e) {
-                                      showAlert(context, "Error", e.message.toString(), true, () {
+                                      showAlert(context, "Error",
+                                          e.message.toString(), true, () {
                                         Navigator.of(context,
                                                 rootNavigator: true)
                                             .pop();
@@ -592,7 +594,6 @@ class _OrderDtailsState extends State<OrderDtails> {
                                     ),
                                   ),
                                 ),
-                               
                               ],
                             ),
                           ],
@@ -685,26 +686,28 @@ class _OrderDtailsState extends State<OrderDtails> {
                                   width: _width * 0.01,
                                 ),
                                 InkWell(
-                                  onTap: () async {
-                                    try {
-                                      await FlutterPhoneDirectCaller.callNumber(
-                                          _sharedData.order.vendor.phone);
-                                    } catch (e) {
-                                      showAlert(context, "Error", e.message.toString(), true, () {
-                                        Navigator.of(context,
-                                                rootNavigator: true)
-                                            .pop();
-                                      });
-                                    }
-                                  },
-                                  child: Text(
-                                  _sharedData.order.vendor.phone,
-                                  style: GoogleFonts.robotoSlab(
-                                    color: kColor,
-                                    fontSize: _height * 0.018,
-                                    fontWeight: FontWeight.w300,
-                                  ),
-                                )),
+                                    onTap: () async {
+                                      try {
+                                        await FlutterPhoneDirectCaller
+                                            .callNumber(
+                                                _sharedData.order.vendor.phone);
+                                      } catch (e) {
+                                        showAlert(context, "Error",
+                                            e.message.toString(), true, () {
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pop();
+                                        });
+                                      }
+                                    },
+                                    child: Text(
+                                      _sharedData.order.vendor.phone,
+                                      style: GoogleFonts.robotoSlab(
+                                        color: kColor,
+                                        fontSize: _height * 0.018,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    )),
                               ],
                             ),
                             Row(
@@ -850,11 +853,10 @@ class _OrderDtailsState extends State<OrderDtails> {
                                         });
                                         _sharedData.order.situation =
                                             ifDeliveyStates[status];
-                                        if (_sharedData.order.paymentMethod ==
-                                            'Wallet') {
-                                          await User()
-                                              .updateWallet(_sharedData.order);
-                                        }
+
+                                        await User()
+                                            .updateWallet(_sharedData.order);
+
                                         await Order()
                                             .updateOrder(_sharedData.order);
                                         await User().sendEmail("Delivered",

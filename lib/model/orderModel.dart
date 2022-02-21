@@ -1,6 +1,7 @@
 import 'package:grocery/controllers/userController.dart';
 import 'package:grocery/model/productModel.dart';
 import 'package:grocery/model/userModel.dart';
+import 'package:intl/intl.dart';
 
 class OrderModel {
   String uid;
@@ -27,7 +28,7 @@ class OrderModel {
   bool deliverySeen;
   double realOrderPrice= 0.0;
 
-  OrderModel(String id, Map<String, dynamic> data , isSimple) {
+  OrderModel(String id, Map<String, dynamic> data , isSimple, time) {
     this.uid = id;
     this.id = data['orderId'];
     this.vendorSeen = data['vendorSeen'] ?? false;
@@ -56,7 +57,8 @@ class OrderModel {
       realOrderPrice += double.parse(productModel.price) *
               double.parse(productModel.quantity);
     }
-    this.situation = data['situation'];
+
+    this.situation =data['situation'];
     this.paymentMethod = data['paymentMethod'];
     this.purchasedAt = data['purchased_at'] ?? "";
     this.orderId = data['orderId'] ?? "";

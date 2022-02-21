@@ -103,24 +103,51 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
 
                         return Column(
                             children: docs.map((order) {
-                          OrderModel localOrderContainer =
-                              OrderModel(order.id, order.data(),true);
+                          OrderModel localOrderContainer = OrderModel(
+                              order.id, order.data(), true, widget.time);
                           if (stateOrder[widget.status]
                               .toString()
                               .contains(order['situation'])) {
-                            return OrderCard(
-                                orderId: order["orderId"],
-                                onTap: () async {
-                                  _sharedData.order = localOrderContainer;
+                            if (widget.status == 1) if (localOrderContainer
+                                    .purchasedAt
+                                    .split(" ")[0]
+                                    .compareTo(DateFormat('yyyy-MM-dd')
+                                        .format(widget.time)
+                                        .toString()) ==
+                                0) {
+                              return OrderCard(
+                                  orderId: order["orderId"],
+                                  onTap: () async {
+                                    _sharedData.order = localOrderContainer;
 
-                                  await Order().updateOrder(_sharedData.order);
-                                  Navigator.pushNamed(context, '/order');
-                                },
-                                status: order["situation"],
-                                isSimple: true,
-                                seen: SharedData.user.role == "vendor"
-                                    ? localOrderContainer.vendorSeen
-                                    : localOrderContainer.deliverySeen);
+                                    await Order()
+                                        .updateOrder(_sharedData.order);
+                                    Navigator.pushNamed(context, '/order');
+                                  },
+                                  status: order["situation"],
+                                  isSimple: true,
+                                  seen: SharedData.user.role == "vendor"
+                                      ? localOrderContainer.vendorSeen
+                                      : localOrderContainer.deliverySeen);
+                            } else {
+                              return SizedBox();
+                            }
+                            else {
+                              return OrderCard(
+                                  orderId: order["orderId"],
+                                  onTap: () async {
+                                    _sharedData.order = localOrderContainer;
+
+                                    await Order()
+                                        .updateOrder(_sharedData.order);
+                                    Navigator.pushNamed(context, '/order');
+                                  },
+                                  status: order["situation"],
+                                  isSimple: true,
+                                  seen: SharedData.user.role == "vendor"
+                                      ? localOrderContainer.vendorSeen
+                                      : localOrderContainer.deliverySeen);
+                            }
                           } else {
                             return SizedBox();
                           }
@@ -155,23 +182,25 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                         final List<DocumentSnapshot> docs = data.docs;
                         return Column(
                             children: docs.map((order) {
-                          OrderModel localOrderContainer =
-                              OrderModel(order.id, order.data(),false);
+                          var dateYMD =
+                              DateFormat('yyyy-MM-dd').format(DateTime.now());
+
+                          OrderModel localOrderContainer = OrderModel(
+                              order.id, order.data(), false, widget.time);
                           if (localOrderContainer.statusDay == null ||
-                              localOrderContainer.statusDay !=
-                                  DateFormat('yyyy-MM-dd')
-                                      .format(DateTime.now())) {
-                            localOrderContainer.statusDay =
-                                DateFormat('yyyy-MM-dd').format(DateTime.now());
+                              localOrderContainer.statusDay != dateYMD) {
+                            localOrderContainer.statusDay = dateYMD;
                             localOrderContainer.situation = "pending";
                             _order.updateSubs(localOrderContainer);
                           }
 
-                          if (SharedData().onDateSelectedSubs(
-                              widget.time, localOrderContainer)) {
+                          var response = SharedData().onDateSelectedSubs(
+                              widget.time, localOrderContainer);
+
+                          if (response["status"]) {
                             if (stateSubs[widget.status]
                                 .toString()
-                                .contains(order['situation'])) {
+                                .contains(response["state"])) {
                               return OrderCard(
                                   orderId: order["orderId"],
                                   onTap: () async {
@@ -180,7 +209,7 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                                     Navigator.pushNamed(
                                         context, '/subscripton');
                                   },
-                                  status: order["situation"],
+                                  status: response["state"],
                                   isSimple: false,
                                   seen: SharedData.user.role == "vendor"
                                       ? localOrderContainer.vendorSeen

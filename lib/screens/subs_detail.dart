@@ -332,6 +332,22 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                         "Warning",
                                                         "do you really want to change the status to Delivred ?",
                                                         () async {
+                                                      if (_sharedData.order.user
+                                                                  .wallet[
+                                                              "balance"] ==
+                                                          "0") {
+                                                        showNotification(
+                                                            context,
+                                                            "Warning",
+                                                            "please ask user to recharge his/her wallet",
+                                                            () {
+                                                          Navigator.of(context,
+                                                                  rootNavigator:
+                                                                      true)
+                                                              .pop();
+                                                        });
+                                                      }
+
                                                       Navigator.of(context,
                                                               rootNavigator:
                                                                   true)
@@ -351,14 +367,10 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                               status];
                                                       await Order().updateSubs(
                                                           _sharedData.order);
-                                                      if (_sharedData.order
-                                                              .paymentMethod ==
-                                                          'Wallet') {
-                                                        await User()
-                                                            .updateWallet(
-                                                                _sharedData
-                                                                    .order);
-                                                      }
+
+                                                      await User().updateWallet(
+                                                          _sharedData.order);
+
                                                       await User().sendEmail(
                                                           "Delivered",
                                                           _sharedData.order.id,
@@ -392,21 +404,6 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                         'dispatched',
                                                         _sharedData.order.id,
                                                         kAdminEmail);
-                                                    if (_sharedData.order.user
-                                                                .wallet[
-                                                            "balance"] ==
-                                                        "0") {
-                                                      showNotification(
-                                                          context,
-                                                          "Warning",
-                                                          "please ask user to recharge his/her wallet",
-                                                          () {
-                                                        Navigator.of(context,
-                                                                rootNavigator:
-                                                                    true)
-                                                            .pop();
-                                                      });
-                                                    }
                                                   }
                                                 },
                                                 child: Container(
@@ -843,26 +840,31 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             width: _width * 0.01,
                                           ),
                                           InkWell(
-                                  onTap: () async {
-                                    try {
-                                      await FlutterPhoneDirectCaller.callNumber(
-                                          _sharedData.order.user.phone);
-                                    } catch (e) {
-                                      showAlert(context, "Error", e.message.toString(), true, () {
-                                        Navigator.of(context,
-                                                rootNavigator: true)
-                                            .pop();
-                                      });
-                                    }
-                                  },
-                                  child:Text(
-                                            _sharedData.order.user.phone,
-                                            style: GoogleFonts.robotoSlab(
-                                              color: kColor,
-                                              fontSize: _height * 0.018,
-                                              fontWeight: FontWeight.w300,
-                                            ),
-                                          )),
+                                              onTap: () async {
+                                                try {
+                                                  await FlutterPhoneDirectCaller
+                                                      .callNumber(_sharedData
+                                                          .order.user.phone);
+                                                } catch (e) {
+                                                  showAlert(
+                                                      context,
+                                                      "Error",
+                                                      e.message.toString(),
+                                                      true, () {
+                                                    Navigator.of(context,
+                                                            rootNavigator: true)
+                                                        .pop();
+                                                  });
+                                                }
+                                              },
+                                              child: Text(
+                                                _sharedData.order.user.phone,
+                                                style: GoogleFonts.robotoSlab(
+                                                  color: kColor,
+                                                  fontSize: _height * 0.018,
+                                                  fontWeight: FontWeight.w300,
+                                                ),
+                                              )),
                                         ],
                                       ),
                                       Row(
@@ -1003,27 +1005,34 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             width: _width * 0.01,
                                           ),
                                           InkWell(
-                                  onTap: () async {
-                                    try {
-                                      await FlutterPhoneDirectCaller.callNumber(
-                                          _sharedData.order.delivery.phone);
-                                    } catch (e) {
-                                      showAlert(context, "Error", e.message.toString(), true, () {
-                                        Navigator.of(context,
-                                                rootNavigator: true)
-                                            .pop();
-                                      });
-                                    }
-                                  },
-                                  child:
-                                          Text(
-                                            _sharedData.order.delivery.phone,
-                                            style: GoogleFonts.robotoSlab(
-                                              color: kColor,
-                                              fontSize: _height * 0.018,
-                                              fontWeight: FontWeight.w300,
-                                            ),
-                                          )),
+                                              onTap: () async {
+                                                try {
+                                                  await FlutterPhoneDirectCaller
+                                                      .callNumber(_sharedData
+                                                          .order
+                                                          .delivery
+                                                          .phone);
+                                                } catch (e) {
+                                                  showAlert(
+                                                      context,
+                                                      "Error",
+                                                      e.message.toString(),
+                                                      true, () {
+                                                    Navigator.of(context,
+                                                            rootNavigator: true)
+                                                        .pop();
+                                                  });
+                                                }
+                                              },
+                                              child: Text(
+                                                _sharedData
+                                                    .order.delivery.phone,
+                                                style: GoogleFonts.robotoSlab(
+                                                  color: kColor,
+                                                  fontSize: _height * 0.018,
+                                                  fontWeight: FontWeight.w300,
+                                                ),
+                                              )),
                                         ],
                                       ),
                                     ],
@@ -1116,26 +1125,31 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             width: _width * 0.01,
                                           ),
                                           InkWell(
-                                  onTap: () async {
-                                    try {
-                                      await FlutterPhoneDirectCaller.callNumber(
-                                          _sharedData.order.vendor.phone);
-                                    } catch (e) {
-                                      showAlert(context, "Error", e.message.toString(), true, () {
-                                        Navigator.of(context,
-                                                rootNavigator: true)
-                                            .pop();
-                                      });
-                                    }
-                                  },
-                                  child:Text(
-                                            _sharedData.order.vendor.phone,
-                                            style: GoogleFonts.robotoSlab(
-                                              color: kColor,
-                                              fontSize: _height * 0.018,
-                                              fontWeight: FontWeight.w300,
-                                            ),
-                                          )),
+                                              onTap: () async {
+                                                try {
+                                                  await FlutterPhoneDirectCaller
+                                                      .callNumber(_sharedData
+                                                          .order.vendor.phone);
+                                                } catch (e) {
+                                                  showAlert(
+                                                      context,
+                                                      "Error",
+                                                      e.message.toString(),
+                                                      true, () {
+                                                    Navigator.of(context,
+                                                            rootNavigator: true)
+                                                        .pop();
+                                                  });
+                                                }
+                                              },
+                                              child: Text(
+                                                _sharedData.order.vendor.phone,
+                                                style: GoogleFonts.robotoSlab(
+                                                  color: kColor,
+                                                  fontSize: _height * 0.018,
+                                                  fontWeight: FontWeight.w300,
+                                                ),
+                                              )),
                                         ],
                                       ),
                                       Row(
