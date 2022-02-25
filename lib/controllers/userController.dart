@@ -11,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grocery/shared_Pref.dart';
 import 'package:http/http.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class User {
@@ -134,13 +135,25 @@ class User {
     }
   }
 
-  updateWallet(OrderModel order) async {
+  updateWallet(OrderModel order, deducate) async {
     try {
-        for (var transaction in order.user.wallet['transactions']) {
-      if (transaction["status"] == "pending") {
-        transaction["status"] = "completed";
+      if (deducate && order.paymentMethod == "Wallet") {
+        var newBalance = double.parse(order.user.wallet["balance"]) -
+            double.parse(order.amount);
+        order.user.wallet["balance"] = newBalance.toString();
+        order.user.wallet["transactions"].add({
+          "amount": "-${order.amount}",
+          "description": "For order ${order.orderId}",
+          "date": DateFormat('dd-MM-yyyy HH:mm:ss.S').format(DateTime.now()),
+          "type": "Expense",
+          "paymentId": order.paymentId
+        });
       }
-    }
+      for (var transaction in order.user.wallet['transactions']) {
+        if (transaction["status"] == "pending") {
+          transaction["status"] = "completed";
+        }
+      }
       await _firestore
           .collection('users')
           .doc(order.user.uid)

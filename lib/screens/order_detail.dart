@@ -841,6 +841,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                           SharedData.user.role == "delivery"
                               ? InkWell(
                                   onTap: () async {
+                                    try{
                                     if (status == 1) {
                                       showConfirmation(context, "Warning",
                                           "do you really want to change the status to Delivred ?",
@@ -854,8 +855,8 @@ class _OrderDtailsState extends State<OrderDtails> {
                                         _sharedData.order.situation =
                                             ifDeliveyStates[status];
 
-                                        await User()
-                                            .updateWallet(_sharedData.order);
+                                        await User().updateWallet(
+                                            _sharedData.order, false);
 
                                         await Order()
                                             .updateOrder(_sharedData.order);
@@ -871,7 +872,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                     if (status == 0 &&
                                         _sharedData.order.situation ==
                                             'prepared') {
-                                      {
+                                      
                                         setState(() {
                                           status = (status + 1) % 3;
                                           _sharedData.order.situation =
@@ -880,23 +881,17 @@ class _OrderDtailsState extends State<OrderDtails> {
                                         await Order()
                                             .updateOrder(_sharedData.order);
                                       }
-                                    }
+                                    
                                     if (ifDeliveyStates[status] ==
                                         'dispatched') {
                                       await User().sendEmail('dispatched',
                                           _sharedData.order.id, kAdminEmail);
-                                      if (_sharedData
-                                              .order.user.wallet["balance"] ==
-                                          "0") {
-                                        showNotification(context, "Warning",
-                                            "please ask user to recharge his/her wallet",
-                                            () {
-                                          Navigator.of(context,
-                                                  rootNavigator: true)
-                                              .pop();
-                                        });
-                                      }
                                     }
+                                    }
+                                    catch(e){
+                                      print(e);
+                                    }
+                                    
                                   },
                                   child: Container(
                                       padding: EdgeInsets.symmetric(
@@ -997,7 +992,28 @@ class _OrderDtailsState extends State<OrderDtails> {
                         ],
                       ),
                 SizedBox(
-                  height: _height * 0.06,
+                  height: _height * 0.02,
+                ),
+                _sharedData.order.user.wallet["balance"] == "0"
+                    ? Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: _width * 0.08,
+                            vertical: _height * 0.03),
+                        width: _width,
+                        color: kColorRed.withOpacity(0.15),
+                        child: Center(
+                          child: Text(
+                            "please ask user to recharge his/her wallet !!",
+                            style: GoogleFonts.robotoSlab(
+                              color: kColor,
+                              fontSize: _height * 0.018,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ))
+                    : SizedBox(),
+                SizedBox(
+                  height: _height * 0.03,
                 ),
                 Column(
                     children: _sharedData.order.products.map((product) {

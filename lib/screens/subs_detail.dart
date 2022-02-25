@@ -332,22 +332,6 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                         "Warning",
                                                         "do you really want to change the status to Delivred ?",
                                                         () async {
-                                                      if (_sharedData.order.user
-                                                                  .wallet[
-                                                              "balance"] ==
-                                                          "0") {
-                                                        showNotification(
-                                                            context,
-                                                            "Warning",
-                                                            "please ask user to recharge his/her wallet",
-                                                            () {
-                                                          Navigator.of(context,
-                                                                  rootNavigator:
-                                                                      true)
-                                                              .pop();
-                                                        });
-                                                      }
-
                                                       Navigator.of(context,
                                                               rootNavigator:
                                                                   true)
@@ -369,7 +353,8 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                           _sharedData.order);
 
                                                       await User().updateWallet(
-                                                          _sharedData.order);
+                                                          _sharedData.order,
+                                                          true);
 
                                                       await User().sendEmail(
                                                           "Delivered",
@@ -563,7 +548,28 @@ class _SubsDetailsState extends State<SubsDetails> {
                                       ),
                                     ),
                           SizedBox(
-                            height: _height * 0.05,
+                            height: _height * 0.02,
+                          ),
+                          _sharedData.order.user.wallet["balance"] == "0"
+                              ? Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: _width * 0.08,
+                                      vertical: _height * 0.03),
+                                  width: _width,
+                                  color: kColorRed.withOpacity(0.15),
+                                  child: Center(
+                                    child: Text(
+                                      "please ask user to recharge his/her wallet !!",
+                                      style: GoogleFonts.robotoSlab(
+                                        color: kColor,
+                                        fontSize: _height * 0.018,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ))
+                              : SizedBox(),
+                          SizedBox(
+                            height: _height * 0.03,
                           ),
                           Container(
                               padding: EdgeInsets.symmetric(
