@@ -276,54 +276,58 @@ class _OrderDtailsState extends State<OrderDtails> {
                             ),
                           ],
                         ),
-                        Row(
-                          children: [
-                            Text(
-                              "Wallet pending amount:",
-                              style: GoogleFonts.robotoSlab(
-                                color: kColor,
-                                fontSize: _height * 0.020,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            SizedBox(
-                              width: _width * 0.01,
-                            ),
-                            Text(
-                              "${_sharedData.order.user.pendingAmount}₹",
-                              style: GoogleFonts.robotoSlab(
-                                color: kColor,
-                                fontSize: _height * 0.018,
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Total amount to be collected :",
-                              style: GoogleFonts.robotoSlab(
-                                color: kColor,
-                                fontSize: _height * 0.020,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            SizedBox(
-                              width: _width * 0.01,
-                            ),
-                            Text(
-                              _sharedData.order.paymentMethod == "COD"
-                                  ? "${(double.parse(_sharedData.order.amount) + double.parse(_sharedData.order.user.pendingAmount))}₹"
-                                  : "${_sharedData.order.user.pendingAmount}₹",
-                              style: GoogleFonts.robotoSlab(
-                                color: kColor,
-                                fontSize: _height * 0.018,
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                          ],
-                        ),
+                        SharedData.user.role == "delivery"
+                            ? Row(
+                                children: [
+                                  Text(
+                                    "Wallet pending amount:",
+                                    style: GoogleFonts.robotoSlab(
+                                      color: kColor,
+                                      fontSize: _height * 0.020,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: _width * 0.01,
+                                  ),
+                                  Text(
+                                    "${_sharedData.order.user.pendingAmount}₹",
+                                    style: GoogleFonts.robotoSlab(
+                                      color: kColor,
+                                      fontSize: _height * 0.018,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : SizedBox(),
+                        SharedData.user.role == "delivery"
+                            ? Row(
+                                children: [
+                                  Text(
+                                    "Total amount to be collected :",
+                                    style: GoogleFonts.robotoSlab(
+                                      color: kColor,
+                                      fontSize: _height * 0.020,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: _width * 0.01,
+                                  ),
+                                  Text(
+                                    _sharedData.order.paymentMethod == "COD"
+                                        ? "${(double.parse(_sharedData.order.amount) + double.parse(_sharedData.order.user.pendingAmount))}₹"
+                                        : "${_sharedData.order.user.pendingAmount}₹",
+                                    style: GoogleFonts.robotoSlab(
+                                      color: kColor,
+                                      fontSize: _height * 0.018,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : SizedBox(),
                       ],
                     )),
                 SizedBox(
@@ -841,38 +845,39 @@ class _OrderDtailsState extends State<OrderDtails> {
                           SharedData.user.role == "delivery"
                               ? InkWell(
                                   onTap: () async {
-                                    try{
-                                    if (status == 1) {
-                                      showConfirmation(context, "Warning",
-                                          "do you really want to change the status to Delivred ?",
-                                          () async {
-                                        Navigator.of(context,
-                                                rootNavigator: true)
-                                            .pop();
-                                        setState(() {
-                                          status = (status + 1) % 3;
+                                    try {
+                                      if (status == 1) {
+                                        showConfirmation(context, "Warning",
+                                            "do you really want to change the status to Delivred ?",
+                                            () async {
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pop();
+                                          setState(() {
+                                            status = (status + 1) % 3;
+                                          });
+                                          _sharedData.order.situation =
+                                              ifDeliveyStates[status];
+
+                                          await User().updateWallet(
+                                              _sharedData.order, false);
+
+                                          await Order()
+                                              .updateOrder(_sharedData.order);
+                                          await User().sendEmail(
+                                              "Delivered",
+                                              _sharedData.order.id,
+                                              kAdminEmail);
+                                          Navigator.pop(context);
+                                        }, () {
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pop();
                                         });
-                                        _sharedData.order.situation =
-                                            ifDeliveyStates[status];
-
-                                        await User().updateWallet(
-                                            _sharedData.order, false);
-
-                                        await Order()
-                                            .updateOrder(_sharedData.order);
-                                        await User().sendEmail("Delivered",
-                                            _sharedData.order.id, kAdminEmail);
-                                        Navigator.pop(context);
-                                      }, () {
-                                        Navigator.of(context,
-                                                rootNavigator: true)
-                                            .pop();
-                                      });
-                                    }
-                                    if (status == 0 &&
-                                        _sharedData.order.situation ==
-                                            'prepared') {
-                                      
+                                      }
+                                      if (status == 0 &&
+                                          _sharedData.order.situation ==
+                                              'prepared') {
                                         setState(() {
                                           status = (status + 1) % 3;
                                           _sharedData.order.situation =
@@ -881,17 +886,15 @@ class _OrderDtailsState extends State<OrderDtails> {
                                         await Order()
                                             .updateOrder(_sharedData.order);
                                       }
-                                    
-                                    if (ifDeliveyStates[status] ==
-                                        'dispatched') {
-                                      await User().sendEmail('dispatched',
-                                          _sharedData.order.id, kAdminEmail);
-                                    }
-                                    }
-                                    catch(e){
+
+                                      if (ifDeliveyStates[status] ==
+                                          'dispatched') {
+                                        await User().sendEmail('dispatched',
+                                            _sharedData.order.id, kAdminEmail);
+                                      }
+                                    } catch (e) {
                                       print(e);
                                     }
-                                    
                                   },
                                   child: Container(
                                       padding: EdgeInsets.symmetric(
@@ -994,7 +997,8 @@ class _OrderDtailsState extends State<OrderDtails> {
                 SizedBox(
                   height: _height * 0.02,
                 ),
-                _sharedData.order.user.wallet["balance"] == "0"
+                _sharedData.order.user.wallet["balance"] == "0" &&
+                        SharedData.user.role == "delivery"
                     ? Container(
                         padding: EdgeInsets.symmetric(
                             horizontal: _width * 0.08,

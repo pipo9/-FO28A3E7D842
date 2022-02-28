@@ -550,7 +550,8 @@ class _SubsDetailsState extends State<SubsDetails> {
                           SizedBox(
                             height: _height * 0.02,
                           ),
-                          _sharedData.order.user.wallet["balance"] == "0"
+                          _sharedData.order.user.wallet["balance"] == "0" &&
+                                  SharedData.user.role == "delivery"
                               ? Container(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: _width * 0.08,
@@ -710,54 +711,59 @@ class _SubsDetailsState extends State<SubsDetails> {
                                       ),
                                     ],
                                   ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Wallet pending amount:",
-                                        style: GoogleFonts.robotoSlab(
-                                          color: kColor,
-                                          fontSize: _height * 0.020,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: _width * 0.01,
-                                      ),
-                                      Text(
-                                        "${_sharedData.order.user.pendingAmount}₹",
-                                        style: GoogleFonts.robotoSlab(
-                                          color: kColor,
-                                          fontSize: _height * 0.018,
-                                          fontWeight: FontWeight.w300,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Total amount to be collected :",
-                                        style: GoogleFonts.robotoSlab(
-                                          color: kColor,
-                                          fontSize: _height * 0.020,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: _width * 0.01,
-                                      ),
-                                      Text(
-                                        _sharedData.order.paymentMethod == "COD"
-                                            ? "${(double.parse(_sharedData.order.amount) + double.parse(_sharedData.order.user.pendingAmount))}₹"
-                                            : "${_sharedData.order.user.pendingAmount}₹",
-                                        style: GoogleFonts.robotoSlab(
-                                          color: kColor,
-                                          fontSize: _height * 0.018,
-                                          fontWeight: FontWeight.w300,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  SharedData.user.role == "delivery"
+                                      ? Row(
+                                          children: [
+                                            Text(
+                                              "Wallet pending amount:",
+                                              style: GoogleFonts.robotoSlab(
+                                                color: kColor,
+                                                fontSize: _height * 0.020,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: _width * 0.01,
+                                            ),
+                                            Text(
+                                              "${_sharedData.order.user.pendingAmount}₹",
+                                              style: GoogleFonts.robotoSlab(
+                                                color: kColor,
+                                                fontSize: _height * 0.018,
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : SizedBox(),
+                                  SharedData.user.role == "delivery"
+                                      ? Row(
+                                          children: [
+                                            Text(
+                                              "Total amount to be collected :",
+                                              style: GoogleFonts.robotoSlab(
+                                                color: kColor,
+                                                fontSize: _height * 0.020,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: _width * 0.01,
+                                            ),
+                                            Text(
+                                              _sharedData.order.paymentMethod ==
+                                                      "COD"
+                                                  ? "${(double.parse(_sharedData.order.amount) + double.parse(_sharedData.order.user.pendingAmount))}₹"
+                                                  : "${_sharedData.order.user.pendingAmount}₹",
+                                              style: GoogleFonts.robotoSlab(
+                                                color: kColor,
+                                                fontSize: _height * 0.018,
+                                                fontWeight: FontWeight.w300,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : SizedBox(),
                                 ],
                               )),
                           SizedBox(
