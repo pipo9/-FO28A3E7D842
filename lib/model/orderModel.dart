@@ -80,6 +80,19 @@ class OrderModel {
       else
         listProducts.add(element.subsToMap());
     });
+    if (situation == "delivered")
+      return {
+        "statusDay": statusDay,
+        "products": listProducts,
+        "vendorAcceptance": vendorAcceptance,
+        "deliveryAcceptance": deliveryAcceptance,
+        'vendorId': vendorId,
+        'deliveryId': deliveryId,
+        'situation': situation,
+        'vendorSeen': vendorSeen,
+        'deliverySeen': deliverySeen,
+        "amount": amount,
+      };
     return {
       "statusDay": statusDay,
       "products": listProducts,

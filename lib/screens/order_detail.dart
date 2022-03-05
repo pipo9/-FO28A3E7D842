@@ -869,7 +869,9 @@ class _OrderDtailsState extends State<OrderDtails> {
                                               _sharedData.order.id,
                                               kAdminEmail);
                                           Navigator.pop(context);
-                                        }, () {
+                                        }
+                                        ,
+                                         () {
                                           Navigator.of(context,
                                                   rootNavigator: true)
                                               .pop();
