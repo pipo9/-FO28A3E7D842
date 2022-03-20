@@ -48,7 +48,8 @@ class SharedData with ChangeNotifier {
     notifyListeners();
   }
 
-  String onDateSelected(DateTime date) {
+   onDateSelected(DateTime date) {
+    var resturnedResult = {};
     String productStatus = "disabled";
     List<ProductModel> products = [];
     order.products.forEach((product) {
@@ -60,6 +61,9 @@ class SharedData with ChangeNotifier {
         if (product.startDate.compareTo(dateYMD.toString()) <= 0) {
           if (dates.containsKey(dateYMD)) {
             productStatus = dates[dateYMD.toString()];
+            if (productStatus == "delivered" && order.userInfos.containsKey(dateYMD))  {
+              resturnedResult["user"] = UserModel(order.user.uid, order.userInfos[dateYMD]);
+            }
           } else if (product.status == "subscribed" && days.contains(dateEEE)) {
             productStatus = "pending";
           }
@@ -72,10 +76,12 @@ class SharedData with ChangeNotifier {
     if (toDayproducts.length == 0) {
       productStatus = "disabled";
     }
-    return productStatus;
+
+    resturnedResult["productStatus"]= productStatus;
+    return resturnedResult;
   }
 
-   onDateSelectedSubs(DateTime date, OrderModel order) {
+  onDateSelectedSubs(DateTime date, OrderModel order) {
     var response = {};
     var dateYMD = DateFormat('yyyy-MM-dd').format(date);
     var dateEEE = DateFormat('EEEE').format(date);

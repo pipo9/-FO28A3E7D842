@@ -192,7 +192,7 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                               localOrderContainer.statusDay != dateYMD) {
                             localOrderContainer.statusDay = dateYMD;
                             localOrderContainer.situation = "pending";
-                            _order.updateSubs(localOrderContainer);
+                            _order.updateSubs(localOrderContainer,widget.time);
                           }
 
                           var response = SharedData().onDateSelectedSubs(
@@ -206,7 +206,7 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                                   orderId: order["orderId"],
                                   onTap: () async {
                                     _sharedData.order = localOrderContainer;
-                                    await Order().updateSubs(_sharedData.order);
+                                    await Order().updateSubs(_sharedData.order,widget.time);
                                     Navigator.pushNamed(
                                         context, '/subscripton');
                                   },

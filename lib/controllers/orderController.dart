@@ -9,15 +9,15 @@ class Order {
       await _firestore
           .collection("orders")
           .doc(order.uid)
-          .update(order.toMap());
+          .update(order.toMap(true, null));
     } catch (e) {
       print(e.message);
     }
   }
 
-  updateSubs(OrderModel order) async {
+  updateSubs(OrderModel order , date) async {
     try {
-      await _firestore.collection("subscribes").doc(order.uid).update(order.toMap());
+      await _firestore.collection("subscribes").doc(order.uid).update(order.toMap(false , date));
       
     } catch (e) {
       print("error :");

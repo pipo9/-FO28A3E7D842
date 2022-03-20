@@ -1,6 +1,7 @@
 import 'package:grocery/controllers/userController.dart';
 import 'package:grocery/model/productModel.dart';
 import 'package:grocery/model/userModel.dart';
+import 'package:intl/intl.dart';
 
 class OrderModel {
   String uid;
@@ -15,6 +16,7 @@ class OrderModel {
   String purchasedAt;
   String orderId;
   Map<String, dynamic> coupon;
+  Map<String, dynamic> userInfos = {};
   UserModel vendor;
   String vendorId;
   UserModel delivery;
@@ -69,10 +71,14 @@ class OrderModel {
     this.coupon = data['coupon'] ?? null;
     this.vendorId = data['vendorId'];
     this.deliveryId = data['deliveryId'];
+
+    this.userInfos = data['userInfos'] ?? {};
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap(isSimple, date) {
     List listProducts = [];
+    var dateYMD = DateFormat('yyyy-MM-dd').format(date);
+    userInfos[dateYMD] = user.toMap();
 
     products.forEach((element) {
       if (element.isSimple)
@@ -80,31 +86,64 @@ class OrderModel {
       else
         listProducts.add(element.subsToMap());
     });
-    if (situation == "delivered")
-      return {
-        "statusDay": statusDay,
-        "products": listProducts,
-        "vendorAcceptance": vendorAcceptance,
-        "deliveryAcceptance": deliveryAcceptance,
-        'vendorId': vendorId,
-        'deliveryId': deliveryId,
-        'situation': situation,
-        'vendorSeen': vendorSeen,
-        'deliverySeen': deliverySeen,
-        "amount": amount,
-      };
-    return {
-      "statusDay": statusDay,
-      "products": listProducts,
-      "vendorAcceptance": vendorAcceptance,
-      "deliveryAcceptance": deliveryAcceptance,
-      'vendorId': vendorId,
-      'deliveryId': deliveryId,
-      'situation': situation,
-      'vendorSeen': vendorSeen,
-      'deliverySeen': deliverySeen,
-      "amount": amount,
-      "user": user.toMap()
-    };
+    if (isSimple) {
+      if (situation == "delivered")
+        return {
+          "statusDay": statusDay,
+          "products": listProducts,
+          "vendorAcceptance": vendorAcceptance,
+          "deliveryAcceptance": deliveryAcceptance,
+          'vendorId': vendorId,
+          'deliveryId': deliveryId,
+          'situation': situation,
+          'vendorSeen': vendorSeen,
+          'deliverySeen': deliverySeen,
+          "amount": amount,
+        };
+      else
+        return {
+          "statusDay": statusDay,
+          "products": listProducts,
+          "vendorAcceptance": vendorAcceptance,
+          "deliveryAcceptance": deliveryAcceptance,
+          'vendorId': vendorId,
+          'userInfos': userInfos,
+          'deliveryId': deliveryId,
+          'situation': situation,
+          'vendorSeen': vendorSeen,
+          'deliverySeen': deliverySeen,
+          "amount": amount,
+          "user": user.toMap()
+        };
+    } else {
+      if (products[0].dates.containsKey(dateYMD) &&
+          products[0].dates[dateYMD] == "delivered")
+        return {
+          "statusDay": statusDay,
+          "products": listProducts,
+          "vendorAcceptance": vendorAcceptance,
+          "deliveryAcceptance": deliveryAcceptance,
+          'vendorId': vendorId,
+          'deliveryId': deliveryId,
+          'situation': situation,
+          'vendorSeen': vendorSeen,
+          'deliverySeen': deliverySeen,
+          "amount": amount,
+        };
+      else
+        return {
+          "statusDay": statusDay,
+          "products": listProducts,
+          "vendorAcceptance": vendorAcceptance,
+          "deliveryAcceptance": deliveryAcceptance,
+          'vendorId': vendorId,
+          'userInfos': userInfos,
+          'deliveryId': deliveryId,
+          'situation': situation,
+          'vendorSeen': vendorSeen,
+          'deliverySeen': deliverySeen,
+          "amount": amount,
+        };
+    }
   }
 }

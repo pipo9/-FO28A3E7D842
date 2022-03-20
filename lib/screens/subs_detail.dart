@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,6 +6,7 @@ import 'package:grocery/components/calendar.dart';
 import 'package:grocery/components/order_product.dart';
 import 'package:grocery/controllers/orderController.dart';
 import 'package:grocery/controllers/userController.dart';
+import 'package:grocery/model/userModel.dart';
 import 'package:grocery/shared_Pref.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -20,6 +22,7 @@ class SubsDetails extends StatefulWidget {
 class _SubsDetailsState extends State<SubsDetails> {
   int status = 0;
   String disabled;
+  UserModel user;
   List<Color> iconsColors = [kColor, klightGrey, klightGrey];
   List<String> ifDeliveyStates = ['processing', 'dispatched', 'delivered'];
   List<Color> ifDeliveryColors = [kBlueAccent.withOpacity(0.2), kColor, kGreen];
@@ -57,7 +60,13 @@ class _SubsDetailsState extends State<SubsDetails> {
 
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
-    String state = _sharedData.onDateSelected(date);
+    var map = _sharedData.onDateSelected(date);
+    String state = map["productStatus"];
+    user = state == "delivered" ? map["user"] : _sharedData.order.user;
+    disabled = state;
+    // print("##### test : $disabled ..... $state");
+  
+
     switch (state) {
       case 'delivered':
         {
@@ -127,7 +136,7 @@ class _SubsDetailsState extends State<SubsDetails> {
           break;
         }
     }
-    disabled = _sharedData.onDateSelected(date);
+ 
 
     return Scaffold(
       backgroundColor: klightGrey,
@@ -176,7 +185,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                 SizedBox(
                   height: _height * 0.04,
                 ),
-                status == -1 || disabled == "disabled"
+                disabled == "disabled" || status == -1 
                     ? Center(
                         child: Column(
                           children: [
@@ -227,8 +236,8 @@ class _SubsDetailsState extends State<SubsDetails> {
                                         else
                                           _sharedData.order.deliveryId = '';
 
-                                        await Order()
-                                            .updateSubs(_sharedData.order);
+                                        await Order().updateSubs(
+                                            _sharedData.order, date);
                                         Navigator.pushReplacementNamed(
                                             context, '/home');
                                         await User().sendEmail("Rejected",
@@ -272,8 +281,8 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                 .deliveryAcceptance = true;
                                           }
                                         });
-                                        await Order()
-                                            .updateSubs(_sharedData.order);
+                                        await Order().updateSubs(
+                                            _sharedData.order, date);
                                         await User().sendEmail("Accepted",
                                             _sharedData.order.id, kAdminEmail);
                                         toggleSpinner();
@@ -350,7 +359,8 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                           ifDeliveyStates[
                                                               status];
                                                       await Order().updateSubs(
-                                                          _sharedData.order);
+                                                          _sharedData.order,
+                                                          date);
 
                                                       await User().updateWallet(
                                                           _sharedData.order,
@@ -381,7 +391,8 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                             .order.situation =
                                                         ifDeliveyStates[status];
                                                     await Order().updateSubs(
-                                                        _sharedData.order);
+                                                        _sharedData.order,
+                                                        date);
                                                   }
                                                   if (ifDeliveyStates[status] ==
                                                       'dispatched') {
@@ -458,7 +469,8 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                           ifVendorStates[
                                                               status];
                                                       await Order().updateSubs(
-                                                          _sharedData.order);
+                                                          _sharedData.order,
+                                                          date);
                                                       await User().sendEmail(
                                                           "Prepared",
                                                           _sharedData.order.id,
@@ -491,7 +503,8 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                         ifVendorStates[status];
 
                                                     await Order().updateSubs(
-                                                        _sharedData.order);
+                                                        _sharedData.order,
+                                                        date);
                                                   }
                                                 },
                                                 child: Container(
@@ -550,7 +563,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                           SizedBox(
                             height: _height * 0.02,
                           ),
-                          _sharedData.order.user.wallet["balance"] == "0" &&
+                          user.wallet["balance"] == "0" &&
                                   SharedData.user.role == "delivery"
                               ? Container(
                                   padding: EdgeInsets.symmetric(
@@ -726,7 +739,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                               width: _width * 0.01,
                                             ),
                                             Text(
-                                              "${_sharedData.order.user.pendingAmount}₹",
+                                              "${user.pendingAmount}₹",
                                               style: GoogleFonts.robotoSlab(
                                                 color: kColor,
                                                 fontSize: _height * 0.018,
@@ -753,8 +766,8 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             Text(
                                               _sharedData.order.paymentMethod ==
                                                       "COD"
-                                                  ? "${(double.parse(_sharedData.order.amount) + double.parse(_sharedData.order.user.pendingAmount))}₹"
-                                                  : "${_sharedData.order.user.pendingAmount}₹",
+                                                  ? "${(double.parse(_sharedData.order.amount) + double.parse(user.pendingAmount))}₹"
+                                                  : "${user.pendingAmount}₹",
                                               style: GoogleFonts.robotoSlab(
                                                 color: kColor,
                                                 fontSize: _height * 0.018,
@@ -806,7 +819,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             width: _width * 0.01,
                                           ),
                                           Text(
-                                            _sharedData.order.user.fullName,
+                                            user.fullName,
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
                                               fontSize: _height * 0.018,
@@ -829,7 +842,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             width: _width * 0.01,
                                           ),
                                           Text(
-                                            _sharedData.order.user.email,
+                                            user.email,
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
                                               fontSize: _height * 0.018,
@@ -870,7 +883,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                 }
                                               },
                                               child: Text(
-                                                _sharedData.order.user.phone,
+                                                user.phone,
                                                 style: GoogleFonts.robotoSlab(
                                                   color: kColor,
                                                   fontSize: _height * 0.018,
@@ -893,7 +906,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             width: _width * 0.01,
                                           ),
                                           Text(
-                                            _sharedData.order.user
+                                            user
                                                     .wallet["balance"] +
                                                 "₹",
                                             style: GoogleFonts.robotoSlab(
@@ -922,7 +935,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                           Container(
                                             width: _width * 0.51,
                                             child: Text(
-                                              _sharedData.order.user.address,
+                                              user.address,
                                               softWrap: true,
                                               style: GoogleFonts.robotoSlab(
                                                 color: kColor,
