@@ -206,7 +206,9 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                                   orderId: order["orderId"],
                                   onTap: () async {
                                     _sharedData.order = localOrderContainer;
-                                    await Order().updateSubs(_sharedData.order,widget.time);
+                                    
+                                     await Order().updateSubs(_sharedData.order,widget.time);
+                                   
                                     Navigator.pushNamed(
                                         context, '/subscripton');
                                   },

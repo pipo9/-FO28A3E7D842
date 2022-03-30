@@ -37,7 +37,7 @@ class OrderModel {
     this.statusDay = data['statusDay'];
     this.situation = data['situation'] ?? "";
 
-    if (data.containsKey("user") && situation == "delivered") {
+    if (isSimple && data.containsKey("user") && situation == "delivered") {
       this.user = UserModel(data['userId'], data['user']);
     } else {
       User().getUsersInfo(data['userId']).then((user) {
@@ -78,7 +78,11 @@ class OrderModel {
   Map<String, dynamic> toMap(isSimple, date) {
     List listProducts = [];
     var dateYMD = DateFormat('yyyy-MM-dd').format(date);
-    userInfos[dateYMD] = user.toMap();
+    var toCommituserInfos = userInfos;
+    print(toCommituserInfos);
+    if (situation != "delivered")
+    toCommituserInfos[dateYMD] = user.toMap();
+    print(toCommituserInfos);
 
     products.forEach((element) {
       if (element.isSimple)
@@ -107,7 +111,7 @@ class OrderModel {
           "vendorAcceptance": vendorAcceptance,
           "deliveryAcceptance": deliveryAcceptance,
           'vendorId': vendorId,
-          'userInfos': userInfos,
+          'userInfos': toCommituserInfos,
           'deliveryId': deliveryId,
           'situation': situation,
           'vendorSeen': vendorSeen,
@@ -137,7 +141,7 @@ class OrderModel {
           "vendorAcceptance": vendorAcceptance,
           "deliveryAcceptance": deliveryAcceptance,
           'vendorId': vendorId,
-          'userInfos': userInfos,
+          'userInfos': toCommituserInfos,
           'deliveryId': deliveryId,
           'situation': situation,
           'vendorSeen': vendorSeen,

@@ -64,7 +64,7 @@ class _SubsDetailsState extends State<SubsDetails> {
     String state = map["productStatus"];
     user = state == "delivered" ? map["user"] : _sharedData.order.user;
     disabled = state;
-    // print("##### test : $disabled ..... $state");
+  //  print("##### test : ${user.email} ");
   
 
     switch (state) {
@@ -370,13 +370,16 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                           "Delivered",
                                                           _sharedData.order.id,
                                                           kAdminEmail);
+                                                          Navigator.pushReplacementNamed(context, '/home');
                                                     }, () {
                                                       Navigator.of(context,
                                                               rootNavigator:
                                                                   true)
                                                           .pop();
                                                     });
+                                                   
                                                   }
+                                                
                                                   if (status == 0 &&
                                                       state == 'prepared') {
                                                     setState(() {

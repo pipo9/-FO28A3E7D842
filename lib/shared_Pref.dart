@@ -20,10 +20,7 @@ class SharedData with ChangeNotifier {
 
   get currentNotifications => notifications;
 
-  set changeCurentOrder(OrderModel order) {
-    this.order = order;
-    notifyListeners();
-  }
+
 
   getNotifications() async {
     List<NotificationModel> notifications = [];
@@ -62,6 +59,10 @@ class SharedData with ChangeNotifier {
           if (dates.containsKey(dateYMD)) {
             productStatus = dates[dateYMD.toString()];
             if (productStatus == "delivered" && order.userInfos.containsKey(dateYMD))  {
+                
+                  //  print("##### test : ${order.userInfos} ");
+                  //  print("##### test : $dateYMD ");
+
               resturnedResult["user"] = UserModel(order.user.uid, order.userInfos[dateYMD]);
             }
           } else if (product.status == "subscribed" && days.contains(dateEEE)) {

@@ -11,7 +11,7 @@ class Order {
           .doc(order.uid)
           .update(order.toMap(true, null));
     } catch (e) {
-      print(e.message);
+      print(e);
     }
   }
 
