@@ -78,11 +78,10 @@ class OrderModel {
   Map<String, dynamic> toMap(isSimple, date) {
     List listProducts = [];
     var dateYMD = DateFormat('yyyy-MM-dd').format(date);
-    var toCommituserInfos = userInfos;
-    print(toCommituserInfos);
+    // print(userInfos);
     if (situation != "delivered")
-    toCommituserInfos[dateYMD] = user.toMap();
-    print(toCommituserInfos);
+       userInfos[dateYMD] = user.toMap();
+    // print(userInfos);
 
     products.forEach((element) {
       if (element.isSimple)
@@ -111,7 +110,7 @@ class OrderModel {
           "vendorAcceptance": vendorAcceptance,
           "deliveryAcceptance": deliveryAcceptance,
           'vendorId': vendorId,
-          'userInfos': toCommituserInfos,
+          'userInfos': userInfos,
           'deliveryId': deliveryId,
           'situation': situation,
           'vendorSeen': vendorSeen,
@@ -141,7 +140,7 @@ class OrderModel {
           "vendorAcceptance": vendorAcceptance,
           "deliveryAcceptance": deliveryAcceptance,
           'vendorId': vendorId,
-          'userInfos': toCommituserInfos,
+          'userInfos': userInfos,
           'deliveryId': deliveryId,
           'situation': situation,
           'vendorSeen': vendorSeen,
