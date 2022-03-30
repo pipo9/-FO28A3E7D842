@@ -78,10 +78,10 @@ class OrderModel {
   Map<String, dynamic> toMap(isSimple, date) {
     List listProducts = [];
     var dateYMD = DateFormat('yyyy-MM-dd').format(date);
-    // print(userInfos);
-    if (situation != "delivered")
+    print(userInfos);
+    if ( products[0].dates.containsKey(dateYMD) && products[0].dates[dateYMD] != "delivered")
        userInfos[dateYMD] = user.toMap();
-    // print(userInfos);
+    print(userInfos);
 
     products.forEach((element) {
       if (element.isSimple)
@@ -89,6 +89,7 @@ class OrderModel {
       else
         listProducts.add(element.subsToMap());
     });
+    
     if (isSimple) {
       if (situation == "delivered")
         return {
