@@ -79,7 +79,7 @@ class OrderModel {
     List listProducts = [];
     var dateYMD = DateFormat('yyyy-MM-dd').format(date);
     // print(userInfos);
-    if ( products[0].dates.containsKey(dateYMD) && products[0].dates[dateYMD] != "delivered")
+    if ( !isSimple && products[0].dates.containsKey(dateYMD) && products[0].dates[dateYMD] != "delivered")
        userInfos[dateYMD] = user.toMap();
     // print(userInfos);
 
