@@ -9,7 +9,7 @@ class Order {
       await _firestore
           .collection("orders")
           .doc(order.uid)
-          .update(order.toMap(true, null));
+          .update(order.toMap(true, DateTime.now()));
     } catch (e) {
       print(e);
     }

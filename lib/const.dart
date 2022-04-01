@@ -23,6 +23,7 @@ const smalText = 'Adobe Devanagari';
 //contacts
 const kAdminEmail ="anshulgoel_005@yahoo.co.in";
 // "Support@grocurs.com";
+// anshulgoel_005@yahoo.co.in
 //style
 // roboto slab bold
 TextStyle kStyle =
