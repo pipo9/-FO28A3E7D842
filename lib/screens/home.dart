@@ -6,6 +6,7 @@ import 'package:grocery/components/sub_screen_orders.dart';
 import 'package:grocery/controllers/userController.dart';
 import 'package:grocery/model/notificationModel.dart';
 import 'package:grocery/shared_Pref.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../const.dart';
@@ -79,23 +80,39 @@ class _HomeState extends State<Home> {
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(32.0))),
                                           content: Container(
-                                              child: CalendarDatePicker(
-                                                  initialDate: time,
-                                                  firstDate: DateTime.utc(
-                                                      DateTime.now().year - 2,
-                                                      DateTime.now().month,
-                                                      1),
-                                                  lastDate: DateTime.utc(
-                                                      DateTime.now().year + 4,
-                                                      DateTime.now().month,
-                                                      1),
-                                                  onDateChanged: (value) {
-                                                    setState(() {
-                                                      
-                                                      time = value;
-                                                    });
-                                                    Navigator.pop(context);
-                                                  })));
+                                              height: _height * 0.6,
+                                              child: Column(children: [
+                                                Align(
+                                                  alignment:
+                                                      Alignment.centerRight,
+                                                  child: Text(
+                                                    "Date : ${DateFormat('dd-MM-yyyy').format(time)}",
+                                                    style:
+                                                        GoogleFonts.robotoSlab(
+                                                      color: kDarkGrey,
+                                                      fontSize: _height * 0.017,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
+                                                CalendarDatePicker(
+                                                    initialDate: time,
+                                                    firstDate: DateTime.utc(
+                                                        DateTime.now().year - 2,
+                                                        DateTime.now().month,
+                                                        1),
+                                                    lastDate: DateTime.utc(
+                                                        DateTime.now().year + 4,
+                                                        DateTime.now().month,
+                                                        1),
+                                                    onDateChanged: (value) {
+                                                      setState(() {
+                                                        time = value;
+                                                      });
+                                                      Navigator.pop(context);
+                                                    })
+                                              ])));
                                     });
                               },
                               child: Icon(
@@ -156,9 +173,7 @@ class _HomeState extends State<Home> {
                           SizedBox(width: _width * 0.05),
                           InkWell(
                             onTap: () {
-                              Navigator.pushReplacementNamed(
-                                  context, '/signIn');
-                              User().signOut();
+                              signout();
                             },
                             child: Icon(
                               Icons.power_settings_new_outlined,
@@ -238,5 +253,15 @@ class _HomeState extends State<Home> {
             )
           ],
         )));
+  }
+
+  signout() {
+    showConfirmation(context, "Warning", "Do you really want to \n Sign Out ?", () {
+      Navigator.of(context, rootNavigator: true).pop();
+      Navigator.pushReplacementNamed(context, '/signIn');
+      User().signOut();
+    }, () {
+      Navigator.of(context, rootNavigator: true).pop();
+    });
   }
 }

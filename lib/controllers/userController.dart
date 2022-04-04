@@ -147,7 +147,7 @@ class User {
           "description": "For order ${order.orderId}",
           "date": DateFormat('dd-MM-yyyy HH:mm:ss.S').format(DateTime.now()),
           "type": "Expense",
-          "paymentId": order.paymentId
+          'status': "Completed",
         });
       }
       for (var transaction in order.user.wallet['transactions']) {

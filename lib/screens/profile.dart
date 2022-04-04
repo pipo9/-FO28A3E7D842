@@ -34,7 +34,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
-    SharedData.context= context;
+    SharedData.context = context;
 
     return Scaffold(
       backgroundColor: klightGrey,
@@ -100,20 +100,6 @@ class _ProfileState extends State<Profile> {
                   ),
                   Textfields(
                     enabled: enabled,
-                    inputType: TextInputType.emailAddress,
-                    labetText: SharedData.user.email != null &&
-                            SharedData.user.email != ''
-                        ? SharedData.user.email
-                        : fill_info_email_labet,
-                    hintText: fill_info_email_hint,
-                    icon: Icons.email,
-                    onChanged: (value) {
-                      email = value;
-                    },
-                    controller: emailTextController,
-                  ),
-                  Textfields(
-                    enabled: enabled,
                     inputType: TextInputType.number,
                     labetText: SharedData.user.phone != null &&
                             SharedData.user.phone != ''
@@ -125,6 +111,20 @@ class _ProfileState extends State<Profile> {
                       phone = value;
                     },
                     controller: phoneTextController,
+                  ),
+                  Textfields(
+                    enabled: false,
+                    inputType: TextInputType.emailAddress,
+                    labetText: SharedData.user.email != null &&
+                            SharedData.user.email != ''
+                        ? SharedData.user.email
+                        : fill_info_email_labet,
+                    hintText: fill_info_email_hint,
+                    icon: Icons.email,
+                    onChanged: (value) {
+                      email = value;
+                    },
+                    controller: emailTextController,
                   ),
                   SizedBox(height: _height * 0.06),
                   GradientButton(
