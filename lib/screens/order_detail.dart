@@ -140,6 +140,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                 SizedBox(
                   height: _height * 0.05,
                 ),
+                
                 Container(
                     padding: EdgeInsets.symmetric(
                         horizontal: _width * 0.08, vertical: _height * 0.03),

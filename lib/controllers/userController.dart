@@ -95,17 +95,18 @@ class User {
     return result;
   }
 
- Future<UserModel> getUsersInfo(id) async {
+  Future<UserModel> getUsersInfo(id) async {
+    UserModel user;
     try {
       DocumentSnapshot doc = await _firestore.collection('users').doc(id).get();
       if (doc.data() != null) {
-        UserModel user = new UserModel(id, doc.data());         
+        user = new UserModel(id, doc.data());
         return user;
       }
     } catch (e) {
       print("###Error getUserInfo## : $e");
     }
-     return null;
+    return user;
   }
 
   sendEmail(stauts, id, email) async {

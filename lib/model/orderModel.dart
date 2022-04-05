@@ -37,13 +37,13 @@ class OrderModel {
     this.statusDay = data['statusDay'];
     this.situation = data['situation'] ?? "";
 
-    if (isSimple && data.containsKey("user") && situation == "delivered") {
+    if (isSimple) if (data.containsKey("user") && situation == "delivered")
       this.user = UserModel(data['userId'], data['user']);
-    } else {
-      User().getUsersInfo(data['userId']).then((user) {
-        this.user = user;
-      });
-    }
+    else {}
+    User().getUsersInfo(data['userId']).then((user) {
+      this.user = user;
+
+    }).catchError((err) => {print("###Error UserMoadal## : $err")});
 
     User().getUsersInfo(data['vendorId']).then((user) {
       this.vendor = user;
@@ -79,8 +79,10 @@ class OrderModel {
     List listProducts = [];
     var dateYMD = DateFormat('yyyy-MM-dd').format(date);
     // print(userInfos);
-    if ( !isSimple && products[0].dates.containsKey(dateYMD) && products[0].dates[dateYMD] != "delivered")
-       userInfos[dateYMD] = user.toMap();
+    if (!isSimple &&
+        products[0].dates.containsKey(dateYMD) &&
+        products[0].dates[dateYMD] != "delivered")
+      userInfos[dateYMD] = user.toMap();
     // print(userInfos);
 
     products.forEach((element) {
@@ -89,7 +91,7 @@ class OrderModel {
       else
         listProducts.add(element.subsToMap());
     });
-    
+
     if (isSimple) {
       if (situation == "delivered")
         return {

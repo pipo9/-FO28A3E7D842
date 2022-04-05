@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -133,7 +135,6 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                               return SizedBox();
                             }
                             else {
-                              
                               return OrderCard(
                                   orderId: order["orderId"],
                                   onTap: () async {
@@ -145,6 +146,8 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                                   },
                                   status: order["situation"],
                                   isSimple: true,
+                                  name: localOrderContainer.user.fullName,
+                                  address: localOrderContainer.user.address,
                                   seen: SharedData.user.role == "vendor"
                                       ? localOrderContainer.vendorSeen
                                       : localOrderContainer.deliverySeen);
@@ -188,11 +191,13 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
 
                           OrderModel localOrderContainer = OrderModel(
                               order.id, order.data(), false, widget.time);
+                          print(localOrderContainer.user);
+                          print(localOrderContainer.vendor);
                           if (localOrderContainer.statusDay == null ||
                               localOrderContainer.statusDay != dateYMD) {
                             localOrderContainer.statusDay = dateYMD;
                             localOrderContainer.situation = "pending";
-                            _order.updateSubs(localOrderContainer,widget.time);
+                            _order.updateSubs(localOrderContainer, widget.time);
                           }
 
                           var response = SharedData().onDateSelectedSubs(
@@ -206,14 +211,17 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                                   orderId: order["orderId"],
                                   onTap: () async {
                                     _sharedData.order = localOrderContainer;
-                                    
-                                     await Order().updateSubs(_sharedData.order,widget.time);
-                                   
+
+                                    await Order().updateSubs(
+                                        _sharedData.order, widget.time);
+
                                     Navigator.pushNamed(
                                         context, '/subscripton');
                                   },
                                   status: response["state"],
                                   isSimple: false,
+                                  name: localOrderContainer.user.fullName,
+                                  address: localOrderContainer.user.address,
                                   seen: SharedData.user.role == "vendor"
                                       ? localOrderContainer.vendorSeen
                                       : localOrderContainer.deliverySeen);

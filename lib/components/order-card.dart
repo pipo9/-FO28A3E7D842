@@ -8,12 +8,16 @@ class OrderCard extends StatefulWidget {
   final status;
   final seen;
   final isSimple;
+  final name;
+  final address;
 
   OrderCard(
       {@required this.orderId,
       @required this.onTap,
       @required this.status,
       @required this.isSimple,
+      this.name = '',
+      this.address = '',
       @required this.seen});
 
   @override
@@ -131,8 +135,8 @@ class _OrderCardState extends State<OrderCard> {
               )
             ],
             borderRadius: BorderRadius.all(Radius.circular(5)),
-            color: widget.status == 'pending' && (widget.seen == null ||
-                    widget.seen == false)
+            color: widget.status == 'pending' &&
+                    (widget.seen == null || widget.seen == false)
                 ? klightblue
                 : klightGrey,
           ),
@@ -172,6 +176,63 @@ class _OrderCardState extends State<OrderCard> {
                         color: pendingColors[status],
                         fontSize: _height * 0.020,
                         fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: _height * 0.03,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "Customer Name:",
+                      style: GoogleFonts.robotoSlab(
+                        color: kColor,
+                        fontSize: _height * 0.020,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(
+                      width: _width * 0.01,
+                    ),
+                    Text(
+                      widget.name,
+                      style: GoogleFonts.robotoSlab(
+                        color: kColor,
+                        fontSize: _height * 0.018,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: _height * 0.03,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "delivery Address:",
+                      style: GoogleFonts.robotoSlab(
+                        color: kColor,
+                        fontSize: _height * 0.020,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(
+                      width: _width * 0.01,
+                    ),
+                    Container(
+                      width: _width * 0.51,
+                      child: Text(
+                        widget.address,
+                        softWrap: true,
+                        style: GoogleFonts.robotoSlab(
+                          color: kColor,
+                          fontSize: _height * 0.018,
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
                     ),
                   ],
