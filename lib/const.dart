@@ -15,13 +15,14 @@ const kLightGreen = Color(0xff96D8C2);
 const kgreyText = Color(0xffF5F5F5);
 const kGreen = Color(0xff1BA42F);
 const kDarkText = Color(0xff070707);
-const snackBarColor =  Color(0xff0F357B);
-const kDarkGrey =  Color(0xff707070);
+const snackBarColor = Color(0xff0F357B);
+const kDarkGrey = Color(0xff707070);
 //Fonts
 const smalText = 'Adobe Devanagari';
 
 //contacts
-const kAdminEmail ="achraf.bouchouik@gmail.com";
+const kAdminEmail = "anshulgoel_005@yahoo.co.in";
+// ""achraf.bouchouik@gmail.com";
 // "Support@grocurs.com";
 // anshulgoel_005@yahoo.co.in
 //style
@@ -41,7 +42,7 @@ double resizeText(String text) {
   } else if (text.length >= 27) {
     size = 8;
   }
-  return size+1;
+  return size + 1;
 }
 
 void showAlert(context, title, message, error, onPressed) {
@@ -202,7 +203,8 @@ extension DoubleExtension on double {
   }
 }
 
-String convertDateTimeDisplay(String date, String initialFormat, String finalFormat) {
+String convertDateTimeDisplay(
+    String date, String initialFormat, String finalFormat) {
   final DateFormat displayFormater = DateFormat(initialFormat);
   final DateFormat serverFormater = DateFormat(finalFormat);
   final DateTime displayDate = displayFormater.parse(date);
@@ -210,36 +212,34 @@ String convertDateTimeDisplay(String date, String initialFormat, String finalFor
   return formatted;
 }
 
+Map validateEmail(email) {
+  Map response = Map();
+  if (email == null) {
+    response['status'] = false;
+    response['message'] = "- email should not be empty";
+    return response;
+  }
+  if (!RegExp(
+          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+      .hasMatch(email)) {
+    response['status'] = false;
+    response['message'] = "- please enter a correct email";
+    return response;
+  }
+  response['status'] = true;
+  response['message'] = "";
+  return response;
+}
 
-
- Map validateEmail(email) {
-
-    Map response = Map();
-    if(email==null){
-      response['status'] = false;
-      response['message'] = "- email should not be empty";
-      return response;
-    }
-    if(!RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email)){
-      response['status'] = false;
-      response['message'] = "- please enter a correct email";
-      return response;
-    }
-    response['status'] = true;
-    response['message'] = "";
+Map validatetextField(textField) {
+  Map response = Map();
+  if (textField == null) {
+    response['status'] = false;
+    response['message'] = "- Text field length should not be empty";
     return response;
   }
 
- Map validatetextField(textField) {
-    Map response = Map();
-    if (textField==null )  {
-      response['status'] = false;
-      response['message'] = "- Text field length should not be empty";
-      return response;
-    }
-
-    response['status'] = true;
-    response['message'] = "";
-    return response;
-  }
+  response['status'] = true;
+  response['message'] = "";
+  return response;
+}
