@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grocery/controllers/orderController.dart';
@@ -17,6 +16,7 @@ import 'order-card.dart';
 class SubScreenOrders extends StatefulWidget {
   final status;
   final time;
+
   SubScreenOrders({@required this.status, @required this.time});
   @override
   _SubScreenOrdersState createState() => _SubScreenOrdersState();
@@ -25,8 +25,9 @@ class SubScreenOrders extends StatefulWidget {
 class _SubScreenOrdersState extends State<SubScreenOrders> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-  Order _order = Order();
-
+  var status;
+  List<OrderModel> orders = [];
+  List<OrderModel> subs = [];
   List stateOrder = [
     "pendingrejecteddispatchedprocessingprepared",
     "delivered"
@@ -35,19 +36,35 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
     'pendingrejectedsuspendedprocessingpreparedsubscribeddispatched',
     'delivered'
   ];
+  @override
+  void initState() {
+    SharedData _sharedData = Provider.of<SharedData>(context, listen: false);
+    Future.delayed(Duration.zero, () {
+      Order().getOrders(widget.time, _sharedData);
+      Order().getSubs(widget.time, _sharedData);
+      setState(() {
+        orders = _sharedData.orders;
+        subs = _sharedData.subs;
+      });
+    });
+    super.initState();
+  }
 
   void _onRefresh() async {
-    await Future.delayed(Duration(milliseconds: 3000));
+    SharedData _sharedData = Provider.of<SharedData>(context, listen: false);
+    await Order().getOrders(widget.time, _sharedData);
+    await Order().getSubs(widget.time, _sharedData);
+
+    await Future.delayed(Duration(milliseconds: 1000));
     _refreshController.refreshCompleted();
   }
 
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
   @override
   Widget build(BuildContext context) {
-    SharedData _sharedData = Provider.of<SharedData>(context, listen: false);
-
-    // final _height = MediaQuery.of(context).size.height;
+    SharedData _sharedData = Provider.of<SharedData>(context);
+    double _height = MediaQuery.of(context).size.height;
+    orders = _sharedData.orders;
+    subs = _sharedData.subs;
 
     return DefaultTabController(
       length: 2,
@@ -76,160 +93,111 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
           child: TabBarView(
             children: [
               SingleChildScrollView(
-                  child: StreamBuilder(
-                      stream: _firestore
-                          .collection("orders")
-                          .where(
-                              SharedData.user.role == "vendor"
-                                  ? "vendorId"
-                                  : "deliveryId",
-                              isEqualTo: SharedData.user.uid)
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        var data = snapshot.data;
-                        if (data == null) {
-                          return Padding(
-                              padding: EdgeInsets.only(top: 70),
-                              child: Center(
-                                child: Text(
-                                  "You Have No Order Today",
-                                  style: GoogleFonts.robotoSlab(
-                                    color: kBlueAccent,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ));
-                        }
-                        final List<DocumentSnapshot> docs = data.docs;
-
-                        return Column(
-                            children: docs.map((order) {
-                          OrderModel localOrderContainer = OrderModel(
-                              order.id, order.data(), true, widget.time);
+                child: orders.length <= 0
+                    ? Center(
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: _height * 0.13,
+                            ),
+                            Icon(
+                              Icons.calendar_today,
+                              color: kColor,
+                              size: _height * 0.1,
+                            ),
+                            SizedBox(
+                              height: _height * 0.01,
+                            ),
+                            Text(
+                              "You have No Order Today",
+                              style: GoogleFonts.robotoSlab(
+                                color: kColor,
+                                fontSize: _height * 0.022,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : Column(children: [
+                        for (var i = 0; i < orders.length; i++)
                           if (stateOrder[widget.status]
-                              .toString()
-                              .contains(order['situation'])) {
-                            if (widget.status == 1) if (localOrderContainer
-                                    .purchasedAt
-                                    .split(" ")[0]
-                                    .compareTo(DateFormat('yyyy-MM-dd')
-                                        .format(widget.time)
-                                        .toString()) ==
-                                0) {
-                              return OrderCard(
-                                  orderId: order["orderId"],
-                                  onTap: () async {
-                                    _sharedData.order = localOrderContainer;
+                                  .toString()
+                                  .contains(orders[i].situation) &&
+                              orders[i].purchasedAt.split(" ")[0].compareTo(
+                                      DateFormat('yyyy-MM-dd')
+                                          .format(widget.time)
+                                          .toString()) ==
+                                  0)
+                            OrderCard(
+                                orderId: orders[i].id,
+                                onTap: () async {
+                                  _sharedData.order = orders[i];
 
-                                    await Order()
-                                        .updateOrder(_sharedData.order);
-                                    Navigator.pushNamed(context, '/order');
-                                  },
-                                  status: order["situation"],
-                                  isSimple: true,
-                                  seen: SharedData.user.role == "vendor"
-                                      ? localOrderContainer.vendorSeen
-                                      : localOrderContainer.deliverySeen);
-                            } else {
-                              return SizedBox();
-                            }
-                            else {
-                              return OrderCard(
-                                  orderId: order["orderId"],
-                                  onTap: () async {
-                                    _sharedData.order = localOrderContainer;
-
-                                    await Order()
-                                        .updateOrder(_sharedData.order);
-                                    Navigator.pushNamed(context, '/order');
-                                  },
-                                  status: order["situation"],
-                                  isSimple: true,
-                                  name: localOrderContainer.user.fullName,
-                                  address: localOrderContainer.user.address,
-                                  seen: SharedData.user.role == "vendor"
-                                      ? localOrderContainer.vendorSeen
-                                      : localOrderContainer.deliverySeen);
-                            }
-                          } else {
-                            return SizedBox();
-                          }
-                        }).toList());
-                      })),
+                                  await Order().updateOrder(orders[i]);
+                                  Navigator.pushNamed(context, '/order');
+                                },
+                                status: orders[i].situation,
+                                isSimple: true,
+                                name: orders[i].user.fullName,
+                                address: orders[i].user.address,
+                                seen: SharedData.user.role == "vendor"
+                                    ? orders[i].vendorSeen
+                                    : orders[i].deliverySeen)
+                      ]),
+              ),
               SingleChildScrollView(
-                  child: StreamBuilder(
-                      stream: _firestore
-                          .collection("subscribes")
-                          .where(
-                              SharedData.user.role == "vendor"
-                                  ? "vendorId"
-                                  : "deliveryId",
-                              isEqualTo: SharedData.user.uid)
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        var data = snapshot.data;
-                        if (data == null) {
-                          return Padding(
-                              padding: EdgeInsets.only(top: 70),
-                              child: Center(
-                                child: Text(
-                                  "You Have No Order Today",
-                                  style: GoogleFonts.robotoSlab(
-                                    color: kBlueAccent,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ));
-                        }
-                        final List<DocumentSnapshot> docs = data.docs;
-                        return Column(
-                            children: docs.map((order) {
-                          var dateYMD =
-                              DateFormat('yyyy-MM-dd').format(DateTime.now());
+                child: subs.length <= 0
+                    ? Center(
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: _height * 0.13,
+                            ),
+                            Icon(
+                              Icons.calendar_today,
+                              color: kColor,
+                              size: _height * 0.1,
+                            ),
+                            SizedBox(
+                              height: _height * 0.01,
+                            ),
+                            Text(
+                              "You have No subscription Today",
+                              style: GoogleFonts.robotoSlab(
+                                color: kColor,
+                                fontSize: _height * 0.022,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : Column(children: [
+                        for (var i = 0; i < subs.length; i++)
+                          // if (SharedData().onDateSelectedSubs(
+                          //         widget.time, subs[i])["status"] &&
+                          //     stateSubs[widget.status].toString().contains(
+                          //         SharedData().onDateSelectedSubs(
+                          //             widget.time, subs[i])["state"]))
+                            OrderCard(
+                                orderId: subs[i].id,
+                                onTap: () async {
+                                  _sharedData.order = subs[i];
 
-                          OrderModel localOrderContainer = OrderModel(
-                              order.id, order.data(), false, widget.time);
-                          print(localOrderContainer.user);
-                          print(localOrderContainer.vendor);
-                          if (localOrderContainer.statusDay == null ||
-                              localOrderContainer.statusDay != dateYMD) {
-                            localOrderContainer.statusDay = dateYMD;
-                            localOrderContainer.situation = "pending";
-                            _order.updateSubs(localOrderContainer, widget.time);
-                          }
-
-                          var response = SharedData().onDateSelectedSubs(
-                              widget.time, localOrderContainer);
-
-                          if (response["status"]) {
-                            if (stateSubs[widget.status]
-                                .toString()
-                                .contains(response["state"])) {
-                              return OrderCard(
-                                  orderId: order["orderId"],
-                                  onTap: () async {
-                                    _sharedData.order = localOrderContainer;
-
-                                    await Order().updateSubs(
-                                        _sharedData.order, widget.time);
-
-                                    Navigator.pushNamed(
-                                        context, '/subscripton');
-                                  },
-                                  status: response["state"],
-                                  isSimple: false,
-                                  name: localOrderContainer.user.fullName,
-                                  address: localOrderContainer.user.address,
-                                  seen: SharedData.user.role == "vendor"
-                                      ? localOrderContainer.vendorSeen
-                                      : localOrderContainer.deliverySeen);
-                            }
-                          }
-                          return SizedBox();
-                        }).toList());
-                      })),
+                                  await Order()
+                                      .updateSubs(subs[i], widget.time);
+                                  Navigator.pushNamed(context, '/subscripton');
+                                },
+                                status: subs[i].situation,
+                                isSimple: true,
+                                name: subs[i].user.fullName,
+                                address: subs[i].user.address,
+                                seen: SharedData.user.role == "vendor"
+                                    ? subs[i].vendorSeen
+                                    : subs[i].deliverySeen)
+                      ]),
+              ),
             ],
           ),
         ),

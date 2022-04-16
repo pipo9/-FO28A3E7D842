@@ -11,8 +11,10 @@ class SharedData with ChangeNotifier {
   static BuildContext context;
   static List<NotificationModel> notifications = [];
   static int unreadNotifs = 0;
+  List<OrderModel> _orders = [];
+  List<OrderModel> _subs = [];
 
-  OrderModel order;
+  OrderModel _order;
   List<ProductModel> toDayproducts = [];
   String _subCurentstatus;
 
@@ -20,7 +22,32 @@ class SharedData with ChangeNotifier {
 
   get currentNotifications => notifications;
 
+  get order => _order;
 
+  List<OrderModel> get orders {
+    return _orders;
+  }
+
+  List<OrderModel> get subs {
+    return _subs;
+  }
+
+  set order(OrderModel order){
+    _order = order;
+    notifyListeners();
+  }
+
+  set orders(List<OrderModel> orders) {
+    _orders = orders;
+    _orders.sort((b, a) => a.purchasedAt.compareTo(b.purchasedAt));
+    notifyListeners();
+  }
+
+  set subscribes(List<OrderModel> orders) {
+    _subs = orders;
+    _subs.sort((b, a) => a.purchasedAt.compareTo(b.purchasedAt));
+    notifyListeners();
+  }
 
   getNotifications() async {
     List<NotificationModel> notifications = [];
@@ -45,11 +72,11 @@ class SharedData with ChangeNotifier {
     notifyListeners();
   }
 
-   onDateSelected(DateTime date) {
+  onDateSelected(DateTime date) {
     var resturnedResult = {};
     String productStatus = "disabled";
     List<ProductModel> products = [];
-    order.products.forEach((product) {
+    _order.products.forEach((product) {
       if (product.status != 'paused') {
         List days = product.days;
         Map dates = product.dates;
@@ -58,12 +85,13 @@ class SharedData with ChangeNotifier {
         if (product.startDate.compareTo(dateYMD.toString()) <= 0) {
           if (dates.containsKey(dateYMD)) {
             productStatus = dates[dateYMD.toString()];
-            if (productStatus == "delivered" && order.userInfos.containsKey(dateYMD))  {
-                
-                  //  print("##### test : ${order.userInfos} ");
-                  //  print("##### test : $dateYMD ");
+            if (productStatus == "delivered" &&
+                _order.userInfos.containsKey(dateYMD)) {
+              //  print("##### test : ${order.userInfos} ");
+              //  print("##### test : $dateYMD ");
 
-              resturnedResult["user"] = UserModel(order.user.uid, order.userInfos[dateYMD]);
+              resturnedResult["user"] =
+                  UserModel(_order.user.uid, _order.userInfos[dateYMD]);
             }
           } else if (product.status == "subscribed" && days.contains(dateEEE)) {
             productStatus = "pending";
@@ -78,7 +106,7 @@ class SharedData with ChangeNotifier {
       productStatus = "disabled";
     }
 
-    resturnedResult["productStatus"]= productStatus;
+    resturnedResult["productStatus"] = productStatus;
     return resturnedResult;
   }
 
@@ -99,14 +127,18 @@ class SharedData with ChangeNotifier {
     });
 
     response["status"] = productStatus;
-    response["state"] = order.products[0].dates[dateYMD] ?? "pending";
+    if (order.products.isNotEmpty) {
+      response["state"] = order.products[0].dates[dateYMD];
+    } else {
+      response["state"] = "pending";
+    }
 
     return response;
   }
 
   updateProductsStatus(DateTime date, status) {
     var dateYMD = DateFormat('yyyy-MM-dd').format(date);
-    order.products.forEach((product) {
+    _order.products.forEach((product) {
       if (product.dates[dateYMD] != "paused") product.dates[dateYMD] = status;
     });
   }
@@ -115,9 +147,9 @@ class SharedData with ChangeNotifier {
     FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
     await _firestore.collection("reminders").add({
-      "body": "Order with ID :${order.id} \n is now prepared",
+      "body": "Order with ID :${_order.id} \n is now prepared",
       "title": "Order Prepared",
-      "to": "${order.deliveryId}"
+      "to": "${_order.deliveryId}"
     });
   }
 }

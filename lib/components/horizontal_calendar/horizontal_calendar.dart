@@ -1,6 +1,7 @@
 library horizontal_calendar;
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'date_helper.dart';
 import 'date_widget.dart';
@@ -102,7 +103,7 @@ class _HorizontalCalendarState extends State<HorizontalCalendar> {
     allDates.addAll(getDateList(widget.firstDate, widget.lastDate));
     selectedDates.addAll(widget.initialSelectedDates.map((toDateMonthYear)));
   }
-
+ 
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -114,12 +115,17 @@ class _HorizontalCalendarState extends State<HorizontalCalendar> {
           itemCount: allDates.length,
           itemBuilder: (context, index) {
             final date = allDates[index];
+            var dateYMD = DateFormat('yyyy-MM-dd').format(date);
+            var selecteddatesYMD = [for (var d in selectedDates) DateFormat('yyyy-MM-dd').format(d)];
+            // print(selecteddatesYMD);
+            // print(dateYMD);
+            // print(selecteddatesYMD.contains(dateYMD));
             return Row(
               children: <Widget>[
                 DateWidget(
                   key: Key(date.toIso8601String()),
                   padding: widget.padding,
-                  isSelected: selectedDates.contains(date),
+                  isSelected: selecteddatesYMD.contains(dateYMD),
                   isDisabled: widget.isDateDisabled != null
                       ? widget.isDateDisabled(date)
                       : false,

@@ -29,50 +29,47 @@ class OrderModel {
   bool deliverySeen;
   double realOrderPrice = 0.0;
 
-  OrderModel(String id, Map<String, dynamic> data, isSimple, time) {
-    this.uid = id;
-    this.id = data['orderId'];
-    this.vendorSeen = data['vendorSeen'] ?? false;
-    this.deliverySeen = data['deliverySeen'] ?? false;
-    this.statusDay = data['statusDay'];
-    this.situation = data['situation'] ?? "";
+  fromMap(String id, Map<String, dynamic> data, isSimple, time) async {
+    var order = new OrderModel();
+    order.uid = id;
+    order.id = data['orderId'];
 
-    if (isSimple) if (data.containsKey("user") && situation == "delivered")
-      this.user = UserModel(data['userId'], data['user']);
-    else {}
-    User().getUsersInfo(data['userId']).then((user) {
-      this.user = user;
+    order.vendorSeen = data['vendorSeen'] ?? false;
+    order.deliverySeen = data['deliverySeen'] ?? false;
+    order.statusDay = data['statusDay'];
+    order.situation = data['situation'] ?? "";
 
-    }).catchError((err) => {print("###Error UserMoadal## : $err")});
+     if (isSimple && data.containsKey("user") && situation == "delivered")
+      order.user = UserModel(data['userId'], data['user']);
+    else {
+      order.user = await User().getUsersInfo(data['userId']);
+    }
+    order.vendor = await User().getUsersInfo(data['vendorId']);
+    order.delivery = await User().getUsersInfo(data['deliveryId']);
 
-    User().getUsersInfo(data['vendorId']).then((user) {
-      this.vendor = user;
-    });
-    User().getUsersInfo(data['deliveryId']).then((user) {
-      this.delivery = user;
-    });
-    this.paymentId = data['paymentId'] ?? "";
-    this.vendorAcceptance = data['vendorAcceptance'] ?? false;
-    this.deliveryAcceptance = data['deliveryAcceptance'] ?? false;
-    this.amount = data['amount'];
-    this.phone = data['phone'];
-    this.localisation = data['localisation'];
+    order.paymentId = data['paymentId'] ?? "";
+    order.vendorAcceptance = data['vendorAcceptance'] ?? false;
+    order.deliveryAcceptance = data['deliveryAcceptance'] ?? false;
+    order.amount = data['amount'];
+    order.phone = data['phone'];
+    order.localisation = data['localisation'];
 
     for (var i = 0; i < data['products'].length; i++) {
       ProductModel productModel = ProductModel(data['products'][i], isSimple);
-      products.add(productModel);
+      order.products.add(productModel);
       realOrderPrice += double.parse(productModel.price) *
           double.parse(productModel.quantity);
     }
 
-    this.paymentMethod = data['paymentMethod'];
-    this.purchasedAt = data['purchased_at'] ?? "";
-    this.orderId = data['orderId'] ?? "";
-    this.coupon = data['coupon'] ?? null;
-    this.vendorId = data['vendorId'];
-    this.deliveryId = data['deliveryId'];
+    order.paymentMethod = data['paymentMethod'];
+    order.purchasedAt = data['purchased_at'] ?? "";
+    order.orderId = data['orderId'] ?? "";
+    order.coupon = data['coupon'] ?? null;
+    order.vendorId = data['vendorId'];
+    order.deliveryId = data['deliveryId'];
 
-    this.userInfos = data['userInfos'] ?? {};
+    order.userInfos = data['userInfos'] ?? {};
+    return order;
   }
 
   Map<String, dynamic> toMap(isSimple, date) {

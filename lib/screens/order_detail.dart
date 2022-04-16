@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:grocery/components/order_product.dart';
 import 'package:grocery/controllers/orderController.dart';
 import 'package:grocery/controllers/userController.dart';
+import 'package:grocery/model/orderModel.dart';
 import 'package:grocery/shared_Pref.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
@@ -41,14 +42,17 @@ class _OrderDtailsState extends State<OrderDtails> {
   bool loading = false;
 
   toggleSpinner() {
-    setState(() {});
+    setState(() {
+      loading = !loading;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    SharedData _sharedData = Provider.of<SharedData>(context, listen: false);
+    SharedData _sharedData = Provider.of<SharedData>(context);
     double _height = MediaQuery.of(context).size.height;
     double _width = MediaQuery.of(context).size.width;
+    OrderModel order = _sharedData.order;
     SharedData.context = context;
     switch (_sharedData.order.situation) {
       case 'delivered':
@@ -140,7 +144,6 @@ class _OrderDtailsState extends State<OrderDtails> {
                 SizedBox(
                   height: _height * 0.05,
                 ),
-                
                 Container(
                     padding: EdgeInsets.symmetric(
                         horizontal: _width * 0.08, vertical: _height * 0.03),
@@ -870,9 +873,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                               _sharedData.order.id,
                                               kAdminEmail);
                                           Navigator.pop(context);
-                                        }
-                                        ,
-                                         () {
+                                        }, () {
                                           Navigator.of(context,
                                                   rootNavigator: true)
                                               .pop();
@@ -1023,7 +1024,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                   height: _height * 0.03,
                 ),
                 Column(
-                    children: _sharedData.order.products.map((product) {
+                    children: order.products.map((product) {
                   return OrderProduct(
                       imageUrl: product.image,
                       price: product.price,
