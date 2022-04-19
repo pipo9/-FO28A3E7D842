@@ -36,6 +36,7 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
     'pendingrejectedsuspendedprocessingpreparedsubscribeddispatched',
     'delivered'
   ];
+
   @override
   void initState() {
     SharedData _sharedData = Provider.of<SharedData>(context, listen: false);
@@ -175,11 +176,11 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                       )
                     : Column(children: [
                         for (var i = 0; i < subs.length; i++)
-                          // if (SharedData().onDateSelectedSubs(
-                          //         widget.time, subs[i])["status"] &&
-                          //     stateSubs[widget.status].toString().contains(
-                          //         SharedData().onDateSelectedSubs(
-                          //             widget.time, subs[i])["state"]))
+                          if (SharedData().onDateSelectedSubs(
+                                  widget.time, subs[i])["status"] &&
+                              stateSubs[widget.status]
+                                  .toString()
+                                  .contains(subs[i].situation))
                             OrderCard(
                                 orderId: subs[i].id,
                                 onTap: () async {

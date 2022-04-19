@@ -39,9 +39,11 @@ class OrderModel {
     order.statusDay = data['statusDay'];
     order.situation = data['situation'] ?? "";
 
-     if (isSimple && data.containsKey("user") && situation == "delivered")
+    if (isSimple && data.containsKey("user") && order.situation == "delivered") {
+      // print("######### test user : true");
       order.user = UserModel(data['userId'], data['user']);
-    else {
+    } else {
+      // print("######### test user : false");
       order.user = await User().getUsersInfo(data['userId']);
     }
     order.vendor = await User().getUsersInfo(data['vendorId']);
@@ -57,7 +59,7 @@ class OrderModel {
     for (var i = 0; i < data['products'].length; i++) {
       ProductModel productModel = ProductModel(data['products'][i], isSimple);
       order.products.add(productModel);
-      realOrderPrice += double.parse(productModel.price) *
+      order.realOrderPrice += double.parse(productModel.price) *
           double.parse(productModel.quantity);
     }
 
