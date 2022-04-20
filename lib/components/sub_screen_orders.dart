@@ -178,9 +178,11 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                         for (var i = 0; i < subs.length; i++)
                           if (SharedData().onDateSelectedSubs(
                                   widget.time, subs[i])["status"] &&
-                              stateSubs[widget.status]
-                                  .toString()
-                                  .contains(subs[i].situation))
+                              stateSubs[widget.status].toString().contains(
+                                  subs[i].products[0].dates[
+                                          DateFormat('yyyy-MM-dd')
+                                              .format(widget.time)] ??
+                                      "pending"))
                             OrderCard(
                                 orderId: subs[i].id,
                                 onTap: () async {
@@ -190,7 +192,10 @@ class _SubScreenOrdersState extends State<SubScreenOrders> {
                                       .updateSubs(subs[i], widget.time);
                                   Navigator.pushNamed(context, '/subscripton');
                                 },
-                                status: subs[i].situation,
+                                status: subs[i].products[0].dates[
+                                        DateFormat('yyyy-MM-dd')
+                                            .format(widget.time)] ??
+                                    "pending",
                                 isSimple: true,
                                 name: subs[i].user.fullName,
                                 address: subs[i].user.address,

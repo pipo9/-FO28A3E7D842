@@ -51,6 +51,7 @@ class _HomeState extends State<Home> {
                   padding: EdgeInsets.symmetric(
                       horizontal: _width * 0.02, vertical: _height * 0.02),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
@@ -69,6 +70,7 @@ class _HomeState extends State<Home> {
                         ),
                       ),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           InkWell(
                               onTap: () {
@@ -115,11 +117,28 @@ class _HomeState extends State<Home> {
                                               ])));
                                     });
                               },
-                              child: Icon(
-                                Icons.calendar_today_outlined,
-                                size: _width * 0.055,
-                                color: kDarkGrey,
-                              )),
+                              child: Column(children: [
+                                // ${DateFormat('dd-MM-yyyy').format(time)}
+                                Text(
+                                  "${DateFormat.MEd().format(time)}",
+                                  style: GoogleFonts.robotoSlab(
+                                    color: kDarkGrey,
+                                    fontSize: _height * 0.017,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Icon(
+                                  Icons.calendar_today_outlined,
+                                  size: _width * 0.055,
+                                  color: kDarkGrey,
+                                ),
+                                SizedBox(
+                                  height: 2,
+                                ),
+                              ])),
                           SizedBox(width: _width * 0.05),
                           StreamBuilder(
                               stream: _firestore
@@ -256,7 +275,8 @@ class _HomeState extends State<Home> {
   }
 
   signout() {
-    showConfirmation(context, "Warning", "Do you really want to \n Sign Out ?", () {
+    showConfirmation(context, "Warning", "Do you really want to \n Sign Out ?",
+        () {
       Navigator.of(context, rootNavigator: true).pop();
       Navigator.pushReplacementNamed(context, '/signIn');
       User().signOut();

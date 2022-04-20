@@ -138,6 +138,7 @@ class User {
   }
 
   updateWallet(OrderModel order, deducate) async {
+    
     try {
       if (deducate && order.paymentMethod == "Wallet") {
         var newBalance = double.parse(order.user.wallet["balance"]) -
