@@ -72,73 +72,76 @@ class _HomeState extends State<Home> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          InkWell(
-                              onTap: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(32.0))),
-                                          content: Container(
-                                              height: _height * 0.6,
-                                              child: Column(children: [
-                                                Align(
-                                                  alignment:
-                                                      Alignment.centerRight,
-                                                  child: Text(
-                                                    "Date : ${DateFormat('dd-MM-yyyy').format(time)}",
-                                                    style:
-                                                        GoogleFonts.robotoSlab(
-                                                      color: kDarkGrey,
-                                                      fontSize: _height * 0.017,
-                                                      fontWeight:
-                                                          FontWeight.w600,
+                          Column(children: [
+                            // ${DateFormat('dd-MM-yyyy').format(time)}
+                            Text(
+                              "${DateFormat.MEd().format(time)}",
+                              style: GoogleFonts.robotoSlab(
+                                color: kDarkGrey,
+                                fontSize: _height * 0.017,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            InkWell(
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(32.0))),
+                                            content: Container(
+                                                height: _height * 0.6,
+                                                child: Column(children: [
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.centerRight,
+                                                    child: Text(
+                                                      "Date : ${DateFormat('dd-MM-yyyy').format(time)}",
+                                                      style: GoogleFonts
+                                                          .robotoSlab(
+                                                        color: kDarkGrey,
+                                                        fontSize:
+                                                            _height * 0.017,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                CalendarDatePicker(
-                                                    initialDate: time,
-                                                    firstDate: DateTime.utc(
-                                                        DateTime.now().year - 2,
-                                                        DateTime.now().month,
-                                                        1),
-                                                    lastDate: DateTime.utc(
-                                                        DateTime.now().year + 4,
-                                                        DateTime.now().month,
-                                                        1),
-                                                    onDateChanged: (value) {
-                                                      setState(() {
-                                                        time = value;
-                                                      });
-                                                      Navigator.pop(context);
-                                                    })
-                                              ])));
-                                    });
-                              },
-                              child: Column(children: [
-                                // ${DateFormat('dd-MM-yyyy').format(time)}
-                                Text(
-                                  "${DateFormat.MEd().format(time)}",
-                                  style: GoogleFonts.robotoSlab(
-                                    color: kDarkGrey,
-                                    fontSize: _height * 0.017,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Icon(
+                                                  CalendarDatePicker(
+                                                      initialDate: time,
+                                                      firstDate: DateTime.utc(
+                                                          DateTime.now().year -
+                                                              2,
+                                                          DateTime.now().month,
+                                                          1),
+                                                      lastDate: DateTime.utc(
+                                                          DateTime.now().year +
+                                                              4,
+                                                          DateTime.now().month,
+                                                          1),
+                                                      onDateChanged: (value) {
+                                                        setState(() {
+                                                          time = value;
+                                                        });
+                                                        Navigator.pop(context);
+                                                      })
+                                                ])));
+                                      });
+                                },
+                                child: Icon(
                                   Icons.calendar_today_outlined,
                                   size: _width * 0.055,
                                   color: kDarkGrey,
-                                ),
-                                SizedBox(
-                                  height: 2,
-                                ),
-                              ])),
+                                )),
+                            SizedBox(
+                              height: 2,
+                            ),
+                          ]),
                           SizedBox(width: _width * 0.05),
                           StreamBuilder(
                               stream: _firestore
