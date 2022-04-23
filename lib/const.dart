@@ -22,10 +22,10 @@ const smalText = 'Adobe Devanagari';
 
 //contacts
 const kAdminEmail = 
-// "anshulgoel_005@yahoo.co.in";
-"achraf.bouchouik@gmail.com";
+ "anshulgoel_005@yahoo.co.in";
+//"achraf.bouchouik@gmail.com";
 // "Support@grocurs.com";
-// anshulgoel_005@yahoo.co.in
+
 //style
 // roboto slab bold
 TextStyle kStyle =
