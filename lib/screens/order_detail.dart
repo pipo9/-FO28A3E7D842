@@ -864,7 +864,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                               ifDeliveyStates[status];
 
                                           await User().updateWallet(
-                                              _sharedData.order, true);
+                                              _sharedData.order, false);
 
                                           await Order()
                                               .updateOrder(_sharedData.order);
