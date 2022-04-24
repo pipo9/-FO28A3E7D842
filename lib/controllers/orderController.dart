@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:grocery/model/orderModel.dart';
 import 'package:grocery/shared_Pref.dart';
+import 'package:intl/intl.dart';
 
 class Order {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -30,6 +31,12 @@ class Order {
     subSnapshot.docs.forEach((doc) async {
       OrderModel sub =
           await OrderModel().fromMap(doc.id, doc.data(), false, time);
+      if (!sub.products[0].dates
+          .containsKey(DateFormat('yyyy-MM-dd').format(time))) {
+        sub.situation = "pending";
+        await Order().updateSubs(sub, time);
+      }
+
       subs.add(sub);
       _sharedData.subscribes = subs;
     });
