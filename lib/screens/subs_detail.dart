@@ -566,7 +566,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                           SizedBox(
                             height: _height * 0.02,
                           ),
-                          user.wallet["balance"] == "0" &&
+                          user.wallet["balance"] == "0.0" &&
                                   SharedData.user.role == "delivery"
                               ? Container(
                                   padding: EdgeInsets.symmetric(
