@@ -1001,7 +1001,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                 SizedBox(
                   height: _height * 0.02,
                 ),
-                _sharedData.order.user.wallet["balance"] == "0.0" &&
+                double.parse(_sharedData.order.user.wallet["balance"]) <= 0 &&
                         SharedData.user.role == "delivery"
                     ? Container(
                         padding: EdgeInsets.symmetric(
