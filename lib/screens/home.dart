@@ -78,7 +78,7 @@ class _HomeState extends State<Home> {
                               "${DateFormat.MEd().format(time)}",
                               style: GoogleFonts.robotoSlab(
                                 color: kDarkGrey,
-                                fontSize: _height * 0.017,
+                                fontSize: _width * 0.025,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -96,6 +96,7 @@ class _HomeState extends State<Home> {
                                                     Radius.circular(32.0))),
                                             content: Container(
                                                 height: _height * 0.6,
+                                                width: _width * 0.8,
                                                 child: Column(children: [
                                                   Align(
                                                     alignment:
@@ -106,7 +107,7 @@ class _HomeState extends State<Home> {
                                                           .robotoSlab(
                                                         color: kDarkGrey,
                                                         fontSize:
-                                                            _height * 0.017,
+                                                            _width * 0.025,
                                                         fontWeight:
                                                             FontWeight.w600,
                                                       ),
@@ -230,13 +231,13 @@ class _HomeState extends State<Home> {
                       Icon(
                         Icons.departure_board_outlined,
                         color: status == 0 ? kBlueAccent : kDarkGrey,
-                        size: _height * 0.035,
+                        size: _width * 0.05,
                       ),
                       Text(
                         "Pending",
                         style: GoogleFonts.robotoSlab(
                           color: status == 0 ? kBlueAccent : kDarkGrey,
-                          fontSize: _height * 0.017,
+                          fontSize: _width * 0.025,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -257,13 +258,13 @@ class _HomeState extends State<Home> {
                     Icon(
                       Icons.shopping_bag_outlined,
                       color: status == 1 ? kBlueAccent : kDarkGrey,
-                      size: _height * 0.035,
+                      size: _width * 0.05,
                     ),
                     Text(
                       "Delivered",
                       style: GoogleFonts.robotoSlab(
                         color: status == 1 ? kBlueAccent : kDarkGrey,
-                        fontSize: _height * 0.017,
+                        fontSize: _width * 0.025,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

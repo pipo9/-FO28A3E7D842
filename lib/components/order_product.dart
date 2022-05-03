@@ -113,7 +113,7 @@ class _OrderProductState extends State<OrderProduct> {
                 widget.productName,
                 style: GoogleFonts.robotoSlab(
                   color: kColor,
-                  fontSize: _height * 0.020,
+                  fontSize: _width  * 0.028,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -126,7 +126,7 @@ class _OrderProductState extends State<OrderProduct> {
                       "${widget.price}₹",
                       style: GoogleFonts.robotoSlab(
                         color: kDarkText,
-                        fontSize: _height * 0.019,
+                        fontSize: _width  * 0.025,
                         fontWeight: FontWeight.w500,
                       ),
                     )
@@ -135,7 +135,7 @@ class _OrderProductState extends State<OrderProduct> {
                         Text("${priceAfterDiscount()}₹",
                             style: GoogleFonts.robotoSlab(
                               color: kDarkText,
-                              fontSize: _height * 0.020,
+                              fontSize: _width  * 0.028,
                               fontWeight: FontWeight.w700,
                             )),
                         SizedBox(
@@ -144,7 +144,7 @@ class _OrderProductState extends State<OrderProduct> {
                         Text("${widget.price}₹",
                             style: GoogleFonts.robotoSlab(
                                 color: kDarkText,
-                                fontSize: _height * 0.019,
+                                fontSize: _width  * 0.025,
                                 fontWeight: FontWeight.w500,
                                 decoration: TextDecoration.lineThrough)),
                       ],
@@ -173,7 +173,7 @@ class _OrderProductState extends State<OrderProduct> {
                     "Qantity : ${widget.quantity}",
                     style: GoogleFonts.robotoSlab(
                       color: kColor,
-                      fontSize: _height * 0.018,
+                      fontSize: _width  * 0.024,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -184,7 +184,7 @@ class _OrderProductState extends State<OrderProduct> {
                     "Total Price : $total",
                     style: GoogleFonts.robotoSlab(
                       color: kColorRed,
-                      fontSize: _height * 0.018,
+                      fontSize: _width  * 0.024,
                       fontWeight: FontWeight.w400,
                     ),
                   ),

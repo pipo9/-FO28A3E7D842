@@ -123,9 +123,7 @@ class _OrderCardState extends State<OrderCard> {
         child: Container(
           padding: EdgeInsets.all(_height * 0.015),
           margin: EdgeInsets.only(
-              top: _height * 0.025,
-              left: _height * 0.02,
-              right: _height * 0.02),
+              top: _height * 0.025, left: _width * 0.04, right: _width * 0.04),
           decoration: BoxDecoration(
             boxShadow: [
               BoxShadow(
@@ -153,7 +151,7 @@ class _OrderCardState extends State<OrderCard> {
                           "Order Id:",
                           style: GoogleFonts.robotoSlab(
                             color: kColor,
-                            fontSize: _height * 0.020,
+                            fontSize: _width * 0.028,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -164,7 +162,7 @@ class _OrderCardState extends State<OrderCard> {
                           widget.orderId,
                           style: GoogleFonts.robotoSlab(
                             color: kColor,
-                            fontSize: _height * 0.018,
+                            fontSize: _width * 0.028,
                             fontWeight: FontWeight.w300,
                           ),
                         ),
@@ -174,7 +172,7 @@ class _OrderCardState extends State<OrderCard> {
                       state,
                       style: GoogleFonts.robotoSlab(
                         color: pendingColors[status],
-                        fontSize: _height * 0.020,
+                        fontSize: _width * 0.028,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -189,7 +187,7 @@ class _OrderCardState extends State<OrderCard> {
                       "Customer Name:",
                       style: GoogleFonts.robotoSlab(
                         color: kColor,
-                        fontSize: _height * 0.020,
+                        fontSize: _width * 0.030,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -200,7 +198,7 @@ class _OrderCardState extends State<OrderCard> {
                       widget.name,
                       style: GoogleFonts.robotoSlab(
                         color: kColor,
-                        fontSize: _height * 0.018,
+                        fontSize: _width * 0.028,
                         fontWeight: FontWeight.w300,
                       ),
                     ),
@@ -216,7 +214,7 @@ class _OrderCardState extends State<OrderCard> {
                       "delivery Address:",
                       style: GoogleFonts.robotoSlab(
                         color: kColor,
-                        fontSize: _height * 0.020,
+                        fontSize: _width * 0.030,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -230,7 +228,7 @@ class _OrderCardState extends State<OrderCard> {
                         softWrap: true,
                         style: GoogleFonts.robotoSlab(
                           color: kColor,
-                          fontSize: _height * 0.018,
+                          fontSize: _width * 0.028,
                           fontWeight: FontWeight.w300,
                         ),
                       ),
@@ -243,76 +241,52 @@ class _OrderCardState extends State<OrderCard> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                            height: _height * 0.04,
-                            width: _height * 0.04,
-                            decoration: BoxDecoration(
-                              color: pendingColors[status],
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(80)),
-                            ),
-                            child: Align(
-                                alignment: Alignment.center,
-                                child: Icon(
-                                  Icons.departure_board_outlined,
-                                  color: klightGrey,
-                                  size: _height * 0.03,
-                                ))),
-                      ],
-                    ),
+                    Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: pendingColors[status],
+                          borderRadius: BorderRadius.all(Radius.circular(80)),
+                        ),
+                        child: Center(
+                            child: Icon(
+                          Icons.departure_board_outlined,
+                          color: klightGrey,
+                          size: _width * 0.04,
+                        ))),
                     Container(
                       height: _height * 0.008,
                       width: _width * 0.25,
                       color: proContColors[status],
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                            height: _height * 0.04,
-                            width: _height * 0.04,
-                            decoration: BoxDecoration(
-                              color: proIconColors[status],
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(80)),
-                            ),
-                            child: Align(
-                                alignment: Alignment.center,
-                                child: Icon(
-                                  Icons.loop,
-                                  color: klightGrey,
-                                  size: _height * 0.03,
-                                ))),
-                      ],
-                    ),
+                    Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: proIconColors[status],
+                          borderRadius: BorderRadius.all(Radius.circular(80)),
+                        ),
+                        child: Center(
+                            child: Icon(
+                          Icons.loop,
+                          color: klightGrey,
+                          size: _width * 0.04,
+                        ))),
                     Container(
                       height: _height * 0.008,
                       width: _width * 0.25,
                       color: delConColors[status],
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                            height: _height * 0.04,
-                            width: _height * 0.04,
-                            decoration: BoxDecoration(
-                              color: delConColors[status],
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(80)),
-                            ),
-                            child: Align(
-                                alignment: Alignment.center,
-                                child: Icon(
-                                  Icons.shopping_bag_outlined,
-                                  color: klightGrey,
-                                  size: _height * 0.03,
-                                ))),
-                      ],
-                    )
+                    Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: delConColors[status],
+                          borderRadius: BorderRadius.all(Radius.circular(80)),
+                        ),
+                        child: Center(
+                            child: Icon(
+                          Icons.shopping_bag_outlined,
+                          color: klightGrey,
+                          size: _width * 0.04,
+                        ))),
                   ],
                 ),
               ]),

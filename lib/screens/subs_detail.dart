@@ -159,7 +159,7 @@ class _SubsDetailsState extends State<SubsDetails> {
           subscription_title,
           style: GoogleFonts.robotoSlab(
             color: kColor,
-            fontSize: _height * 0.028,
+            fontSize: _width * 0.038,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -179,7 +179,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                       date = value;
                     });
                   },
-                  width: _width,
+                  width: _width * 0.9,
                   height: _height,
                 ),
                 SizedBox(
@@ -195,7 +195,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                             Icon(
                               Icons.calendar_today,
                               color: kColor,
-                              size: _height * 0.1,
+                              size: _width * 0.15,
                             ),
                             SizedBox(
                               height: _height * 0.01,
@@ -204,7 +204,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                               "You have No subscription Today",
                               style: GoogleFonts.robotoSlab(
                                 color: kColor,
-                                fontSize: _height * 0.025,
+                                fontSize: _width * 0.035,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
@@ -259,7 +259,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                 style: GoogleFonts.zillaSlab(
                                                   fontWeight: FontWeight.w500,
                                                   color: klightGrey,
-                                                  fontSize: _width * 0.04,
+                                                  fontSize: _width * 0.05,
                                                 ),
                                               ),
                                             ],
@@ -303,7 +303,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                 style: GoogleFonts.zillaSlab(
                                                   fontWeight: FontWeight.w500,
                                                   color: klightGrey,
-                                                  fontSize: _width * 0.04,
+                                                  fontSize: _width * 0.06,
                                                 ),
                                               ),
                                             ],
@@ -329,7 +329,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                           style: GoogleFonts.zillaSlab(
                                             fontWeight: FontWeight.w600,
                                             color: kColor,
-                                            fontSize: _height * 0.032,
+                                            fontSize: _width * 0.042,
                                           ),
                                         ),
                                         SharedData.user.role == "delivery"
@@ -558,7 +558,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                         "You can not change today's Order state",
                                         style: GoogleFonts.robotoSlab(
                                           color: kColor,
-                                          fontSize: _height * 0.025,
+                                          fontSize: _width * 0.035,
                                           fontWeight: FontWeight.w700,
                                         ),
                                       ),
@@ -579,7 +579,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                       "please ask user to recharge his/her wallet !!",
                                       style: GoogleFonts.robotoSlab(
                                         color: kColor,
-                                        fontSize: _height * 0.018,
+                                        fontSize: _width * 0.030,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
@@ -602,7 +602,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                       "Payment details :",
                                       style: GoogleFonts.robotoSlab(
                                         color: kDarkText,
-                                        fontSize: _height * 0.030,
+                                        fontSize: _width * 0.040,
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),
@@ -616,7 +616,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                         "Payment Mode :",
                                         style: GoogleFonts.robotoSlab(
                                           color: kColor,
-                                          fontSize: _height * 0.020,
+                                          fontSize: _width * 0.030,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
@@ -627,7 +627,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                         _sharedData.order.paymentMethod,
                                         style: GoogleFonts.robotoSlab(
                                           color: kColor,
-                                          fontSize: _height * 0.018,
+                                          fontSize: _width * 0.030,
                                           fontWeight: FontWeight.w300,
                                         ),
                                       ),
@@ -639,7 +639,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                         "QTY :",
                                         style: GoogleFonts.robotoSlab(
                                           color: kColor,
-                                          fontSize: _height * 0.020,
+                                          fontSize: _width * 0.030,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
@@ -651,7 +651,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             .toString(),
                                         style: GoogleFonts.robotoSlab(
                                           color: kColor,
-                                          fontSize: _height * 0.018,
+                                          fontSize: _width * 0.030,
                                           fontWeight: FontWeight.w300,
                                         ),
                                       ),
@@ -663,7 +663,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                         "Purchased At :",
                                         style: GoogleFonts.robotoSlab(
                                           color: kColor,
-                                          fontSize: _height * 0.020,
+                                          fontSize: _width * 0.030,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
@@ -675,7 +675,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             .split(' ')[0],
                                         style: GoogleFonts.robotoSlab(
                                           color: kColor,
-                                          fontSize: _height * 0.018,
+                                          fontSize: _width * 0.030,
                                           fontWeight: FontWeight.w300,
                                         ),
                                       ),
@@ -687,7 +687,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                         "Order Amount :",
                                         style: GoogleFonts.robotoSlab(
                                           color: kColor,
-                                          fontSize: _height * 0.020,
+                                          fontSize: _width * 0.030,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
@@ -698,7 +698,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                         "${_sharedData.order.amount}₹",
                                         style: GoogleFonts.robotoSlab(
                                           color: kColor,
-                                          fontSize: _height * 0.018,
+                                          fontSize: _width * 0.030,
                                           fontWeight: FontWeight.w300,
                                         ),
                                       ),
@@ -710,7 +710,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                         "Saving amount:",
                                         style: GoogleFonts.robotoSlab(
                                           color: kColor,
-                                          fontSize: _height * 0.020,
+                                          fontSize: _width * 0.030,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
@@ -721,7 +721,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                         "${_sharedData.order.realOrderPrice - double.parse(_sharedData.order.amount)} ₹",
                                         style: GoogleFonts.robotoSlab(
                                           color: kColor,
-                                          fontSize: _height * 0.018,
+                                          fontSize: _width * 0.030,
                                           fontWeight: FontWeight.w300,
                                         ),
                                       ),
@@ -734,7 +734,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                               "Wallet pending amount:",
                                               style: GoogleFonts.robotoSlab(
                                                 color: kColor,
-                                                fontSize: _height * 0.020,
+                                                fontSize: _width * 0.030,
                                                 fontWeight: FontWeight.w600,
                                               ),
                                             ),
@@ -745,7 +745,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                               "${user.pendingAmount}₹",
                                               style: GoogleFonts.robotoSlab(
                                                 color: kColor,
-                                                fontSize: _height * 0.018,
+                                                fontSize: _width * 0.030,
                                                 fontWeight: FontWeight.w300,
                                               ),
                                             ),
@@ -759,7 +759,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                               "Total amount to be collected :",
                                               style: GoogleFonts.robotoSlab(
                                                 color: kColor,
-                                                fontSize: _height * 0.020,
+                                                fontSize: _width * 0.030,
                                                 fontWeight: FontWeight.w600,
                                               ),
                                             ),
@@ -773,7 +773,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                   : "${user.pendingAmount}₹",
                                               style: GoogleFonts.robotoSlab(
                                                 color: kColor,
-                                                fontSize: _height * 0.018,
+                                                fontSize: _width * 0.030,
                                                 fontWeight: FontWeight.w300,
                                               ),
                                             ),
@@ -800,7 +800,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                           "Customer delivery details:",
                                           style: GoogleFonts.robotoSlab(
                                             color: kDarkText,
-                                            fontSize: _height * 0.030,
+                                            fontSize: _width * 0.040,
                                             fontWeight: FontWeight.w700,
                                           ),
                                         ),
@@ -814,7 +814,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             "Name:",
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
-                                              fontSize: _height * 0.020,
+                                              fontSize: _width * 0.030,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -825,7 +825,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             user.fullName,
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
-                                              fontSize: _height * 0.018,
+                                              fontSize: _width * 0.030,
                                               fontWeight: FontWeight.w300,
                                             ),
                                           ),
@@ -837,7 +837,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             "Email :",
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
-                                              fontSize: _height * 0.020,
+                                              fontSize: _width * 0.030,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -848,7 +848,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             user.email,
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
-                                              fontSize: _height * 0.018,
+                                              fontSize: _width * 0.030,
                                               fontWeight: FontWeight.w300,
                                             ),
                                           ),
@@ -860,7 +860,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             "Mobile :",
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
-                                              fontSize: _height * 0.020,
+                                              fontSize: _width * 0.030,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -889,7 +889,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                 user.phone,
                                                 style: GoogleFonts.robotoSlab(
                                                   color: kColor,
-                                                  fontSize: _height * 0.018,
+                                                  fontSize: _width * 0.030,
                                                   fontWeight: FontWeight.w300,
                                                 ),
                                               )),
@@ -901,7 +901,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             "Balance:",
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
-                                              fontSize: _height * 0.020,
+                                              fontSize: _width * 0.030,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -914,7 +914,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                 "₹",
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
-                                              fontSize: _height * 0.018,
+                                              fontSize: _width * 0.030,
                                               fontWeight: FontWeight.w300,
                                             ),
                                           ),
@@ -928,7 +928,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             "Delivery Address :",
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
-                                              fontSize: _height * 0.020,
+                                              fontSize: _width * 0.030,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -942,7 +942,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                               softWrap: true,
                                               style: GoogleFonts.robotoSlab(
                                                 color: kColor,
-                                                fontSize: _height * 0.018,
+                                                fontSize: _width * 0.030,
                                                 fontWeight: FontWeight.w300,
                                               ),
                                             ),
@@ -965,7 +965,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                           "delivery boy details :",
                                           style: GoogleFonts.robotoSlab(
                                             color: kDarkText,
-                                            fontSize: _height * 0.030,
+                                            fontSize: _width * 0.030,
                                             fontWeight: FontWeight.w700,
                                           ),
                                         ),
@@ -979,7 +979,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             "Name:",
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
-                                              fontSize: _height * 0.020,
+                                              fontSize: _width * 0.030,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -990,7 +990,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             _sharedData.order.delivery.fullName,
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
-                                              fontSize: _height * 0.018,
+                                              fontSize: _width * 0.030,
                                               fontWeight: FontWeight.w300,
                                             ),
                                           ),
@@ -1002,7 +1002,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             "Email :",
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
-                                              fontSize: _height * 0.020,
+                                              fontSize: _width * 0.030,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -1013,7 +1013,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             _sharedData.order.delivery.email,
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
-                                              fontSize: _height * 0.018,
+                                              fontSize: _width * 0.030,
                                               fontWeight: FontWeight.w300,
                                             ),
                                           ),
@@ -1025,7 +1025,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             "Mobile :",
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
-                                              fontSize: _height * 0.020,
+                                              fontSize: _width * 0.030,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -1057,7 +1057,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                     .order.delivery.phone,
                                                 style: GoogleFonts.robotoSlab(
                                                   color: kColor,
-                                                  fontSize: _height * 0.018,
+                                                  fontSize: _width * 0.030,
                                                   fontWeight: FontWeight.w300,
                                                 ),
                                               )),
@@ -1085,7 +1085,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                           "Vendor details :",
                                           style: GoogleFonts.robotoSlab(
                                             color: kDarkText,
-                                            fontSize: _height * 0.030,
+                                            fontSize: _width * 0.030,
                                             fontWeight: FontWeight.w700,
                                           ),
                                         ),
@@ -1099,7 +1099,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             "Name:",
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
-                                              fontSize: _height * 0.020,
+                                              fontSize: _width * 0.030,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -1110,7 +1110,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             _sharedData.order.vendor.fullName,
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
-                                              fontSize: _height * 0.018,
+                                              fontSize: _width * 0.030,
                                               fontWeight: FontWeight.w300,
                                             ),
                                           ),
@@ -1122,7 +1122,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             "Email :",
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
-                                              fontSize: _height * 0.020,
+                                              fontSize: _width * 0.030,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -1133,7 +1133,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             _sharedData.order.vendor.email,
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
-                                              fontSize: _height * 0.018,
+                                              fontSize: _width * 0.030,
                                               fontWeight: FontWeight.w300,
                                             ),
                                           ),
@@ -1145,7 +1145,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             "Mobile :",
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
-                                              fontSize: _height * 0.020,
+                                              fontSize: _width * 0.030,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -1174,7 +1174,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                                 _sharedData.order.vendor.phone,
                                                 style: GoogleFonts.robotoSlab(
                                                   color: kColor,
-                                                  fontSize: _height * 0.018,
+                                                  fontSize: _width * 0.030,
                                                   fontWeight: FontWeight.w300,
                                                 ),
                                               )),
@@ -1188,7 +1188,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                             "Pickup Address :",
                                             style: GoogleFonts.robotoSlab(
                                               color: kColor,
-                                              fontSize: _height * 0.020,
+                                              fontSize: _width * 0.030,
                                               fontWeight: FontWeight.w600,
                                             ),
                                           ),
@@ -1202,7 +1202,7 @@ class _SubsDetailsState extends State<SubsDetails> {
                                               softWrap: true,
                                               style: GoogleFonts.robotoSlab(
                                                 color: kColor,
-                                                fontSize: _height * 0.018,
+                                                fontSize: _width * 0.030,
                                                 fontWeight: FontWeight.w300,
                                               ),
                                             ),

@@ -129,7 +129,7 @@ class _OrderDtailsState extends State<OrderDtails> {
           order_title,
           style: GoogleFonts.robotoSlab(
             color: kColor,
-            fontSize: _height * 0.028,
+            fontSize: _width * 0.038,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -157,7 +157,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                             "Payment details :",
                             style: GoogleFonts.robotoSlab(
                               color: kDarkText,
-                              fontSize: _height * 0.030,
+                              fontSize: _width * 0.040,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -171,7 +171,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                               "Payment Mode :",
                               style: GoogleFonts.robotoSlab(
                                 color: kColor,
-                                fontSize: _height * 0.020,
+                                fontSize: _width * 0.030,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -182,7 +182,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                               _sharedData.order.paymentMethod,
                               style: GoogleFonts.robotoSlab(
                                 color: kColor,
-                                fontSize: _height * 0.018,
+                                fontSize: _width * 0.030,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
@@ -194,7 +194,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                               "QTY :",
                               style: GoogleFonts.robotoSlab(
                                 color: kColor,
-                                fontSize: _height * 0.020,
+                                fontSize: _width * 0.030,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -205,7 +205,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                               _sharedData.order.products.length.toString(),
                               style: GoogleFonts.robotoSlab(
                                 color: kColor,
-                                fontSize: _height * 0.018,
+                                fontSize: _width * 0.030,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
@@ -217,7 +217,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                               "Purchased At :",
                               style: GoogleFonts.robotoSlab(
                                 color: kColor,
-                                fontSize: _height * 0.020,
+                                fontSize: _width * 0.030,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -228,7 +228,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                               _sharedData.order.purchasedAt.split(' ')[0],
                               style: GoogleFonts.robotoSlab(
                                 color: kColor,
-                                fontSize: _height * 0.018,
+                                fontSize: _width * 0.030,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
@@ -240,7 +240,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                               "Order Amount :",
                               style: GoogleFonts.robotoSlab(
                                 color: kColor,
-                                fontSize: _height * 0.020,
+                                fontSize: _width * 0.030,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -251,7 +251,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                               "${_sharedData.order.amount}₹",
                               style: GoogleFonts.robotoSlab(
                                 color: kColor,
-                                fontSize: _height * 0.018,
+                                fontSize: _width * 0.030,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
@@ -263,7 +263,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                               "Saving amount :",
                               style: GoogleFonts.robotoSlab(
                                 color: kColor,
-                                fontSize: _height * 0.020,
+                                fontSize: _width * 0.030,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -274,7 +274,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                               "${_sharedData.order.realOrderPrice - double.parse(_sharedData.order.amount)} ₹",
                               style: GoogleFonts.robotoSlab(
                                 color: kColor,
-                                fontSize: _height * 0.018,
+                                fontSize: _width * 0.030,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
@@ -287,7 +287,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                     "Wallet pending amount:",
                                     style: GoogleFonts.robotoSlab(
                                       color: kColor,
-                                      fontSize: _height * 0.020,
+                                      fontSize: _width * 0.030,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
@@ -298,7 +298,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                     "${_sharedData.order.user.pendingAmount}₹",
                                     style: GoogleFonts.robotoSlab(
                                       color: kColor,
-                                      fontSize: _height * 0.018,
+                                      fontSize: _width * 0.030,
                                       fontWeight: FontWeight.w300,
                                     ),
                                   ),
@@ -312,7 +312,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                     "Total amount to be collected :",
                                     style: GoogleFonts.robotoSlab(
                                       color: kColor,
-                                      fontSize: _height * 0.020,
+                                      fontSize: _width * 0.030,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
@@ -325,7 +325,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                         : "${_sharedData.order.user.pendingAmount}₹",
                                     style: GoogleFonts.robotoSlab(
                                       color: kColor,
-                                      fontSize: _height * 0.018,
+                                      fontSize: _width * 0.030,
                                       fontWeight: FontWeight.w300,
                                     ),
                                   ),
@@ -352,7 +352,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                 "Customer delivery details:",
                                 style: GoogleFonts.robotoSlab(
                                   color: kDarkText,
-                                  fontSize: _height * 0.030,
+                                  fontSize: _width * 0.040,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -366,7 +366,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                   "Name:",
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
-                                    fontSize: _height * 0.020,
+                                    fontSize: _width * 0.030,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -377,7 +377,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                   _sharedData.order.user.fullName,
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
-                                    fontSize: _height * 0.018,
+                                    fontSize: _width * 0.030,
                                     fontWeight: FontWeight.w300,
                                   ),
                                 ),
@@ -389,7 +389,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                   "Email :",
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
-                                    fontSize: _height * 0.020,
+                                    fontSize: _width * 0.030,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -400,7 +400,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                   _sharedData.order.user.email,
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
-                                    fontSize: _height * 0.018,
+                                    fontSize: _width * 0.030,
                                     fontWeight: FontWeight.w300,
                                   ),
                                 ),
@@ -412,7 +412,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                   "Mobile :",
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
-                                    fontSize: _height * 0.020,
+                                    fontSize: _width * 0.030,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -437,7 +437,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                     _sharedData.order.user.phone,
                                     style: GoogleFonts.robotoSlab(
                                       color: kColor,
-                                      fontSize: _height * 0.018,
+                                      fontSize: _width * 0.030,
                                       fontWeight: FontWeight.w300,
                                     ),
                                   ),
@@ -450,7 +450,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                   "Balance:",
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
-                                    fontSize: _height * 0.020,
+                                    fontSize: _width * 0.030,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -462,7 +462,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                       "₹",
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
-                                    fontSize: _height * 0.018,
+                                    fontSize: _width * 0.030,
                                     fontWeight: FontWeight.w300,
                                   ),
                                 ),
@@ -475,7 +475,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                   "Delivery Address :",
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
-                                    fontSize: _height * 0.020,
+                                    fontSize: _width * 0.030,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -489,7 +489,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                     softWrap: true,
                                     style: GoogleFonts.robotoSlab(
                                       color: kColor,
-                                      fontSize: _height * 0.018,
+                                      fontSize: _width * 0.030,
                                       fontWeight: FontWeight.w300,
                                     ),
                                   ),
@@ -512,7 +512,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                 "delivery boy details :",
                                 style: GoogleFonts.robotoSlab(
                                   color: kDarkText,
-                                  fontSize: _height * 0.030,
+                                  fontSize: _width * 0.040,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -526,7 +526,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                   "Name:",
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
-                                    fontSize: _height * 0.020,
+                                    fontSize: _width * 0.030,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -537,7 +537,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                   _sharedData.order.delivery.fullName,
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
-                                    fontSize: _height * 0.018,
+                                    fontSize: _width * 0.030,
                                     fontWeight: FontWeight.w300,
                                   ),
                                 ),
@@ -549,7 +549,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                   "Email :",
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
-                                    fontSize: _height * 0.020,
+                                    fontSize: _width * 0.030,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -560,7 +560,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                   _sharedData.order.delivery.email,
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
-                                    fontSize: _height * 0.018,
+                                    fontSize: _width * 0.030,
                                     fontWeight: FontWeight.w300,
                                   ),
                                 ),
@@ -572,7 +572,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                   "Mobile :",
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
-                                    fontSize: _height * 0.020,
+                                    fontSize: _width * 0.030,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -597,7 +597,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                     _sharedData.order.delivery.phone,
                                     style: GoogleFonts.robotoSlab(
                                       color: kColor,
-                                      fontSize: _height * 0.018,
+                                      fontSize: _width * 0.030,
                                       fontWeight: FontWeight.w300,
                                     ),
                                   ),
@@ -626,7 +626,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                 "Vendor details :",
                                 style: GoogleFonts.robotoSlab(
                                   color: kDarkText,
-                                  fontSize: _height * 0.030,
+                                  fontSize: _width * 0.040,
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
@@ -640,7 +640,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                   "Name:",
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
-                                    fontSize: _height * 0.020,
+                                    fontSize: _width * 0.030,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -651,7 +651,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                   _sharedData.order.vendor.fullName,
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
-                                    fontSize: _height * 0.018,
+                                    fontSize: _width * 0.030,
                                     fontWeight: FontWeight.w300,
                                   ),
                                 ),
@@ -663,7 +663,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                   "Email :",
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
-                                    fontSize: _height * 0.020,
+                                    fontSize: _width * 0.030,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -674,7 +674,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                   _sharedData.order.vendor.email,
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
-                                    fontSize: _height * 0.018,
+                                    fontSize: _width * 0.030,
                                     fontWeight: FontWeight.w300,
                                   ),
                                 ),
@@ -686,7 +686,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                   "Mobile :",
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
-                                    fontSize: _height * 0.020,
+                                    fontSize: _width * 0.030,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -712,7 +712,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                       _sharedData.order.vendor.phone,
                                       style: GoogleFonts.robotoSlab(
                                         color: kColor,
-                                        fontSize: _height * 0.018,
+                                        fontSize: _width * 0.030,
                                         fontWeight: FontWeight.w300,
                                       ),
                                     )),
@@ -725,7 +725,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                   "Pickup Address :",
                                   style: GoogleFonts.robotoSlab(
                                     color: kColor,
-                                    fontSize: _height * 0.020,
+                                    fontSize: _width * 0.030,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -739,7 +739,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                                     softWrap: true,
                                     style: GoogleFonts.robotoSlab(
                                       color: kColor,
-                                      fontSize: _height * 0.018,
+                                      fontSize: _width * 0.030,
                                       fontWeight: FontWeight.w300,
                                     ),
                                   ),
@@ -1014,7 +1014,7 @@ class _OrderDtailsState extends State<OrderDtails> {
                             "please ask user to recharge his/her wallet !!",
                             style: GoogleFonts.robotoSlab(
                               color: kColor,
-                              fontSize: _height * 0.018,
+                              fontSize: _width * 0.030,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
